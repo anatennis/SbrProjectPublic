@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="create_table_courses" author="Zatirko Yuriy" context="1.0">
+        <comment>Создание таблицы courses</comment>
+        <sql>
+            CREATE TABLE courses (
+            id integer PRIMARY KEY AUTO_INCREMENT NOT NULL,
+            caption text NOT NULL,
+            created_at text
+            );
+        </sql>
+        <rollback>
+            <sql>
+                DROP TABLE courses;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_table_users" author="Zatirko Yuriy" context="1.0">
+        <comment>Создание таблицы users</comment>
+        <sql>
+            CREATE TABLE users (
+            id integer PRIMARY KEY AUTO_INCREMENT NOT NULL,
+            login text NOT NULL,
+            password integer NOT NULL,
+            name text,
+            surname text,
+            email text,
+            registred_at text
+            );
+        </sql>
+        <rollback>
+            <sql>
+                DROP TABLE users;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_table_course_users" author="Zatirko Yuriy" context="1.0">
+        <comment>Создание таблицы courses_users</comment>
+        <sql>
+            CREATE TABLE course_users (
+            course_id integer NOT NULL,
+            user_id integer NOT NULL,
+            user_role text CHECK( user_role IN ('teacher','student')),
+            PRIMARY KEY (course_id, user_id),
+            FOREIGN KEY (course_id) REFERENCES courses (id) ON DELETE CASCADE ON UPDATE NO ACTION,
+            FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE NO ACTION
+
+            );
+        </sql>
+        <rollback>
+            <sql>
+                DROP TABLE course_user;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_table_publications" author="Zatirko Yuriy" context="1.0">
+        <comment>Создание таблицы publications</comment>
+        <sql>
+            CREATE TABLE publications (
+            id integer PRIMARY KEY AUTO_INCREMENT NOT NULL,
+            course_id integer,
+            creator_id integer,
+            title text,
+            published_at text,
+            publication_text text,
+            FOREIGN KEY (course_id) REFERENCES courses (id) ON DELETE CASCADE ON UPDATE NO ACTION,
+            FOREIGN KEY (creator_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE NO ACTION
+            );
+        </sql>
+        <rollback>
+            <sql>
+                DROP TABLE publications;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_table_comment" author="Zatirko Yuriy" context="1.0">
+        <comment>Создание таблицы comment</comment>
+        <sql>
+            CREATE TABLE comment (
+            id integer PRIMARY KEY AUTO_INCREMENT NOT NULL,
+            publication_id integer,
+            creator_id integer,
+            commented_at text,
+            comment_text text,
+            FOREIGN KEY (publication_id) REFERENCES publications (id) ON DELETE CASCADE ON UPDATE NO ACTION,
+            FOREIGN KEY (creator_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE NO ACTION
+            );
+        </sql>
+        <rollback>
+            <sql>
+                DROP TABLE comment;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_table_task" author="Zatirko Yuriy" context="1.0">
+        <comment>Создание таблицы task</comment>
+        <sql>
+            CREATE TABLE task (
+            id integer PRIMARY KEY AUTO_INCREMENT NOT NULL,
+            course_id integer,
+            creator_id integer,
+            set_at text,
+            title text,
+            compl_time text,
+            task_text text,
+            FOREIGN KEY (course_id) REFERENCES courses (id) ON DELETE CASCADE ON UPDATE NO ACTION,
+            FOREIGN KEY (creator_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE NO ACTION
+            );
+        </sql>
+        <rollback>
+            <sql>
+                DROP TABLE task;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create_table_users_task" author="Zatirko Yuriy" context="1.0">
+        <comment>Создание таблицы users_task</comment>
+        <sql>
+            CREATE TABLE users_task (
+            task_id integer NOT NULL,
+            user_id integer NOT NULL,
+            task_state text CHECK( task_state IN ('assigned','submitted','submitted_late')),
+            submitted_at text,
+            PRIMARY KEY (task_id, user_id),
+            FOREIGN KEY (task_id) REFERENCES task (id) ON DELETE CASCADE ON UPDATE NO ACTION,
+            FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE ON UPDATE NO ACTION
+            );
+        </sql>
+        <rollback>
+            <sql>
+                DROP TABLE users_task;
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
