@@ -9,7 +9,7 @@
         <comment>Создание таблицы courses</comment>
         <sql>
             CREATE TABLE `sbr_testdb`.`edu_user` (
-            `id` INT NOT NULL AUTO_INCREMENT,
+            `id` BIGINT NOT NULL AUTO_INCREMENT,
             `login` VARCHAR(45) NULL,
             `password` VARCHAR(45) NULL,
             `name` VARCHAR(45) NULL,
