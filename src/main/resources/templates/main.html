@@ -1,5 +1,7 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Getting Started</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -7,8 +9,13 @@
 <body>
 <h1>Welcome!</h1>
 <p>Click <a th:href="@{/test}">here</a> to see a greeting</p>
-<p>Click <a th:href="@{/login}">here</a> to login</p>
-<!--<p>Click <a th:href="@{/user/${user.id}}">here</a> to see a greeting</p>-->
-<p>Click <a th:href="@{/registration}">here</a> to registrate</p>
+<div sec:authorize="isAnonymous()">
+    <p>Click <a th:href="@{/login}">here</a> to login</p>
+    <p>Click <a th:href="@{/registration}">here</a> for registration</p>
+</div>
+<div sec:authorize="isAuthenticated()">
+    <p>Click <a th:href="@{/user}">here</a> to see your page</p>
+</div>
+
 </body>
 </html>
