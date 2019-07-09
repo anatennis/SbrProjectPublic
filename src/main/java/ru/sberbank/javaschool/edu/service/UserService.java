@@ -18,7 +18,7 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepo;
 
     @Autowired
-    private PasswordEncoder passwordEncoder; //пока BCrypt, попозже поменяю
+    private PasswordEncoder passwordEncoder; //BCrypt так BCrypt :)
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
@@ -34,6 +34,17 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userRepo.save(user);
+        return true;
+    }
+
+    public boolean updateUser(String login, User user) {
+        User uFromDB = userRepo.findUserByLogin(login);
+        if (uFromDB == null) {
+            return false;
+        }
+        uFromDB.setName(user.getName());
+        uFromDB.setSurname(user.getSurname());
+        userRepo.save(uFromDB);
         return true;
     }
 }

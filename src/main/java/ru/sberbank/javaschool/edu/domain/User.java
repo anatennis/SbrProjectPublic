@@ -38,6 +38,7 @@ public class User implements UserDetails {
      * @return the authorities, sorted by natural key (never <code>null</code>)
      */
     @Override
+
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
     }

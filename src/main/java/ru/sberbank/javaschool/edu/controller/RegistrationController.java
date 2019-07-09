@@ -17,8 +17,6 @@ import java.time.LocalDateTime;
 public class RegistrationController {
     @Autowired
     private UserService userService;
-    //private UserRepository userRepo;
-    //private String salt = "mySuperSalt";
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -37,10 +35,5 @@ public class RegistrationController {
         return "redirect:/login";
     }
 
-//    private String hashPassword(String password) {
-//        byte[] bytesOfSaltedPassword = (password+salt).getBytes();
-//        return DigestUtils.md5Digest(bytesOfSaltedPassword).toString();
-//
-//    }
 
 }
