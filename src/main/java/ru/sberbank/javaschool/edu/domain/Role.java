@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "edu_role")
+@Table(name = "edu_user_role")
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
