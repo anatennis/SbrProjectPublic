@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -28,4 +29,14 @@ public class Course implements Serializable {
             inverseJoinColumns = @JoinColumn(name="user", referencedColumnName="id")
     )
     private Set<User> users;
+
+//    @ManyToMany
+//    @ElementCollection
+//    @CollectionTable(name = "edu_course_user", joinColumns = @JoinColumn(name = "course"))
+//    @MapKeyJoinColumn(name = "user_id")
+//    @Column(name = "user_role")
+//    private Map<User, Role> users;
+
+
+
 }

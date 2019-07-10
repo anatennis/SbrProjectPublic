@@ -10,8 +10,7 @@ import ru.sberbank.javaschool.edu.service.UserService;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -36,6 +35,9 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
     private Set<Course> courses;
 
+//    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
+//    private Set<Role> roles;
+
     /**
      * Returns the authorities granted to the user. Cannot return <code>null</code>.
      *
@@ -43,6 +45,7 @@ public class User implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        //return roles;
         return null;
     }
 

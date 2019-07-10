@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import ru.sberbank.javaschool.edu.domain.User;
 import ru.sberbank.javaschool.edu.repository.UserRepository;
 
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 
 @Service
@@ -45,5 +46,23 @@ public class UserService implements UserDetailsService {
         uFromDB.setSurname(user.getSurname());
         userRepo.save(uFromDB);
         return true;
+    }
+
+    public String getInfoFromSession(HttpSession httpSession, User user) { //положить/вытащить данные в сессию, проба
+        String sessionKey = "firstAccessTime";
+        String sessionKeyLogin = "userLogin";
+        Object userFromSession = httpSession.getAttribute(sessionKeyLogin);
+        Object time = httpSession.getAttribute(sessionKey);
+        if (time == null) {
+            time = LocalDateTime.now();
+            httpSession.setAttribute(sessionKey, time);
+        }
+        if (userFromSession == null) {
+            userFromSession = user.getLogin();
+            httpSession.setAttribute(sessionKeyLogin, userFromSession);
+        }
+        return "first access time : " + time + "\nsession id: " + httpSession.getId() + "\nUser login "
+                + httpSession.getAttribute(sessionKeyLogin);
+
     }
 }

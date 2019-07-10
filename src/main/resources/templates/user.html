@@ -13,10 +13,12 @@
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     </form>
 </div>
+<p><a th:href="@{/}">Start page</a></p>
 <p th:text="'Hello, ' + ${username} + '!'" />
 <p th:text="'Session ' + ${oursession}" />
 <section th:each="course : ${courses}">
     <p th:text="${course.getCaption()}"></p>
+    <p><a th:href="@{/administration/course/{id}(id=${course.id})}">Start page</a></p>
 </section>
 <!--<div sec:authorize="hasRole()">-->
     <!--<p>Click <a th:href="@{/user}">here</a> to see your page</p>-->

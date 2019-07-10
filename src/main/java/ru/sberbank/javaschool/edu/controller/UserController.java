@@ -8,12 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.sberbank.javaschool.edu.domain.Course;
+import ru.sberbank.javaschool.edu.domain.Role;
 import ru.sberbank.javaschool.edu.domain.User;
 import ru.sberbank.javaschool.edu.service.UserService;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Set;
 
 @Controller
@@ -28,9 +30,10 @@ public class UserController {  //TODO
     @GetMapping
     public String userGreeting(@AuthenticationPrincipal User user, Model model) {
         String username = user.getUsername();
-        String sessionInfo = getInfoFromSession(user);
+        String sessionInfo = userService.getInfoFromSession(httpSession, user);
+        //Map<Course, Role> courseSet = user.getCourses();
         Set<Course> courseSet = user.getCourses();
-        //userService.loadUserByUsername(user.getLogin()).getUsername();
+
         model.addAttribute("username", username);
         model.addAttribute("oursession", sessionInfo);
         model.addAttribute("courses", courseSet);
@@ -43,25 +46,26 @@ public class UserController {  //TODO
         if (userService.updateUser(login, user)) {
             model.addAttribute("message", "Ваши данные успешно обновлены");
         }
+
         return "redirect:/user";
     }
 
-    private String getInfoFromSession(User user) { //положить/вытащить данные в сессию, проба
-        String sessionKey = "firstAccessTime";
-        String sessionKeyLogin = "userLogin";
-        Object userFromSession = httpSession.getAttribute(sessionKeyLogin);
-        Object time = httpSession.getAttribute(sessionKey);
-        if (time == null) {
-            time = LocalDateTime.now();
-            httpSession.setAttribute(sessionKey, time);
-        }
-        if (userFromSession == null) {
-            userFromSession = user.getLogin();
-            httpSession.setAttribute(sessionKeyLogin, userFromSession);
-        }
-        return "first access time : " + time + "\nsession id: " + httpSession.getId() + "\nUser login "
-                + httpSession.getAttribute(sessionKeyLogin);
-
-    }
+//    private String getInfoFromSession(User user) { //положить/вытащить данные в сессию, проба
+//        String sessionKey = "firstAccessTime";
+//        String sessionKeyLogin = "userLogin";
+//        Object userFromSession = httpSession.getAttribute(sessionKeyLogin);
+//        Object time = httpSession.getAttribute(sessionKey);
+//        if (time == null) {
+//            time = LocalDateTime.now();
+//            httpSession.setAttribute(sessionKey, time);
+//        }
+//        if (userFromSession == null) {
+//            userFromSession = user.getLogin();
+//            httpSession.setAttribute(sessionKeyLogin, userFromSession);
+//        }
+//        return "first access time : " + time + "\nsession id: " + httpSession.getId() + "\nUser login "
+//                + httpSession.getAttribute(sessionKeyLogin);
+//
+//    }
 
 }

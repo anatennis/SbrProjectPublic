@@ -15,7 +15,7 @@
 </div>
 <h3>Список курсов</h3>
 <section th:each="course : ${courses}">
-    <p th:text="${course.getCaption()}"></p>
+    <a th:href="@{/course/{id}(id=${course.id})}" th:text="${course.getCaption()}"></a>
 </section>
 </body>
 </html>
