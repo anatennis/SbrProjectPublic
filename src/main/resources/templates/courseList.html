@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create course</title>
+</head>
+<body>
+Create new course
+<form th:action="@{/administration}" method="post">
+    <div><label> Course caption : <input type="text" name="caption" placeholder="Название"/> </label></div>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <div><input type="submit" value="Create"/></div>
+</form>
+<div th:if="${message}">
+    <span th:utext="${message}"></span>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th> Course caption </th>
+        <th> Create date </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="course : ${courses}">
+        <td><span th:text="${course.caption}"> Caption </span></td>
+        <td><span th:text="${course.createDate}"> CreateDate </span></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
