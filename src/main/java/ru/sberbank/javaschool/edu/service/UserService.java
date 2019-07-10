@@ -10,7 +10,6 @@ import ru.sberbank.javaschool.edu.domain.User;
 import ru.sberbank.javaschool.edu.repository.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 
 @Service
 public class UserService implements UserDetailsService {

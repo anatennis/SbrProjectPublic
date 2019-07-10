@@ -7,12 +7,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.sberbank.javaschool.edu.domain.Course;
 import ru.sberbank.javaschool.edu.domain.User;
 import ru.sberbank.javaschool.edu.service.UserService;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/user")
@@ -27,9 +29,11 @@ public class UserController {  //TODO
     public String userGreeting(@AuthenticationPrincipal User user, Model model) {
         String username = user.getUsername();
         String sessionInfo = getInfoFromSession(user);
+        Set<Course> courseSet = user.getCourses();
         //userService.loadUserByUsername(user.getLogin()).getUsername();
         model.addAttribute("username", username);
         model.addAttribute("oursession", sessionInfo);
+        model.addAttribute("courses", courseSet);
         return "user";
     }
 

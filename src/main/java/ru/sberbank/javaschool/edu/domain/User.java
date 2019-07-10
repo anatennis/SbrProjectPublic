@@ -11,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -31,6 +32,9 @@ public class User implements UserDetails {
     private String surname;
     private LocalDateTime regdate;
     private String phone;
+
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
+    private Set<Course> courses;
 
     /**
      * Returns the authorities granted to the user. Cannot return <code>null</code>.

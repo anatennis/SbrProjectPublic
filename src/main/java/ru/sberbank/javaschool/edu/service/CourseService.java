@@ -6,6 +6,7 @@ import ru.sberbank.javaschool.edu.domain.Course;
 import ru.sberbank.javaschool.edu.repository.CourseRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class CourseService {
@@ -14,6 +15,10 @@ public class CourseService {
     @Autowired
     public CourseService(CourseRepository courseRepository) {
         this.courseRepository = courseRepository;
+    }
+
+    public List<Course> getAllCourses() {
+        return courseRepository.findAll();
     }
 
     public boolean addCourse(Course course) {
