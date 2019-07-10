@@ -32,6 +32,15 @@ Create new course
     <tr th:each="course : ${courses}">
         <td><span th:text="${course.caption}"> Caption </span></td>
         <td><span th:text="${course.createDate}"> CreateDate </span></td>
+        <td>
+            <a th:href="@{'/administration/course/{id}'(id=${course.id})}">Edit</a>
+        </td>
+        <td>
+            <form action="#" th:action="@{'/administration/delete/{id}'(id=${course.id})}" th:method="delete" >
+                <input type="hidden" name="_method" value="delete" />
+                <button type="submit" id="submitButton">Delete</button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>

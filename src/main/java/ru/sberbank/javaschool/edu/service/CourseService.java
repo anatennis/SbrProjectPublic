@@ -29,7 +29,35 @@ public class CourseService {
         }
 
         course.setCreateDate(LocalDateTime.now());
+
         courseRepository.save(course);
+
+        return true;
+    }
+
+    public boolean removeCourse(Long id) {
+        Course courseFromDB = courseRepository.findCourseById(id);
+
+        if (courseFromDB == null) {
+            return false;
+        }
+
+        courseRepository.delete(courseFromDB);
+
+        return true;
+    }
+
+    public boolean updateCourse(Long id, String newCaption) {
+        Course courseFromDB = courseRepository.findCourseById(id);
+
+        if (courseFromDB == null) {
+            return false;
+        }
+
+        courseFromDB.setCaption(newCaption);
+
+        courseRepository.save(courseFromDB);
+
         return true;
     }
 }
