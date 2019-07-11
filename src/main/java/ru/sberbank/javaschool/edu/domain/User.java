@@ -4,8 +4,6 @@ package ru.sberbank.javaschool.edu.domain;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import ru.sberbank.javaschool.edu.service.UserService;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -32,8 +30,8 @@ public class User implements UserDetails {
     private LocalDateTime regdate;
     private String phone;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
-    private Set<Course> courses;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private Set<CourseUser> courseUsers;
 
 //    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
 //    private Set<Role> roles;

@@ -6,7 +6,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 @Entity
@@ -23,20 +22,6 @@ public class Course implements Serializable {
     @Column(name = "createdate")
     private LocalDateTime createDate;
 
-    @ManyToMany
-    @JoinTable(name="edu_course_user",
-            joinColumns = @JoinColumn(name="course", referencedColumnName="id"),
-            inverseJoinColumns = @JoinColumn(name="user", referencedColumnName="id")
-    )
-    private Set<User> users;
-
-//    @ManyToMany
-//    @ElementCollection
-//    @CollectionTable(name = "edu_course_user", joinColumns = @JoinColumn(name = "course"))
-//    @MapKeyJoinColumn(name = "user_id")
-//    @Column(name = "user_role")
-//    private Map<User, Role> users;
-
-
-
+    @OneToMany(mappedBy = "course")
+    private Set<CourseUser> courseUsers = new HashSet<>();
 }

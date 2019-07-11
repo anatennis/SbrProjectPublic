@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.sberbank.javaschool.edu.domain.Course;
 import ru.sberbank.javaschool.edu.repository.CourseRepository;
 import ru.sberbank.javaschool.edu.service.CourseService;
+import ru.sberbank.javaschool.edu.service.CourseUserService;
 
 
 @Controller
@@ -14,11 +15,17 @@ import ru.sberbank.javaschool.edu.service.CourseService;
 public class AdminController {
     private final CourseRepository courseRepository;
     private final CourseService courseService;
+    private final CourseUserService courseUserService;
 
     @Autowired
-    public AdminController(CourseRepository courseRepository, CourseService courseService) {
+    public AdminController (
+            CourseRepository courseRepository,
+            CourseService courseService,
+            CourseUserService courseUserService
+    ) {
         this.courseRepository = courseRepository;
         this.courseService = courseService;
+        this.courseUserService = courseUserService;
     }
 
     @GetMapping
@@ -46,13 +53,26 @@ public class AdminController {
 
     @GetMapping("/course/{id}")
     public String courseEdit(@PathVariable Long id, Model model) {
-        model.addAttribute("course", courseRepository.findCourseById(id));
+        Course course = courseRepository.findCourseById(id);
+        model.addAttribute("course", course);
+        model.addAttribute("courseusers", course.getCourseUsers());
         return "courseEdit";
     }
 
     @PostMapping("/course/{id}")
     public String change(@PathVariable Long id, Course course) {
         courseService.updateCourse(id, course.getCaption());
+
+        return "redirect:/administration/course/{id}";
+    }
+
+    @PostMapping("/course/{id}/add")
+    public String addUser(
+            @PathVariable Long id,
+            @RequestParam String userName,
+            @RequestParam String userRole
+    ) {
+        courseUserService.addCourseUser(id, userName, userRole);
 
         return "redirect:/administration/course/{id}";
     }
