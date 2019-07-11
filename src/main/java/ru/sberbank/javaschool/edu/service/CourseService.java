@@ -3,7 +3,10 @@ package ru.sberbank.javaschool.edu.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sberbank.javaschool.edu.domain.Course;
+import ru.sberbank.javaschool.edu.domain.Role;
+import ru.sberbank.javaschool.edu.domain.User;
 import ru.sberbank.javaschool.edu.repository.CourseRepository;
+import ru.sberbank.javaschool.edu.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,10 +14,15 @@ import java.util.List;
 @Service
 public class CourseService {
     private final CourseRepository courseRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public CourseService(CourseRepository courseRepository) {
+    public CourseService(
+            CourseRepository courseRepository,
+            UserRepository userRepository
+    ) {
         this.courseRepository = courseRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Course> getAllCourses() {
@@ -36,28 +44,29 @@ public class CourseService {
     }
 
     public boolean removeCourse(Long id) {
-        Course courseFromDB = courseRepository.findCourseById(id);
+        Course courseFromDb = courseRepository.findCourseById(id);
 
-        if (courseFromDB == null) {
+        if (courseFromDb == null) {
             return false;
         }
 
-        courseRepository.delete(courseFromDB);
+        courseRepository.delete(courseFromDb);
 
         return true;
     }
 
     public boolean updateCourse(Long id, String newCaption) {
-        Course courseFromDB = courseRepository.findCourseById(id);
+        Course courseFromDb = courseRepository.findCourseById(id);
 
-        if (courseFromDB == null) {
+        if (courseFromDb == null) {
             return false;
         }
 
-        courseFromDB.setCaption(newCaption);
+        courseFromDb.setCaption(newCaption);
 
-        courseRepository.save(courseFromDB);
+        courseRepository.save(courseFromDb);
 
         return true;
     }
+
 }

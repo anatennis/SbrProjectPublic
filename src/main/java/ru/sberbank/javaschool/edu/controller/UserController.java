@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.sberbank.javaschool.edu.domain.Course;
+import ru.sberbank.javaschool.edu.domain.CourseUser;
 import ru.sberbank.javaschool.edu.domain.User;
 import ru.sberbank.javaschool.edu.service.UserService;
 
@@ -29,11 +30,12 @@ public class UserController {  //TODO
     public String userGreeting(@AuthenticationPrincipal User user, Model model) {
         String username = user.getUsername();
         String sessionInfo = getInfoFromSession(user);
-        Set<Course> courseSet = user.getCourses();
+
+        Set<CourseUser> courseUsersSet = user.getCourseUsers();
         //userService.loadUserByUsername(user.getLogin()).getUsername();
         model.addAttribute("username", username);
         model.addAttribute("oursession", sessionInfo);
-        model.addAttribute("courses", courseSet);
+        model.addAttribute("courseusers", courseUsersSet);
         return "user";
     }
 

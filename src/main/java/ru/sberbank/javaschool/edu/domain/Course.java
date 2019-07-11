@@ -22,10 +22,6 @@ public class Course implements Serializable {
     @Column(name = "createdate")
     private LocalDateTime createDate;
 
-    @ManyToMany
-    @JoinTable(name="edu_course_user",
-            joinColumns = @JoinColumn(name="course", referencedColumnName="id"),
-            inverseJoinColumns = @JoinColumn(name="user", referencedColumnName="id")
-    )
-    private Set<User> users;
+    @OneToMany(mappedBy = "course")
+    private Set<CourseUser> courseUsers = new HashSet<>();
 }

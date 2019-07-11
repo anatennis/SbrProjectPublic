@@ -24,5 +24,33 @@
     </form>
 </div>
 
+<div>
+    <form th:action="@{'/administration/course/{id}/add'(id=${course.id})}" method="post">
+        <div><label> User name: <input type="text" name="userName" placeholder="Введите имя"/> </label></div>
+        <div><label> User role: <input type="text" name="userRole" placeholder="Введите роль"/> </label></div>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div><input type="submit" value="Change caption"/></div>
+    </form>
+</div>
+<div>
+    <table>
+        <thead>
+        <tr>
+            <th> User </th>
+            <th> Role </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${courseusers.isEmpty()}">
+            <td colspan="2"> No users </td>
+        </tr>
+        <tr th:each="courseuser : ${courseusers}">
+            <td><span th:text="${courseuser.getUser().getLogin()}"> User </span></td>
+            <td><span th:text="${courseuser.getRole()}"> Role </span></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
 </body>
 </html>

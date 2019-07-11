@@ -15,9 +15,9 @@
 </div>
 <p th:text="'Hello, ' + ${username} + '!'" />
 <p th:text="'Session ' + ${oursession}" />
-<section th:each="course : ${courses}">
-    <p th:text="${course.getCaption()}"></p>
-</section>
+<!--<section th:each="courseUser : ${courseusers}">-->
+<!--    <p th:text="${courseUser.getCourse().getCaption()}"></p>-->
+<!--</section>-->
 <!--<div sec:authorize="hasRole()">-->
     <!--<p>Click <a th:href="@{/user}">here</a> to see your page</p>-->
 <!--</div>-->
