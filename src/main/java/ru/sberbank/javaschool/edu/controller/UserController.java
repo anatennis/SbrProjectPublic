@@ -29,7 +29,7 @@ public class UserController {  //TODO
     @GetMapping
     public String userGreeting(@AuthenticationPrincipal User user, Model model) {
         String username = user.getUsername();
-        String sessionInfo = getInfoFromSession(user);
+        String sessionInfo = userService.getInfoFromSession(httpSession, user);
 
         Set<CourseUser> courseUsersSet = user.getCourseUsers();
         //userService.loadUserByUsername(user.getLogin()).getUsername();
@@ -46,24 +46,6 @@ public class UserController {  //TODO
             model.addAttribute("message", "Ваши данные успешно обновлены");
         }
         return "redirect:/user";
-    }
-
-    private String getInfoFromSession(User user) { //положить/вытащить данные в сессию, проба
-        String sessionKey = "firstAccessTime";
-        String sessionKeyLogin = "userLogin";
-        Object userFromSession = httpSession.getAttribute(sessionKeyLogin);
-        Object time = httpSession.getAttribute(sessionKey);
-        if (time == null) {
-            time = LocalDateTime.now();
-            httpSession.setAttribute(sessionKey, time);
-        }
-        if (userFromSession == null) {
-            userFromSession = user.getLogin();
-            httpSession.setAttribute(sessionKeyLogin, userFromSession);
-        }
-        return "first access time : " + time + "\nsession id: " + httpSession.getId() + "\nUser login "
-                + httpSession.getAttribute(sessionKeyLogin);
-
     }
 
 }

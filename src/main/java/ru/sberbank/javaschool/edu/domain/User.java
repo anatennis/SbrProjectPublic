@@ -29,6 +29,8 @@ public class User implements UserDetails {
     private String surname;
     private LocalDateTime regdate;
     private String phone;
+    private String email;
+    private String actcode;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<CourseUser> courseUsers;

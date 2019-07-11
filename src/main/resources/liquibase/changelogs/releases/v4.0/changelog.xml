@@ -8,6 +8,7 @@
     <include file="recreate_tables.xml" relativeToChangelogFile="true"/>
     <include file="add_user_roles.xml" relativeToChangelogFile="true"/>
     <include file="recreate_course_user.xml" relativeToChangelogFile="true"/>
+    <include file="change_table_user_add_email.xml" relativeToChangelogFile="true"/>
 
 
 </databaseChangeLog>

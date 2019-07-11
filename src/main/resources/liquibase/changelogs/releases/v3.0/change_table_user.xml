@@ -5,16 +5,16 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
     http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
-    <changeSet id="change_table_user" author="Romanova Anastasiya" context="3.0" >
+    <changeSet id="change_table_user" author="Romanova Anastasiya" context="3.0">
         <comment>Изменение длины пароля в edu_user</comment>
         <modifyDataType columnName="password"
                         newDataType="VARCHAR(255)"
                         tableName="edu_user"/>
         <rollback>
-        <sql>
-            DROP TABLE edu_user;
-        </sql>
-    </rollback>
+            <sql>
+                DROP TABLE edu_user;
+            </sql>
+        </rollback>
     </changeSet>
 
 </databaseChangeLog>
