@@ -5,5 +5,6 @@ import ru.sberbank.javaschool.edu.domain.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     User findUserByLogin(String login);
+    User findUserByActcode(String code);
 
 }

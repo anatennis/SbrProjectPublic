@@ -19,6 +19,9 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepo;
 
     @Autowired
+    private MailSender mailSender;
+
+    @Autowired
     private PasswordEncoder passwordEncoder; //BCrypt так BCrypt :)
 
     @Override
@@ -34,7 +37,18 @@ public class UserService implements UserDetailsService {
         user.setRegdate(LocalDateTime.now());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        //user.setActcode(UUID.randomUUID().toString());
+        if (user.getEmail() != null) {
+            String code = UUID.randomUUID().toString();
+            user.setActcode(code);
+            String message = String.format(
+                    "Привет, %s!\n Добро пожаловать в наш класс, мы лучше чем Гугл :D\n" +
+                            "Ссылка для активации твоего аккаунта уже здесь: " +
+                            "http://localhost:8080/activate/%s",
+                    user.getName(),
+                    code
+            );
+            mailSender.send(user.getEmail(), "Activation code EDUClassroom", message);
+        }
 
 
         userRepo.save(user);
@@ -68,5 +82,17 @@ public class UserService implements UserDetailsService {
         return "first access time : " + time + "\nsession id: " + httpSession.getId() + "\nUser login "
                 + httpSession.getAttribute(sessionKeyLogin);
 
+    }
+
+    //активация юзера по почте(доработать), можно потом для отсылки
+    // пароля использовать, если регистрации не будет
+    public boolean isUserActivated(String code) {
+        User user = userRepo.findUserByActcode(code);
+        if (user == null) {
+            return false;
+        }
+        user.setActcode("ok");
+        userRepo.save(user);
+        return true;
     }
 }
