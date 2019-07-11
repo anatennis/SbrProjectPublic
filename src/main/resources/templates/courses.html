@@ -13,9 +13,26 @@
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     </form>
 </div>
-<h3>Список курсов</h3>
-<section th:each="course : ${courses}">
-    <a th:href="@{/course/{id}(id=${course.id})}" th:text="${course.getCaption()}"></a>
-</section>
+<h3>Список твоих курсов</h3>
+<!--<section th:each="course : ${courses}">-->
+    <!--<a th:href="@{/course/{id}(id=${course.course.id})}"><p th:text="${course.course.caption}"/></a>-->
+<!--</section>-->
+<table>
+    <thead>
+    <tr>
+        <th> Role </th>
+        <th> Course </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="course : ${courses}">
+        <td><span th:text="${course.role}"> Your role </span></td>
+        <td>
+            <a th:href="@{/course/{id}(id=${course.course.id})}"><p th:text="${course.course.caption}"/></a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
 </body>
 </html>

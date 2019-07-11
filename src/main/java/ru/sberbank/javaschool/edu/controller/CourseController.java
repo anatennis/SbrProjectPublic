@@ -6,10 +6,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import ru.sberbank.javaschool.edu.domain.Course;
+import ru.sberbank.javaschool.edu.domain.CourseUser;
 import ru.sberbank.javaschool.edu.repository.CourseRepository;
 import ru.sberbank.javaschool.edu.service.CourseService;
+import ru.sberbank.javaschool.edu.service.CourseUserService;
 
 import javax.servlet.http.HttpSession;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -18,6 +21,8 @@ public class CourseController {
     CourseService courseService;
     @Autowired
     CourseRepository courseRepository;
+    @Autowired
+    CourseUserService courseUserService;
 
     @Autowired
     HttpSession httpSession;
@@ -29,11 +34,10 @@ public class CourseController {
         return "/course";
     }
 
-    //курсы конкретного пользователя, пока выдает все курсы
     @GetMapping("/courses")
-    public String showAllUserCourses(Model model) {
-        List<Course> allCourses = courseService.getAllUserCourses((String)httpSession.getAttribute("userLogin"));
-        model.addAttribute("courses", allCourses);
+    public String showAllUserCourses(Model model, Principal principal) {
+        List<CourseUser> allUserCourses = courseUserService.getUserCourses(principal.getName());
+        model.addAttribute("courses", allUserCourses);
         return "/courses";
     }
 

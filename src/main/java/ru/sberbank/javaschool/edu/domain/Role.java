@@ -1,6 +1,13 @@
 package ru.sberbank.javaschool.edu.domain;
 
-public enum Role {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
     TEACHER,
-    STUDENT
+    STUDENT;
+
+    @Override
+    public String getAuthority() {
+        return name();
+    }
 }

@@ -11,6 +11,7 @@ import ru.sberbank.javaschool.edu.repository.UserRepository;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -32,6 +33,9 @@ public class UserService implements UserDetailsService {
         }
         user.setRegdate(LocalDateTime.now());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        //user.setActcode(UUID.randomUUID().toString());
+
 
         userRepo.save(user);
         return true;

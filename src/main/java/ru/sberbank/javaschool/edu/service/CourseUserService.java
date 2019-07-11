@@ -10,6 +10,8 @@ import ru.sberbank.javaschool.edu.repository.CourseRepository;
 import ru.sberbank.javaschool.edu.repository.CourseUserRepository;
 import ru.sberbank.javaschool.edu.repository.UserRepository;
 
+import java.util.List;
+
 @Service
 public class CourseUserService {
     private final CourseUserRepository courseUserRepository;
@@ -43,5 +45,11 @@ public class CourseUserService {
         courseUserRepository.save(courseUser);
 
         return true;
+    }
+
+    public List<CourseUser> getUserCourses(String login) {
+        User user = userRepository.findUserByLogin(login);
+        List<CourseUser> courses = courseUserRepository.findCourseUserByUser(user);
+        return courses;
     }
 }

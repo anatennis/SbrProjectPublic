@@ -19,18 +19,17 @@ import java.util.Set;
 
 @Controller
 @RequestMapping("/user")
-public class UserController {  //TODO
+public class UserController {
     @Autowired
     private UserService userService;
 
     @Autowired
-    HttpSession httpSession; //пока такой вариант работы с сессиями, проба
+    HttpSession httpSession;
 
     @GetMapping
     public String userGreeting(@AuthenticationPrincipal User user, Model model) {
         String username = user.getUsername();
         String sessionInfo = userService.getInfoFromSession(httpSession, user);
-
         Set<CourseUser> courseUsersSet = user.getCourseUsers();
         //userService.loadUserByUsername(user.getLogin()).getUsername();
         model.addAttribute("username", username);

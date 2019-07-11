@@ -32,11 +32,8 @@ public class User implements UserDetails {
     private String email;
     private String actcode;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private Set<CourseUser> courseUsers;
-
-//    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
-//    private Set<Role> roles;
 
     /**
      * Returns the authorities granted to the user. Cannot return <code>null</code>.
@@ -45,8 +42,12 @@ public class User implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        //return roles;
-        return null;
+        List<Role> roles = new ArrayList<>();
+        for (CourseUser courseUser : courseUsers) {
+            roles.add(courseUser.getRole());
+        }
+        return roles;
+        //return null;
     }
 
     /**
