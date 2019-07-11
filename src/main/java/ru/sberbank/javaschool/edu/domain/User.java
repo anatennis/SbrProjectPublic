@@ -8,8 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -34,6 +33,9 @@ public class User implements UserDetails {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<CourseUser> courseUsers;
 
+//    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "users")
+//    private Set<Role> roles;
+
     /**
      * Returns the authorities granted to the user. Cannot return <code>null</code>.
      *
@@ -41,6 +43,7 @@ public class User implements UserDetails {
      */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        //return roles;
         return null;
     }
 

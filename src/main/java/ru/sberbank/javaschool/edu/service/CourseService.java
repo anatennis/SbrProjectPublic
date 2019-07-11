@@ -8,6 +8,7 @@ import ru.sberbank.javaschool.edu.domain.User;
 import ru.sberbank.javaschool.edu.repository.CourseRepository;
 import ru.sberbank.javaschool.edu.repository.UserRepository;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,8 +26,10 @@ public class CourseService {
         this.userRepository = userRepository;
     }
 
-    public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+    public List<Course> getAllUserCourses(String login) {
+        //List<Course> courses = courseRepository.findAllCoursesByUserLogin(login);
+        List<Course> courses = courseRepository.findAll();
+        return courses;
     }
 
     public boolean addCourse(Course course) {

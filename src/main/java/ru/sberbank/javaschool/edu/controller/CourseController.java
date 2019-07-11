@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import ru.sberbank.javaschool.edu.domain.Course;
+import ru.sberbank.javaschool.edu.repository.CourseRepository;
 import ru.sberbank.javaschool.edu.service.CourseService;
 
 import javax.servlet.http.HttpSession;
@@ -14,20 +16,23 @@ import java.util.List;
 public class CourseController {
     @Autowired
     CourseService courseService;
+    @Autowired
+    CourseRepository courseRepository;
 
     @Autowired
     HttpSession httpSession;
 
-    @GetMapping("/course")
-    public String showCourse(Model model, Course course) {  //работает пока не так как надо
-        //model.addAttribute("caption", course.getCaption());
+    @GetMapping("/course/{id}")
+    public String showCourse(@PathVariable long id, Model model) {
+        Course course = courseRepository.findCourseById(id);
+        model.addAttribute("course", course);
         return "/course";
     }
 
-    //дубляж админского метода, но они ведут на разные страницы, в задумке это именно курсы конкретного пользователя
+    //курсы конкретного пользователя, пока выдает все курсы
     @GetMapping("/courses")
     public String showAllUserCourses(Model model) {
-        List<Course> allCourses = courseService.getAllCourses();
+        List<Course> allCourses = courseService.getAllUserCourses((String)httpSession.getAttribute("userLogin"));
         model.addAttribute("courses", allCourses);
         return "/courses";
     }
