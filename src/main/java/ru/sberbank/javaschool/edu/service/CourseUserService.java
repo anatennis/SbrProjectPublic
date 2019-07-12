@@ -50,6 +50,7 @@ public class CourseUserService {
     public List<CourseUser> getUserCourses(String login) {
         User user = userRepository.findUserByLogin(login);
         List<CourseUser> courses = courseUserRepository.findCourseUserByUser(user);
+
         return courses;
     }
 }

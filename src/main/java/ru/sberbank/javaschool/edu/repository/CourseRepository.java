@@ -11,6 +11,7 @@ import java.util.Set;
 
 public interface CourseRepository extends JpaRepository<Course, Long> {
     Course findCourseByCaption(String caption);
+
     Course findCourseById(Long id);
 
 }

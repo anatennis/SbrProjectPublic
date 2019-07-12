@@ -17,6 +17,58 @@
 <div>
     <span th:text="${course.caption}"></span>
 </div>
+<div th:if="${canEdit}">
+    <form th:action="@{'/course/{id}'(id=${course.id})}" method="post">
+        <div><label> Title: <input type="text" name="title" placeholder="Название материала"/> </label></div>
+        <div><label> Text: <textarea type="text" name="text" placeholder="Содержание"></textarea></label></div>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div><input type="submit" value="Добавить материал"/></div>
+    </form>
+</div>
+<div th:if="${!materials.isEmpty()}">
+    <table>
+        <tbody>
+        <tr th:each="material : ${materials}">
+            <td>
+                <table>
+                    <tr>
+                        <td th:align="center"><span th:text="${material.getTitle()}"> Title </span></td>
+                    </tr>
+                    <tr>
+                        <td><span th:text="${material.getText()}"> Text </span></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span th:text="${#temporals.format(material.getCreateDate(), 'dd-MM-yyyy HH:mm:ss')}">
+                                Publication date
+                            </span>
+                        </td>
+                        <td><span th:text="${material.getAuthor().getName()}"> Publisher </span></td>
+                    </tr>
+                    <tr th:if="${canEdit}">
+                        <td>
+                            <form action="#"
+                                  th:action= "@{'/course/{idCourse}/edit/{idMaterial}'(idCourse=${course.getId()}, idMaterial=${material.getId()})}"
+                                  th:method="get" >
+                                <input type="hidden" name="_method" value="get" />
+                                <button type="submit" id="editButton">Edit</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="#"
+                                  th:action= "@{'/course/{idCourse}/delete/{idMaterial}'(idCourse=${course.getId()}, idMaterial=${material.getId()})}"
+                                  th:method="delete" >
+                                <input type="hidden" name="_method" value="delete" />
+                                <button type="submit" id="deleteButton">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 
 </body>

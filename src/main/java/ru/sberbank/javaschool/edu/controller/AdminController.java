@@ -22,7 +22,7 @@ public class AdminController {
     private final CourseUserService courseUserService;
 
     @Autowired
-    public AdminController (
+    public AdminController(
             CourseRepository courseRepository,
             CourseService courseService,
             CourseUserService courseUserService
