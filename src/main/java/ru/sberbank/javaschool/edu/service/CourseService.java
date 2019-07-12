@@ -3,12 +3,9 @@ package ru.sberbank.javaschool.edu.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sberbank.javaschool.edu.domain.Course;
-import ru.sberbank.javaschool.edu.domain.Role;
-import ru.sberbank.javaschool.edu.domain.User;
 import ru.sberbank.javaschool.edu.repository.CourseRepository;
 import ru.sberbank.javaschool.edu.repository.UserRepository;
 
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,7 +24,6 @@ public class CourseService {
     }
 
     public List<Course> getAllUserCourses(String login) {
-        //List<Course> courses = courseRepository.findAllCoursesByUserLogin(login);
         List<Course> courses = courseRepository.findAll();
         return courses;
     }
