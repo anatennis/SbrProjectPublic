@@ -31,7 +31,7 @@ public class UserController {
         String username = user.getUsername();
         String sessionInfo = userService.getInfoFromSession(httpSession, user);
         Set<CourseUser> courseUsersSet = user.getCourseUsers();
-        //userService.loadUserByUsername(user.getLogin()).getUsername();
+
         model.addAttribute("username", username);
         model.addAttribute("oursession", sessionInfo);
         model.addAttribute("courseusers", courseUsersSet);

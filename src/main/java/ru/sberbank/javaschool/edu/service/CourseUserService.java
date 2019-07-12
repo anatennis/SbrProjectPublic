@@ -10,6 +10,7 @@ import ru.sberbank.javaschool.edu.repository.CourseRepository;
 import ru.sberbank.javaschool.edu.repository.CourseUserRepository;
 import ru.sberbank.javaschool.edu.repository.UserRepository;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.List;
 
 @Service
@@ -41,7 +42,6 @@ public class CourseUserService {
         }
 
         CourseUser courseUser = new CourseUser(course, user, userRole);
-
         courseUserRepository.save(courseUser);
 
         return true;
@@ -52,5 +52,14 @@ public class CourseUserService {
         List<CourseUser> courses = courseUserRepository.findCourseUserByUser(user);
 
         return courses;
+    }
+
+
+    //Для автоматического назначения админа на все курсы как учителя для возможности редактирования
+    public void addAdminToAllCourses(Course course) {
+        User admin = userRepository.findUserByLogin("admin");
+        CourseUser courseUserAdmin = new CourseUser(course, admin, Role.TEACHER);
+        courseUserRepository.save(courseUserAdmin);
+
     }
 }

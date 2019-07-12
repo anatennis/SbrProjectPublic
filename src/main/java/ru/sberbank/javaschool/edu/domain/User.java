@@ -47,7 +47,6 @@ public class User implements UserDetails {
             roles.add(courseUser.getRole());
         }
         return roles;
-        //return null;
     }
 
     /**

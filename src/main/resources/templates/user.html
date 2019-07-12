@@ -15,6 +15,11 @@
 </div>
 <p th:text="'Привет, ' + ${username} + '!'" />
 <p th:text="'Сессия ' + ${oursession}" />
+
+<div th:if="${message}">
+    <p th:text="${message}"></p>
+</div>
+
 <a th:href="@{/courses}">Мои курсы</a>
 <!--<section th:each="courseUser : ${courseusers}">-->
 <!--    <p th:text="${courseUser.getCourse().getCaption()}"></p>-->

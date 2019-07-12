@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sberbank.javaschool.edu.domain.Course;
 import ru.sberbank.javaschool.edu.repository.CourseRepository;
+import ru.sberbank.javaschool.edu.repository.CourseUserRepository;
 import ru.sberbank.javaschool.edu.repository.UserRepository;
 
 import java.time.LocalDateTime;
@@ -12,20 +13,16 @@ import java.util.List;
 @Service
 public class CourseService {
     private final CourseRepository courseRepository;
-    private final UserRepository userRepository;
+    private final CourseUserService courseUserService;
+    //private final UserRepository userRepository;
 
     @Autowired
     public CourseService(
             CourseRepository courseRepository,
-            UserRepository userRepository
+            CourseUserService courseUserService
     ) {
         this.courseRepository = courseRepository;
-        this.userRepository = userRepository;
-    }
-
-    public List<Course> getAllUserCourses(String login) {
-        List<Course> courses = courseRepository.findAll();
-        return courses;
+        this.courseUserService = courseUserService;
     }
 
     public boolean addCourse(Course course) {
@@ -38,6 +35,7 @@ public class CourseService {
         course.setCreateDate(LocalDateTime.now());
 
         courseRepository.save(course);
+        courseUserService.addAdminToAllCourses(course);
 
         return true;
     }
