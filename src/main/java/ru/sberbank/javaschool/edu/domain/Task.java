@@ -9,7 +9,6 @@ import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "edu_publication")
 @NoArgsConstructor
 @DiscriminatorValue("Task")
 @Setter
@@ -18,4 +17,8 @@ import java.time.LocalDateTime;
 public class Task extends Material {
     @Column(name = "compltime")
     private LocalDateTime completeTime;
+    @Column(name = "maxmark")
+    private Long maxMark;
+    @Column(name = "curmark")
+    private Long curMark;
 }

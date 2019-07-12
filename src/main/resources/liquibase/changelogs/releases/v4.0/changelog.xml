@@ -9,6 +9,7 @@
     <include file="add_user_roles.xml" relativeToChangelogFile="true"/>
     <include file="recreate_course_user.xml" relativeToChangelogFile="true"/>
     <include file="change_table_user_add_email.xml" relativeToChangelogFile="true"/>
+    <include file="change_table_publication.xml" relativeToChangelogFile="true"/>
 
 
 </databaseChangeLog>
