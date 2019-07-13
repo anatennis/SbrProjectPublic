@@ -29,4 +29,7 @@ public class UserTask {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user")
     protected User user;
+
+    @Column(name = "curmark")
+    private Long curMark;
 }

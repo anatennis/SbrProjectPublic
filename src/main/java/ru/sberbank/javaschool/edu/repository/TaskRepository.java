@@ -8,11 +8,11 @@ import ru.sberbank.javaschool.edu.domain.User;
 
 import java.util.List;
 
-public interface MaterialRepository extends JpaRepository<Material, Long> {
-    Material getMaterialByCourseAndAuthorAndTitle(Course course, User author, String title);
+public interface TaskRepository extends JpaRepository<Task, Long> {
+    Task getTaskByCourseAndAuthorAndTitle(Course course, User author, String title);
 
-    Material getMaterialById(long id);
+    Task getTaskById(long id);
 
-    List<Material> getMaterialByCourseOrderById(Course course);
+    List<Task> getTaskByCourseOrderById(Course course);
 
 }

@@ -1,6 +1,7 @@
 package ru.sberbank.javaschool.edu.domain;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
@@ -19,6 +20,4 @@ public class Task extends Material {
     private LocalDateTime completeTime;
     @Column(name = "maxmark")
     private Long maxMark;
-    @Column(name = "curmark")
-    private Long curMark;
 }

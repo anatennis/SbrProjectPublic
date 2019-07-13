@@ -8,6 +8,7 @@
 </head>
 <body>
 <h1>Welcome!</h1>
+
 <p>Click <a th:href="@{/test}">here</a> to see a greeting</p>
 <div sec:authorize="isAnonymous()">
     <p>Click <a th:href="@{/login}">here</a> to login</p>
@@ -15,7 +16,8 @@
 </div>
 <div sec:authorize="isAuthenticated()">
     <p>Click <a th:href="@{/user}">here</a> to see your page</p>
-    <p>Click <a th:href="@{/courses}">here</a> to see all your courses</p> <!--пока показывает просто все курсы-->
+    <p>Click <a th:href="@{/courses}">here</a> to see all your courses</p>
+
     <p>Click <a th:href="@{/administration}">here</a> to see administration page</p>
 </div>
 
