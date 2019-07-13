@@ -5,7 +5,9 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,4 +26,7 @@ public class Course implements Serializable {
 
     @OneToMany(mappedBy = "course")
     private Set<CourseUser> courseUsers = new HashSet<>();
+
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    private List<Material> materials = new ArrayList<>();
 }

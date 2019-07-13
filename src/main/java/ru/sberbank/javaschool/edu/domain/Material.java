@@ -5,6 +5,8 @@ import lombok.*;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -31,4 +33,7 @@ public class Material implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author")
     protected User author;
+
+    @OneToMany(mappedBy = "material", fetch = FetchType.LAZY)
+    private List<MaterialComment> comments = new ArrayList<>();
 }
