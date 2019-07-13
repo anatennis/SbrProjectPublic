@@ -20,6 +20,4 @@ public class Task extends Material {
     private LocalDateTime completeTime;
     @Column(name = "maxmark")
     private Long maxMark;
-    @Column(name = "curmark")
-    private Long curMark;
 }
