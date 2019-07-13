@@ -1,6 +1,7 @@
 package ru.sberbank.javaschool.edu.domain;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;

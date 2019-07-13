@@ -48,7 +48,8 @@ public class CourseController {
 
         model.addAttribute("course", course);
         model.addAttribute("materials", materials);
-        model.addAttribute("canEdit", materialService.canCreateMaterial(course, user));
+        model.addAttribute("canCreate", materialService.canCreateMaterial(course, user));
+        //model.addAttribute("canEdit", materialService.canEditMaterial(course, user));
 
         return "course";
     }

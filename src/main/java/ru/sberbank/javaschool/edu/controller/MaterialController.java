@@ -35,13 +35,7 @@ public class MaterialController {
             @PathVariable long idMaterial,
             @PathVariable long idCourse,
             @AuthenticationPrincipal User user) {
-        Course course = courseRepository.findCourseById(idCourse);
-
-        if (!materialService.canCreateMaterial(course, user)) {
-            return "redirect:/course/{idCourse}";
-        }
-
-        materialService.removeMaterial(idMaterial);
+        materialService.deletePublication(idMaterial, idCourse, user, true);
 
         return "redirect:/course/{idCourse}";
     }
@@ -75,4 +69,7 @@ public class MaterialController {
 
         return "redirect:/course/{idCourse}";
     }
+
+
+
 }
