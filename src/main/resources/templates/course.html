@@ -63,6 +63,39 @@
                             </form>
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <form th:action="@{'/course/{idCourse}/comment/{idMaterial}'(idCourse=${course.getId()}, idMaterial=${material.getId()})}"
+                                  th:method="post">
+                                <div><textarea type="text" name="text" placeholder="Введите комментарий"></textarea></div>
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                <div><input type="submit" value="Добавить комментарий"/></div>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div th:if="${!material.getComments().isEmpty()}">
+                                <table>
+                                    <tr th:each="comment : ${material.getComments()}">
+                                        <table>
+                                            <tr>
+                                                <td><span th:text="${comment.getText()}"> Text </span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <span th:text="${#temporals.format(comment.getCreatedate(), 'dd-MM-yyyy HH:mm:ss')}">
+                                                        Publication date
+                                                    </span>
+                                                </td>
+                                                <td><span th:text="${comment.getAuthor().getName()}"> Publisher </span></td>
+                                            </tr>
+                                        </table>
+                                    </tr>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
                 </table>
             </td>
         </tr>
