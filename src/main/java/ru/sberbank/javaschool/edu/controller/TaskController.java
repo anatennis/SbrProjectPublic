@@ -7,16 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
-import ru.sberbank.javaschool.edu.domain.Course;
-import ru.sberbank.javaschool.edu.domain.Material;
-import ru.sberbank.javaschool.edu.domain.Task;
-import ru.sberbank.javaschool.edu.domain.User;
-import ru.sberbank.javaschool.edu.repository.CourseRepository;
-import ru.sberbank.javaschool.edu.repository.MaterialRepository;
-import ru.sberbank.javaschool.edu.repository.TaskRepository;
+import ru.sberbank.javaschool.edu.domain.*;
+import ru.sberbank.javaschool.edu.repository.*;
 import ru.sberbank.javaschool.edu.service.CourseService;
 import ru.sberbank.javaschool.edu.service.CourseUserService;
 import ru.sberbank.javaschool.edu.service.MaterialService;
+import ru.sberbank.javaschool.edu.service.UserTaskService;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -25,21 +21,94 @@ import java.util.List;
 
 @Controller
 public class TaskController {
+    //@Autowired
+    //CourseService courseService;
+    //@Autowired
+    //CourseUserService courseUserService;
+    //@Autowired
+    //MaterialRepository materialRepository;
     @Autowired
-    CourseService courseService;
+    private CourseRepository courseRepository;
     @Autowired
-    CourseRepository courseRepository;
+    private TaskRepository taskRepository;
     @Autowired
-    CourseUserService courseUserService;
+    private MaterialService materialService;
     @Autowired
-    MaterialRepository materialRepository;
+    private UserTaskRepository userTaskRepository;
     @Autowired
-    TaskRepository taskRepository;
+    private UserTaskService userTaskService;
     @Autowired
-    MaterialService materialService;
+    private UserRepository userRepository;
+
+    @GetMapping("/course/{idCourse}/tasks/{idTask}")
+    public String showTask(
+            @PathVariable long idCourse,
+            @PathVariable long idTask,
+            Model model,
+            @AuthenticationPrincipal User user) {
+        Course course = courseRepository.findCourseById(idCourse);
+        Task task = taskRepository.getTaskById(idTask);
+        UserTask userTask = userTaskRepository.findUserTaskByUserAndTask(user, task);
+        if (userTask == null) {
+            userTask = userTaskService.createUserTask(user, task);
+        }
+
+        model.addAttribute("course", course);
+        model.addAttribute("task", task);
+        model.addAttribute("usertask", userTask);
+        model.addAttribute("isStudent", !materialService.canCreateMaterial(course, user));
+        model.addAttribute("isTeacher", materialService.canCreateMaterial(course, user));
+        model.addAttribute("usertasks", userTaskRepository.findUserTaskByTask(task));
+
+        return "task";
+    }
+
+    @PostMapping("/course/{idCourse}/tasks/{idTask}")
+    public String submitTask(
+            @PathVariable long idCourse,
+            @PathVariable long idTask,
+            @AuthenticationPrincipal User user) {
+
+        userTaskService.submitTask(idTask, user, idCourse);
+
+        return "redirect:/course/{idCourse}/tasks/{idTask}";
+    }
+
+    @GetMapping("/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}")
+    public String teacherPageTask(
+            @PathVariable long idCourse,
+            @PathVariable long idTask,
+            @PathVariable long idUser,
+            Model model) {
+        Course course = courseRepository.findCourseById(idCourse);
+        Task task = taskRepository.getTaskById(idTask);
+        User user = userRepository.findUserById(idUser);
+        UserTask userTask = userTaskRepository.findUserTaskByUserAndTask(user, task);
+
+        model.addAttribute("course", course);
+        model.addAttribute("task", task);
+        model.addAttribute("usertask", userTask);
+        model.addAttribute("user", user);
+
+        return "task_teacher";
+    }
+
+    @PostMapping("/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}")
+    public String setMarkToUser(
+            @PathVariable long idCourse,
+            @PathVariable long idTask,
+            @PathVariable long idUser,
+            UserTask userTask) {
+
+        userTaskService.setMarkToUser(idTask, idCourse, idUser, userTask.getCurMark());
+
+        return "redirect:/course/{idCourse}/tasks/{idTask}/{idUser}";
+    }
+
+
 
     @GetMapping("/course/{id}/tasks")
-    public String showCourse(
+    public String showTasks(
             @PathVariable long id,
             Model model,
             @AuthenticationPrincipal User user) {
@@ -54,7 +123,7 @@ public class TaskController {
     }
 
     @PostMapping("/course/{idCourse}/tasks")
-    public String addMaterial(@PathVariable long idCourse,
+    public String addTask(@PathVariable long idCourse,
                               @AuthenticationPrincipal User user,
                                Task task) {
 
@@ -76,7 +145,7 @@ public class TaskController {
     }
 
     @GetMapping("/course/{idCourse}/tasks/edit/{idTask}")
-    public String showEditMaterial(
+    public String showEditTask(
             @PathVariable Long idCourse,
             @PathVariable Long idTask,
             @AuthenticationPrincipal User user,

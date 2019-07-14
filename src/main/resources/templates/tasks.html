@@ -38,8 +38,12 @@
         <tr th:each="task : ${tasks}">
             <td>
                 <table>
+
                     <tr>
-                        <td th:align="center"><span th:text="${task.getTitle()}"> Title </span></td>
+                        <td th:align="center"><b>
+                            <a th:href="@{'/course/{idCourse}/tasks/{idTask}'
+                            (idCourse=${course.getId()}, idTask=${task.getId()})}" th:text="${task.getTitle()}"> Title
+                            </a></b></td>
                     </tr>
                     <tr>
                         <td><span th:text="${task.getText()}"> Text </span></td>
@@ -53,8 +57,8 @@
                                 Complete date
                             </span>
                         </td>
-                        <td><span th:text="${task.getAuthor().getName()}"> Publisher </span></td>
-                        <td><span th:text="${task.getMaxMark()}"> Mark </span></td>
+                        <td>Max mark: <span th:text="${task.getMaxMark()}"> Max Mark </span></td>
+                        <!--<td>My mark: <span th:text="${task.getMaxMark()}"> My Mark </span></td>-->
                     </tr>
                     <tr th:if="${canEdit}">
                         <td>
