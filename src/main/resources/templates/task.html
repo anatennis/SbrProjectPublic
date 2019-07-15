@@ -34,7 +34,7 @@
             <td>
                 <a th:href="@{'/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}'
                       (idCourse=${course.getId()}, idTask=${task.getId()}, taskCaption=${task.getTitle()},
-                      idUser=${usertask.getUser().getId()})}">
+                      idUser=${utask.getUser().getId()})}">
                     See task
                 </a>
             </td>

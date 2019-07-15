@@ -58,9 +58,9 @@
         <tr>
             <td>
                 <form th:action="@{'/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}'
-                      (idCourse=${course.getId()}, idTask=${task.getId()}, idUser=${user.getId()})}"
+                      (idCourse=${course.getId()}, idTask=${task.getId()}, idUser=${user.getId()},
+                      taskCaption=${task.getTitle()})}"
                       method="post">
-                    <!--<input type="hidden" name="_method" value="get"/>-->
                     <input type="number" name="curMark">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <button type="submit" id="setMarkButton">Set mark</button>
