@@ -44,7 +44,7 @@ public class CourseController {
             Model model,
             @AuthenticationPrincipal User user) {
         Course course = courseRepository.findCourseById(id);
-        List<Material> materials = materialRepository.getMaterialByCourseOrderById(course);//course.getMaterials();
+        List<Material> materials = materialRepository.getMaterialByCourseOrderById(id);//course.getMaterials();
 
         model.addAttribute("course", course);
         model.addAttribute("materials", materials);
