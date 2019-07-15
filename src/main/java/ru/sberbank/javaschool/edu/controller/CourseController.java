@@ -44,11 +44,12 @@ public class CourseController {
             Model model,
             @AuthenticationPrincipal User user) {
         Course course = courseRepository.findCourseById(id);
-        List<Material> materials = course.getMaterials();
+        List<Material> materials = materialRepository.getMaterialByCourseOrderById(id);//course.getMaterials();
 
         model.addAttribute("course", course);
         model.addAttribute("materials", materials);
         model.addAttribute("canCreate", materialService.canCreateMaterial(course, user));
+        model.addAttribute("currentUser", user);
         //model.addAttribute("canEdit", materialService.canEditMaterial(course, user));
 
         return "course";

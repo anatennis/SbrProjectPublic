@@ -90,6 +90,24 @@
                                                 </td>
                                                 <td><span th:text="${comment.getAuthor().getName()}"> Publisher </span></td>
                                             </tr>
+                                            <tr th:if="${comment.getAuthor().equals(currentUser)}">
+                                                <td>
+                                                    <form action="#"
+                                                          th:action= "@{'/course/{idCourse}/edit_comment/{idComment}'(idCourse=${course.getId()}, idComment=${comment.getId()})}"
+                                                          th:method="get" >
+                                                        <input type="hidden" name="_method" value="get" />
+                                                        <button type="submit" id="editComment">Edit</button>
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <form action="#"
+                                                          th:action= "@{'/course/{idCourse}/delete_comment/{idComment}'(idCourse=${course.getId()}, idComment=${comment.getId()})}"
+                                                          th:method="delete" >
+                                                        <input type="hidden" name="_method" value="delete" />
+                                                        <button type="submit" id="deleteComment">Delete</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
                                         </table>
                                     </tr>
                                 </table>

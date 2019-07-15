@@ -1,6 +1,8 @@
 package ru.sberbank.javaschool.edu.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.sberbank.javaschool.edu.domain.Course;
 import ru.sberbank.javaschool.edu.domain.Material;
 import ru.sberbank.javaschool.edu.domain.Task;
@@ -13,6 +15,11 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
 
     Material getMaterialById(long id);
 
-    List<Material> getMaterialByCourseOrderById(Course course);
+    @Query(
+            value = "SELECT p.* FROM edu_publication p WHERE p.course = :course_id " +
+                    "AND p.dtype = 'Material' ORDER BY id ASC",
+            nativeQuery = true
+    )
+    List<Material> getMaterialByCourseOrderById(@Param("course_id") Long courseId);
 
 }
