@@ -12,10 +12,10 @@
     </form>
 </div>
 <p><a th:href="@{/}">Start page</a></p>
-<p><a th:href="@{'/course/{id}'(id=${course.getId()})}">Back</a></p>
+<p><a th:href="@{'/course/{id}'(id=${idCourse})}">Back</a></p>
 <div>
     <form
-            th:action= "@{'/course/{id}/edit/{idMaterial}'(id=${course.getId()}, idMaterial=${material.getId()})}"
+            th:action= "@{'/course/{id}/edit_comment/{idComment}'(id=${idCourse}, idComment=${comment.getId()})}"
             th:method="post">
         <div><label> Text: <textarea type="text" name="text" th:text="${comment.getText()}"></textarea></label></div>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
