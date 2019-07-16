@@ -10,7 +10,6 @@ import ru.sberbank.javaschool.edu.repository.CourseRepository;
 import ru.sberbank.javaschool.edu.repository.CourseUserRepository;
 import ru.sberbank.javaschool.edu.repository.UserRepository;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -71,6 +70,11 @@ public class CourseUserService {
             return false;
         }
         return true;
+    }
+
+    public void deleteCourseUser(long id) {
+
+        courseUserRepository.deleteById(id);
     }
 
 
