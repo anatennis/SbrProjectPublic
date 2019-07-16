@@ -11,6 +11,7 @@
     <include file="change_table_user_add_email.xml" relativeToChangelogFile="true"/>
     <include file="change_table_publication.xml" relativeToChangelogFile="true"/>
     <include file="replace_curmark_to_usertask.xml" relativeToChangelogFile="true"/>
+    <include file="add_files.xml" relativeToChangelogFile="true"/>
 
 
 </databaseChangeLog>
