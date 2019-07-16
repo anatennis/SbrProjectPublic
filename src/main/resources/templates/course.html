@@ -17,7 +17,9 @@
 <div>
     <span th:text="${course.caption}"></span>
 </div>
+<div><a th:href="@{'/course/{idCourse}/tasks'(idCourse=${course.getId()})}">Задания</a></div>
 <div th:if="${canCreate}">
+    <div><a th:href="@{'/course/{idCourse}/users'(idCourse=${course.getId()})}">Ученики</a></div>
     <form th:action="@{'/course/{id}'(id=${course.id})}" method="post">
         <div><label> Title: <input type="text" name="title" placeholder="Название материала"/> </label></div>
         <div><label> Text: <textarea type="text" name="text" placeholder="Содержание"></textarea></label></div>
@@ -120,8 +122,6 @@
         </tbody>
     </table>
 </div>
-
-<div><a th:href="@{'/course/{idCourse}/tasks'(idCourse=${course.getId()})}">Задания</a></div>
 
 </body>
 </html>

@@ -21,12 +21,6 @@ import java.util.List;
 
 @Controller
 public class TaskController {
-    //@Autowired
-    //CourseService courseService;
-    //@Autowired
-    //CourseUserService courseUserService;
-    //@Autowired
-    //MaterialRepository materialRepository;
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
@@ -99,14 +93,13 @@ public class TaskController {
 
     @PostMapping("/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}")
     public String setMarkToUser(
-            @PathVariable long idCourse,
             @PathVariable long idTask,
             @PathVariable long idUser,
             UserTask userTask) {
 
-        userTaskService.setMarkToUser(idTask, idCourse, idUser, userTask.getCurMark());
+        userTaskService.setMarkToUser(idTask, idUser, userTask.getCurMark());
 
-        return "redirect:/course/{idCourse}/tasks/{idTask}/{idUser}";
+        return "redirect:/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}";
     }
 
 

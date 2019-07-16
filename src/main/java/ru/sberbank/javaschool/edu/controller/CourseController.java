@@ -13,11 +13,13 @@ import ru.sberbank.javaschool.edu.domain.CourseUser;
 import ru.sberbank.javaschool.edu.domain.Material;
 import ru.sberbank.javaschool.edu.domain.User;
 import ru.sberbank.javaschool.edu.repository.CourseRepository;
+import ru.sberbank.javaschool.edu.repository.CourseUserRepository;
 import ru.sberbank.javaschool.edu.repository.MaterialRepository;
 import ru.sberbank.javaschool.edu.service.CourseService;
 import ru.sberbank.javaschool.edu.service.CourseUserService;
 import ru.sberbank.javaschool.edu.service.MaterialService;
 
+import javax.jws.WebParam;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.List;
@@ -30,6 +32,8 @@ public class CourseController {
     CourseRepository courseRepository;
     @Autowired
     CourseUserService courseUserService;
+    @Autowired
+    CourseUserRepository courseUserRepository;
     @Autowired
     MaterialRepository materialRepository;
     @Autowired
@@ -70,6 +74,25 @@ public class CourseController {
         materialService.createMaterial(course, user, material);
 
         return "redirect:/course/{idCourse}";
+    }
+
+    @GetMapping("/course/{idCourse}/users")
+    public String showCourseUsers(@PathVariable long idCourse,
+                                  Model model) {
+
+        Course course = courseRepository.findCourseById(idCourse);
+        List<CourseUser> courseUsers = courseUserRepository.findCourseUserByCourse(course);
+        model.addAttribute("course", course);
+        model.addAttribute("courseusers", courseUsers);
+        return "users";
+    }
+
+    @DeleteMapping("/course/{idCourse}/users/{idCourseuser}")
+    public String removeCourseUser(@PathVariable long idCourseuser) {
+
+        courseUserRepository.deleteById(idCourseuser);
+
+        return "redirect:/course/{idCourse}/users";
     }
 
 
