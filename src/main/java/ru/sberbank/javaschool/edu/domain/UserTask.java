@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "edu_user_task")
@@ -32,4 +34,7 @@ public class UserTask {
 
     @Column(name = "curmark")
     private Long curMark;
+
+    @OneToMany(mappedBy = "userTask", fetch = FetchType.LAZY)
+    private List<TaskComment> comments = new ArrayList<>();
 }

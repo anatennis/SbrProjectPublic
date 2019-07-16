@@ -29,11 +29,7 @@
         <tbody>
         <tr>
             <td><b><span th:text="${task.getTitle()}"> Title</span></b></td>
-        </tr>
-        <tr>
             <td><span th:text="${task.getText()}"> Text </span></td>
-        </tr>
-        <tr>
             <td><span th:text="${#temporals.format(usertask.getSubmittedDate(), 'dd-MM-yyyy HH:mm:ss')}">
                                 Submitted date
                 </span>
@@ -65,6 +61,63 @@
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     <button type="submit" id="setMarkButton">Set mark</button>
                 </form>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <form th:action="@{'/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}/comment'
+                      (idCourse=${course.getId()}, idTask=${task.getId()}, taskCaption=${task.getTitle()},
+                      idUser=${usertask.getUser().getId()})}"
+                      th:method="post">
+                    <div><textarea type="text" name="text" placeholder="Введите комментарий"></textarea></div>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <div><input type="submit" value="Добавить комментарий"/></div>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div th:if="${!usertask.getComments().isEmpty()}">
+                    <table>
+                        <tr th:each="comment : ${usertask.getComments()}">
+                            <table>
+                                <tr>
+                                    <td><span th:text="${comment.getText()}"> Text </span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                                    <span th:text="${#temporals.format(comment.getCreateDate(), 'dd-MM-yyyy HH:mm:ss')}">
+                                                        Publication date
+                                                    </span>
+                                    </td>
+                                    <td><span th:text="${comment.getAuthor().getName()}"> Publisher </span></td>
+                                </tr>
+                                <tr th:if="${comment.getAuthor().equals(currentUser)}">
+                                    <td>
+                                        <form action="#"
+                                              th:action="@{'/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}/edit_comment'
+                                              (idCourse=${course.getId()}, idTask=${task.getId()}, taskCaption=${task.getTitle()},
+                                              idUser=${usertask.getUser().getId()})}"
+                                              th:method="get" >
+                                            <input type="hidden" name="_method" value="get" />
+                                            <button type="submit" id="editComment">Edit</button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form action="#"
+                                              th:action="@{'/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}/comment_delite'
+                                              (idCourse=${course.getId()}, idTask=${task.getId()}, taskCaption=${task.getTitle()},
+                                              idUser=${usertask.getUser().getId()})}"
+                                              th:method="delete" >
+                                            <input type="hidden" name="_method" value="delete" />
+                                            <button type="submit" id="deleteComment">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </table>
+                        </tr>
+                    </table>
+                </div>
             </td>
         </tr>
         </tbody>
