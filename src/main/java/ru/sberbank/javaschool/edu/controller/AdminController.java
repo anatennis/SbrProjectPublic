@@ -1,12 +1,11 @@
 package ru.sberbank.javaschool.edu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.sberbank.javaschool.edu.domain.Course;
-import ru.sberbank.javaschool.edu.domain.User;
+import ru.sberbank.javaschool.edu.domain.Role;
 import ru.sberbank.javaschool.edu.repository.CourseRepository;
 import ru.sberbank.javaschool.edu.service.CourseService;
 import ru.sberbank.javaschool.edu.service.CourseUserService;
@@ -20,16 +19,19 @@ public class AdminController {
     private final CourseRepository courseRepository;
     private final CourseService courseService;
     private final CourseUserService courseUserService;
+    private final UserService userService;
 
     @Autowired
     public AdminController(
             CourseRepository courseRepository,
             CourseService courseService,
-            CourseUserService courseUserService
+            CourseUserService courseUserService,
+            UserService userService
     ) {
         this.courseRepository = courseRepository;
         this.courseService = courseService;
         this.courseUserService = courseUserService;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -66,6 +68,8 @@ public class AdminController {
         Course course = courseRepository.findCourseById(id);
         model.addAttribute("course", course);
         model.addAttribute("courseusers", course.getCourseUsers());
+        model.addAttribute("roles", Role.values());
+        model.addAttribute("allUsers", userService.getUsersNotPresentOnCourse(id));
         return "courseEdit";
     }
 
@@ -85,6 +89,15 @@ public class AdminController {
         courseUserService.addCourseUser(id, userName, userRole);
 
         return "redirect:/administration/course/{id}";
+    }
+
+    @DeleteMapping("/course/{idCourse}/delete/{idCourseUser}")
+    public String deleteUserFromCourse(@PathVariable long idCourseUser) {
+
+        courseUserService.deleteCourseUser(idCourseUser);
+
+        return "redirect:/administration/course/{idCourse}";
+
     }
 
     private boolean hasAccess(Principal principal) {  //костыльненькое ограничение прав доступа на админку

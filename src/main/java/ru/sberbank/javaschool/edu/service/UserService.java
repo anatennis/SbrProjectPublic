@@ -6,17 +6,25 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.sberbank.javaschool.edu.domain.Course;
+import ru.sberbank.javaschool.edu.domain.CourseUser;
 import ru.sberbank.javaschool.edu.domain.User;
+import ru.sberbank.javaschool.edu.repository.CourseRepository;
 import ru.sberbank.javaschool.edu.repository.UserRepository;
 
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepo;
+
+    @Autowired
+    private CourseRepository courseRepository;
 
     @Autowired
     private MailSender mailSender;
@@ -82,6 +90,21 @@ public class UserService implements UserDetailsService {
         return "first access time : " + time + "\nsession id: " + httpSession.getId() + "\nUser login "
                 + httpSession.getAttribute(sessionKeyLogin);
 
+    }
+
+    public List<User> getUsersNotPresentOnCourse(long idCourse) {
+        List<User> users = userRepo.findAll();
+        Course course = courseRepository.findCourseById(idCourse);
+
+        List<User> presentUser = new ArrayList<>();
+
+        for (CourseUser courseUser : course.getCourseUsers()) {
+            presentUser.add(courseUser.getUser());
+        }
+
+        users.removeAll(presentUser);
+
+        return users;
     }
 
     //активация юзера по почте(доработать), можно потом для отсылки
