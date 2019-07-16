@@ -53,6 +53,7 @@ public class TaskController {
         model.addAttribute("isStudent", !materialService.canCreateMaterial(course, user));
         model.addAttribute("isTeacher", materialService.canCreateMaterial(course, user));
         model.addAttribute("usertasks", userTaskRepository.findUserTaskByTask(task));
+        model.addAttribute("currentUser", user);
 
         return "task";
     }
@@ -73,6 +74,7 @@ public class TaskController {
             @PathVariable long idCourse,
             @PathVariable long idTask,
             @PathVariable long idUser,
+            @AuthenticationPrincipal User currentUser,
             Model model) {
         Course course = courseRepository.findCourseById(idCourse);
         Task task = taskRepository.getTaskById(idTask);
@@ -83,6 +85,8 @@ public class TaskController {
         model.addAttribute("task", task);
         model.addAttribute("usertask", userTask);
         model.addAttribute("user", user);
+        model.addAttribute("currentUser", currentUser);
+
 
         return "task_teacher";
     }

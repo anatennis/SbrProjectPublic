@@ -48,8 +48,7 @@ public class MaterialCommentController {
             @PathVariable Long idComment,
             @AuthenticationPrincipal User user
     ) {
-        boolean result = commentService.deleteComment(user, idComment);
-        System.out.println("------>" + result);
+        commentService.deleteComment(user, idComment);
 
         return "redirect:/course/{idCourse}";
 
@@ -77,7 +76,7 @@ public class MaterialCommentController {
 
     @PostMapping("/course/{idCourse}/edit_comment/{idComment}")
     public String editMaterial(
-            @PathVariable Long idComment,
+            @PathVariable long idComment,
             MaterialComment comment,
             @AuthenticationPrincipal User user
     ) {
