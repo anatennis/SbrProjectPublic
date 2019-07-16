@@ -86,18 +86,18 @@
                                 </tr>
                                 <tr>
                                     <td>
-                                                    <span th:text="${#temporals.format(comment.getCreateDate(), 'dd-MM-yyyy HH:mm:ss')}">
-                                                        Publication date
-                                                    </span>
+                                        <span th:text="${#temporals.format(comment.getCreateDate(), 'dd-MM-yyyy HH:mm:ss')}">
+                                            Publication date
+                                        </span>
                                     </td>
                                     <td><span th:text="${comment.getAuthor().getName()}"> Publisher </span></td>
                                 </tr>
                                 <tr th:if="${comment.getAuthor().equals(currentUser)}">
                                     <td>
                                         <form action="#"
-                                              th:action="@{'/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}/edit_comment'
+                                              th:action="@{'/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}/edit_comment/{idComment}'
                                               (idCourse=${course.getId()}, idTask=${task.getId()}, taskCaption=${task.getTitle()},
-                                              idUser=${usertask.getUser().getId()})}"
+                                              idUser=${usertask.getUser().getId()}, idComment=${comment.getId()})}"
                                               th:method="get" >
                                             <input type="hidden" name="_method" value="get" />
                                             <button type="submit" id="editComment">Edit</button>
@@ -105,9 +105,9 @@
                                     </td>
                                     <td>
                                         <form action="#"
-                                              th:action="@{'/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}/comment_delite'
+                                              th:action="@{'/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}/comment_delete/{idComment}'
                                               (idCourse=${course.getId()}, idTask=${task.getId()}, taskCaption=${task.getTitle()},
-                                              idUser=${usertask.getUser().getId()})}"
+                                              idUser=${usertask.getUser().getId()}, idComment=${comment.getId()})}"
                                               th:method="delete" >
                                             <input type="hidden" name="_method" value="delete" />
                                             <button type="submit" id="deleteComment">Delete</button>
