@@ -1,23 +1,27 @@
 package ru.sberbank.javaschool.edu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.sberbank.javaschool.edu.domain.*;
 import ru.sberbank.javaschool.edu.repository.*;
-import ru.sberbank.javaschool.edu.service.CourseService;
 import ru.sberbank.javaschool.edu.service.CourseUserService;
 import ru.sberbank.javaschool.edu.service.MaterialService;
+import ru.sberbank.javaschool.edu.service.PublicationFileService;
 import ru.sberbank.javaschool.edu.service.UserTaskService;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class TaskController {
@@ -33,6 +37,12 @@ public class TaskController {
     private UserTaskService userTaskService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private CourseUserService courseUserService;
+    @Autowired
+    private PublicationFileRepository publicationFileRepository;
+    @Autowired
+    private PublicationFileService publicationFileService;
 
     @GetMapping("/course/{idCourse}/tasks/{idTask}")
     public String showTask(
@@ -46,6 +56,7 @@ public class TaskController {
         if (userTask == null) {
             userTask = userTaskService.createUserTask(user, task);
         }
+        List<PublicationFile> publicationFiles = publicationFileRepository.findAllByUserAndTask(user, task);
 
         model.addAttribute("course", course);
         model.addAttribute("task", task);
@@ -54,6 +65,7 @@ public class TaskController {
         model.addAttribute("isTeacher", materialService.canCreateMaterial(course, user));
         model.addAttribute("usertasks", userTaskRepository.findUserTaskByTask(task));
         model.addAttribute("currentUser", user);
+        model.addAttribute("pubFiles", publicationFiles);
 
         return "task";
     }
@@ -62,7 +74,12 @@ public class TaskController {
     public String submitTask(
             @PathVariable long idCourse,
             @PathVariable long idTask,
+            @RequestParam("file[]") MultipartFile files[],
             @AuthenticationPrincipal User user) {
+
+        for (MultipartFile file : files) {
+            publicationFileService.saveFiles(file, idTask, user);
+        }
 
         userTaskService.submitTask(idTask, user, idCourse);
 
@@ -77,8 +94,12 @@ public class TaskController {
             @AuthenticationPrincipal User currentUser,
             Model model) {
         Course course = courseRepository.findCourseById(idCourse);
+        if (!courseUserService.isTeacher(currentUser, course)) {
+            return "redirect:/course/{idCourse}/tasks/{idTask}";
+        }
         Task task = taskRepository.getTaskById(idTask);
         User user = userRepository.findUserById(idUser);
+        List<PublicationFile> publicationFiles = publicationFileRepository.findAllByUserAndTask(user, task);
         UserTask userTask = userTaskRepository.findUserTaskByUserAndTask(user, task);
 
         model.addAttribute("course", course);
@@ -86,7 +107,7 @@ public class TaskController {
         model.addAttribute("usertask", userTask);
         model.addAttribute("user", user);
         model.addAttribute("currentUser", currentUser);
-
+        model.addAttribute("pubFiles", publicationFiles);
 
         return "task_teacher";
     }

@@ -3,13 +3,9 @@ package ru.sberbank.javaschool.edu.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sberbank.javaschool.edu.domain.*;
-import ru.sberbank.javaschool.edu.repository.CourseRepository;
-import ru.sberbank.javaschool.edu.repository.TaskRepository;
-import ru.sberbank.javaschool.edu.repository.UserRepository;
-import ru.sberbank.javaschool.edu.repository.UserTaskRepository;
+import ru.sberbank.javaschool.edu.repository.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -24,14 +20,21 @@ public class UserTaskService {
     @Autowired
     private CourseRepository courseRepository;
     @Autowired
+    private PublicationFileService publicationFileRepository;
+    @Autowired
     private MailSender mailSender;
 
     public UserTask createUserTask(User user, Task task) {
+        Set<CourseUser> teachers = getTeachers(task.getCourse());
+        for (CourseUser teacher : teachers) {
+            if (teacher.getUser().getName().equals(user.getName())) {
+                return null;
+            }
+        }
         UserTask userTask = new UserTask();
         userTask.setUser(user);
         userTask.setCurMark(new Long(0));
         userTask.setTask(task);
-        //userTask.setTaskState("UNCOMPLETE");
         userTaskRepository.save(userTask);
         return userTask;
     }
@@ -49,10 +52,7 @@ public class UserTaskService {
         //send mail
 
         Course course = courseRepository.findCourseById(idCourse);
-        Set<CourseUser> teachers = course.getCourseUsers()
-                .stream()
-                .filter(u -> u.getRole() == Role.TEACHER)
-                .collect(Collectors.toSet());
+        Set<CourseUser> teachers = getTeachers(course);
 
         String messageTitle = userTask.getUser().getName() + " submit task " + userTask.getTask().getTitle();
         String link = "http://localhost:8080/course/" + idCourse + "/tasks/"
@@ -85,5 +85,12 @@ public class UserTaskService {
         userTask.setCurMark(curMark);
         userTaskRepository.save(userTask);
         return true;
+    }
+
+    private Set<CourseUser> getTeachers(Course course) {
+        return course.getCourseUsers()
+                .stream()
+                .filter(u -> u.getRole() == Role.TEACHER)
+                .collect(Collectors.toSet());
     }
 }

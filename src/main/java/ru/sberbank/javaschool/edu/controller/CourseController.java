@@ -78,10 +78,14 @@ public class CourseController {
 
     @GetMapping("/course/{idCourse}/users")
     public String showCourseUsers(@PathVariable long idCourse,
-                                  Model model) {
+                                  Model model,
+                                  @AuthenticationPrincipal User user) {
 
         Course course = courseRepository.findCourseById(idCourse);
-        List<CourseUser> courseUsers = courseUserRepository.findCourseUserByCourse(course);
+        if (!courseUserService.isTeacher(user, course)) {
+            return "redirect:/course/{idCourse}";
+        }
+        List<CourseUser> courseUsers = courseUserService.getCourseUsersWithoutTeachers(course);
         model.addAttribute("course", course);
         model.addAttribute("courseusers", courseUsers);
         return "users";
@@ -94,6 +98,7 @@ public class CourseController {
 
         return "redirect:/course/{idCourse}/users";
     }
+
 
 
 }

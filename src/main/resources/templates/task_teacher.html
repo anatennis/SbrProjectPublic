@@ -14,6 +14,15 @@
 <p><a th:href="@{/}">Start page</a></p>
 <p><a th:href="@{'/course/{id}/tasks/{idTask}'(id=${course.getId()}, idTask=${task.getId()})}">All tasks</a></p>
 <div th:text="${course.caption}"></div>
+Student <b><span th:text="${usertask.getUser().getName()}"></span></b>
+<div>Файлы, прикрепленные к заданию</div>
+<div th:if="${pubFiles}">
+    <div th:each="pfile : ${pubFiles}">
+        <a th:href="@{'/files/{filename}' (filename=${pfile.getFilename()})}">
+            <span th:text="${pfile.getFilename().split('_')[1]}"></span>
+        </a>
+    </div>
+</div>
 <div>
     <table>
         <thead>
@@ -22,7 +31,7 @@
             <th> Task text</th>
             <th> Submitted date</th>
             <th> Max mark</th>
-            <th> Your mark</th>
+            <th> User mark</th>
             <th> Task state</th>
         </tr>
         </thead>

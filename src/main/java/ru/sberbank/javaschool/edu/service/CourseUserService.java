@@ -12,6 +12,7 @@ import ru.sberbank.javaschool.edu.repository.UserRepository;
 
 import javax.jws.soap.SOAPBinding;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseUserService {
@@ -52,6 +53,24 @@ public class CourseUserService {
         List<CourseUser> courses = courseUserRepository.findCourseUserByUser(user);
 
         return courses;
+    }
+
+    public List<CourseUser> getCourseUsersWithoutTeachers(Course course) {
+        //List<CourseUser> courseUsers = courseUserRepository.findCourseUserByCourse(course);
+        List<CourseUser> courseUsersWithoutTeachers = courseUserRepository.findCourseUserByCourse(course)
+                .stream()
+                .filter(u -> u.getRole() != Role.TEACHER)
+                .collect(Collectors.toList());
+
+        return courseUsersWithoutTeachers;
+    }
+
+    public boolean isTeacher(User user, Course course) {
+        CourseUser courseUser = courseUserRepository.findCourseUserByCourseAndUser(course, user);
+        if (courseUser.getRole() != Role.TEACHER) {
+            return false;
+        }
+        return true;
     }
 
 

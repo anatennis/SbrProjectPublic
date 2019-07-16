@@ -18,11 +18,11 @@
     <table>
         <thead>
         <tr>
-            <th> Task caption </th>
-            <th> User </th>
-            <th> Submitted date </th>
-            <th> Mark </th>
-            <th> Link </th>
+            <th> Task caption</th>
+            <th> User</th>
+            <th> Submitted date</th>
+            <th> Mark</th>
+            <th> Link</th>
         </tr>
         </thead>
         <tbody>
@@ -84,14 +84,19 @@
                     <p th:text="${usertask.getSubmittedDate()}"></p>
                 </span>
             </td>
+            <td>Files
+
+            </td>
         </tr>
-        <tr th:if="!${usertask.getSubmittedDate()}" >
-            <td>
+        <tr>
+            <td th:if="!${usertask.getSubmittedDate()}">
+            <!--<td>-->
                 <form th:action="@{'/course/{idCourse}/tasks/{idTask}'
                       (idCourse=${course.getId()}, idTask=${task.getId()})}"
-                      th:method="post">
+                      th:method="post" enctype="multipart/form-data">
                     <input type="hidden" name="_method" value="get"/>
-                    <button type="submit" id="Submit task">Submit task</button>
+                    <input type="file" min="1" max="10" name="file[]" multiple="true">
+                    <button type="submit" id="Submit task">Прикрепить файлы и сдать задание</button>
                 </form>
             </td>
         </tr>
@@ -101,7 +106,7 @@
                       (idCourse=${course.getId()}, idTask=${task.getId()})}"
                       th:method="post">
                     <div><textarea type="text" name="text" placeholder="Введите комментарий"></textarea></div>
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                     <div><input type="submit" value="Добавить комментарий"/></div>
                 </form>
             </td>
@@ -128,8 +133,8 @@
                                         <form action="#"
                                               th:action="@{'/course/{idCourse}/tasks/{idTask}/edit_comment/{idComment}'
                                               (idCourse=${course.getId()}, idTask=${task.getId()}, idComment=${comment.getId()})}"
-                                              th:method="get" >
-                                            <input type="hidden" name="_method" value="get" />
+                                              th:method="get">
+                                            <input type="hidden" name="_method" value="get"/>
                                             <button type="submit" id="editComment">Edit</button>
                                         </form>
                                     </td>
@@ -137,8 +142,8 @@
                                         <form action="#"
                                               th:action="@{'/course/{idCourse}/tasks/{idTask}/comment_delete/{idComment}'
                                               (idCourse=${course.getId()}, idTask=${task.getId()}, idComment=${comment.getId()})}"
-                                              th:method="delete" >
-                                            <input type="hidden" name="_method" value="delete" />
+                                              th:method="delete">
+                                            <input type="hidden" name="_method" value="delete"/>
                                             <button type="submit" id="deleteComment">Delete</button>
                                         </form>
                                     </td>
@@ -151,7 +156,17 @@
         </tr>
         </tbody>
     </table>
+
+    <div>Файлы, прикрепленные к заданию</div>
+    <div th:if="${pubFiles}">
+        <div th:each="pfile : ${pubFiles}">
+            <a th:href="@{'/files/{filename}' (filename=${pfile.getFilename()})}">
+                <span th:text="${pfile.getFilename().split('_')[1]}"></span>
+            </a>
+        </div>
+    </div>
 </div>
+
 
 </body>
 </html>
