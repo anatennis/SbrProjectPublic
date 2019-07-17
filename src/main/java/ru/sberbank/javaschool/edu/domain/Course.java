@@ -1,6 +1,7 @@
 package ru.sberbank.javaschool.edu.domain;
 
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,5 +29,6 @@ public class Course implements Serializable {
     private Set<CourseUser> courseUsers = new HashSet<>();
 
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    @Where(clause = "dtype='Material'")
     private List<Material> materials = new ArrayList<>();
 }

@@ -44,7 +44,8 @@ public class CourseController {
             Model model
     ) {
         Course course = courseService.findCourseById(idCourse);
-        List<Material> materials = materialService.getCourseMaterials(idCourse);// ToDo - подумать как испарвить на course.getMaterials();
+        List<Material> materials = course.getMaterials();
+        //materialService.getCourseMaterials(idCourse); ToDo - подумать как лучше
 
         model.addAttribute("course", course);
         model.addAttribute("materials", materials);

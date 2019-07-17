@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -13,9 +14,20 @@ import java.io.Serializable;
 @Setter
 @EqualsAndHashCode(of = {"id"})
 @ToString(of = {"id", "title"})
-public class Publication implements Serializable {
+public abstract class Publication implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
     protected String title;
+    @Lob
+    @Column(name = "text", columnDefinition = "LONGTEXT")
+    protected String text;
+    @Column(name = "createdate")
+    protected LocalDateTime createDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course")
+    protected Course course;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author")
+    protected User author;
 }
