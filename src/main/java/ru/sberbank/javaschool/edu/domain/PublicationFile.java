@@ -23,7 +23,8 @@ public class PublicationFile {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "publication")
-    protected Task task;
+    //protected Task task;
+    protected Publication publication;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user")
     protected User user;

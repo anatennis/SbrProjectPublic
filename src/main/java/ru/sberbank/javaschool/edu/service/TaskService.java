@@ -40,7 +40,7 @@ public class TaskService {
     }
 
     public List<PublicationFile> findAllPubFilesByUserAndTask(User user, Task task) {
-        return publicationFileRepository.findAllByUserAndTask(user, task);
+        return publicationFileRepository.findAllByUserAndPublication(user, task);
     }
 
     public List<UserTask> findUserTaskByTask(Task task) {

@@ -88,7 +88,8 @@ public class UserTaskService {
         Task task = taskRepository.getTaskById(idTask);
         User user = userRepository.findUserById(idUser);
         UserTask userTask = userTaskRepository.findUserTaskByUserAndTask(user, task);
-        if (userTask == null || userTask.getTaskState() == null) {
+        if (userTask == null || userTask.getTaskState() == null ||
+                curMark > task.getMaxMark() || curMark < 0) {
             return false;
         }
         userTask.setCurMark(curMark);

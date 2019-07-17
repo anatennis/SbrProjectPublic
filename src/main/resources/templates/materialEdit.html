@@ -17,7 +17,7 @@
     <form
             th:action= "@{'/course/{id}/edit/{idMaterial}'(id=${course.getId()}, idMaterial=${material.getId()})}"
             th:method="post">
-        <div><label> Text: <textarea type="text" name="text" th:text="${comment.getText()}"></textarea></label></div>
+        <div><label> Text: <textarea type="text" name="text" th:text="${material.getText()}"></textarea></label></div>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <div><input type="submit" value="Edit"/></div>
     </form>

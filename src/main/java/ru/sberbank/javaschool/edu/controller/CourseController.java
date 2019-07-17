@@ -4,10 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.sberbank.javaschool.edu.domain.Course;
 import ru.sberbank.javaschool.edu.domain.CourseUser;
 import ru.sberbank.javaschool.edu.domain.Material;
@@ -15,6 +13,7 @@ import ru.sberbank.javaschool.edu.domain.User;
 import ru.sberbank.javaschool.edu.service.CourseService;
 import ru.sberbank.javaschool.edu.service.CourseUserService;
 import ru.sberbank.javaschool.edu.service.MaterialService;
+import ru.sberbank.javaschool.edu.service.PublicationFileService;
 
 import java.security.Principal;
 import java.util.List;
@@ -24,16 +23,18 @@ public class CourseController {
     private final CourseService courseService;
     private final CourseUserService courseUserService;
     private final MaterialService materialService;
+    private final PublicationFileService publicationFileService;
 
     @Autowired
     public CourseController(
             CourseService courseService,
             CourseUserService courseUserService,
-            MaterialService materialService
-    ) {
+            MaterialService materialService,
+            PublicationFileService publicationFileService) {
         this.courseService = courseService;
         this.courseUserService = courseUserService;
         this.materialService = materialService;
+        this.publicationFileService = publicationFileService;
     }
 
     @GetMapping("/course/{idCourse}")
@@ -66,11 +67,15 @@ public class CourseController {
     @PostMapping("/course/{idCourse}")
     public String addMaterial(@PathVariable long idCourse,
                               @AuthenticationPrincipal User user,
+                              @RequestParam("file[]") MultipartFile []files,
                               Material material
     ) {
         Course course = courseService.findCourseById(idCourse);
-
         materialService.createMaterial(course, user, material);
+        for (MultipartFile file : files) {
+            publicationFileService.saveFiles(file, material.getId(), user);
+        }
+
 
         return "redirect:/course/{idCourse}";
     }

@@ -10,6 +10,6 @@ import java.util.List;
 
 @Repository
 public interface PublicationFileRepository extends JpaRepository<PublicationFile, Long> {
-    List<PublicationFile> findAllByUserAndTask(User user, Task task);
+    List<PublicationFile> findAllByUserAndPublication(User user, Task task);
 
 }

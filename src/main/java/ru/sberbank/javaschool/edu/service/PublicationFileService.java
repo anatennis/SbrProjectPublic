@@ -4,10 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import ru.sberbank.javaschool.edu.domain.Publication;
 import ru.sberbank.javaschool.edu.domain.PublicationFile;
-import ru.sberbank.javaschool.edu.domain.Task;
 import ru.sberbank.javaschool.edu.domain.User;
 import ru.sberbank.javaschool.edu.repository.PublicationFileRepository;
+import ru.sberbank.javaschool.edu.repository.PublicationRepository;
 import ru.sberbank.javaschool.edu.repository.TaskRepository;
 
 import java.io.File;
@@ -19,19 +20,21 @@ public class PublicationFileService {
 
     private final PublicationFileRepository publicationFileRepository;
     private final TaskRepository taskRepository;
+    private final PublicationRepository publicationRepository;
 
     @Value("${upload.path}")
     String uploadPath;
 
     @Autowired
     public PublicationFileService(PublicationFileRepository publicationFileRepository,
-                                  TaskRepository taskRepository) {
+                                  TaskRepository taskRepository, PublicationRepository publicationRepository) {
         this.publicationFileRepository = publicationFileRepository;
         this.taskRepository = taskRepository;
+        this.publicationRepository = publicationRepository;
     }
 
 
-    public void saveFiles(MultipartFile file, long idTask, User user) {
+    public void saveFiles(MultipartFile file, long idPublication, User user) {
         if (file != null) {
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) {
@@ -48,8 +51,10 @@ public class PublicationFileService {
 
             PublicationFile publicationFile = new PublicationFile();
             publicationFile.setFilename(filename);
-            Task task = taskRepository.getTaskById(idTask);
-            publicationFile.setTask(task);
+            //Task task = taskRepository.getTaskById(idTask);
+            Publication publication = publicationRepository.findPublicationById(idPublication);
+            //publicationFile.setTask(task);
+            publicationFile.setPublication(publication);
             publicationFile.setPath(uploadPath);
             publicationFile.setUser(user);
             publicationFileRepository.save(publicationFile);
