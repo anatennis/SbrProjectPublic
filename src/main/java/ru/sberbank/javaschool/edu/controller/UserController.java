@@ -7,27 +7,27 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import ru.sberbank.javaschool.edu.domain.Course;
 import ru.sberbank.javaschool.edu.domain.CourseUser;
 import ru.sberbank.javaschool.edu.domain.User;
 import ru.sberbank.javaschool.edu.service.UserService;
 
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
 
     @Autowired
-    HttpSession httpSession;
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping
-    public String userGreeting(@AuthenticationPrincipal User user, Model model) {
+    public String userGreeting(@AuthenticationPrincipal User user, Model model, HttpSession httpSession) {
         String username = user.getUsername();
         String sessionInfo = userService.getInfoFromSession(httpSession, user);
         Set<CourseUser> courseUsersSet = user.getCourseUsers();
@@ -43,6 +43,7 @@ public class UserController {
         String login = principal.getName();
         if (userService.updateUser(login, user)) {
             model.addAttribute("message", "Ваши данные успешно обновлены");
+            return "user";
         }
         return "redirect:/user";
     }

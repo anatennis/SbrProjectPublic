@@ -4,23 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.sberbank.javaschool.edu.domain.User;
-import ru.sberbank.javaschool.edu.repository.UserRepository;
 import ru.sberbank.javaschool.edu.service.UserService;
-
-import java.time.LocalDateTime;
 
 @Controller
 public class RegistrationController {
-    @Autowired
-    private UserService userService;
+
+    private final UserService userService;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/registration")
     public String registration() {

@@ -20,17 +20,21 @@ import java.util.UUID;
 
 @Service
 public class UserService implements UserDetailsService {
-    @Autowired
-    private UserRepository userRepo;
+
+    private final UserRepository userRepo;
+    private final CourseRepository courseRepository;
+    private final MailSender mailSender;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    private CourseRepository courseRepository;
+    public UserService(UserRepository userRepo, CourseRepository courseRepository,
+                       MailSender mailSender, PasswordEncoder passwordEncoder) {
+        this.userRepo = userRepo;
+        this.courseRepository = courseRepository;
+        this.mailSender = mailSender;
+        this.passwordEncoder = passwordEncoder;
+    }
 
-    @Autowired
-    private MailSender mailSender;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder; //BCrypt так BCrypt :)
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {

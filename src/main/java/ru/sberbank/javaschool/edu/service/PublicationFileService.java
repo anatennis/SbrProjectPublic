@@ -16,12 +16,19 @@ import java.util.UUID;
 
 @Service
 public class PublicationFileService {
-    @Autowired
-    PublicationFileRepository publicationFileRepository;
-    @Autowired
-    TaskRepository taskRepository;
+
+    private final PublicationFileRepository publicationFileRepository;
+    private final TaskRepository taskRepository;
+
     @Value("${upload.path}")
     String uploadPath;
+
+    @Autowired
+    public PublicationFileService(PublicationFileRepository publicationFileRepository,
+                                  TaskRepository taskRepository) {
+        this.publicationFileRepository = publicationFileRepository;
+        this.taskRepository = taskRepository;
+    }
 
 
     public void saveFiles(MultipartFile file, long idTask, User user) {

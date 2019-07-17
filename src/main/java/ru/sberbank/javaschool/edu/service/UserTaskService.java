@@ -3,7 +3,10 @@ package ru.sberbank.javaschool.edu.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sberbank.javaschool.edu.domain.*;
-import ru.sberbank.javaschool.edu.repository.*;
+import ru.sberbank.javaschool.edu.repository.CourseRepository;
+import ru.sberbank.javaschool.edu.repository.TaskRepository;
+import ru.sberbank.javaschool.edu.repository.UserRepository;
+import ru.sberbank.javaschool.edu.repository.UserTaskRepository;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -11,18 +14,24 @@ import java.util.stream.Collectors;
 
 @Service
 public class UserTaskService {
+
+    private final UserTaskRepository userTaskRepository;
+    private final TaskRepository taskRepository;
+    private final UserRepository userRepository;
+    private final CourseRepository courseRepository;
+    private final MailSender mailSender;
+
     @Autowired
-    private UserTaskRepository userTaskRepository;
-    @Autowired
-    private TaskRepository taskRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CourseRepository courseRepository;
-    @Autowired
-    private PublicationFileService publicationFileRepository;
-    @Autowired
-    private MailSender mailSender;
+    public UserTaskService(UserTaskRepository userTaskRepository, TaskRepository taskRepository,
+                           UserRepository userRepository, CourseRepository courseRepository,
+                           MailSender mailSender) {
+        this.userTaskRepository = userTaskRepository;
+        this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
+        this.courseRepository = courseRepository;
+        this.mailSender = mailSender;
+    }
+
 
     public UserTask createUserTask(User user, Task task) {
         Set<CourseUser> teachers = getTeachers(task.getCourse());

@@ -1,7 +1,6 @@
 package ru.sberbank.javaschool.edu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -10,39 +9,31 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.sberbank.javaschool.edu.domain.*;
-import ru.sberbank.javaschool.edu.repository.*;
-import ru.sberbank.javaschool.edu.service.CourseUserService;
-import ru.sberbank.javaschool.edu.service.MaterialService;
-import ru.sberbank.javaschool.edu.service.PublicationFileService;
-import ru.sberbank.javaschool.edu.service.UserTaskService;
+import ru.sberbank.javaschool.edu.service.*;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 public class TaskController {
+
+    private final TaskService taskService;
+    private final MaterialService materialService;
+    private final UserTaskService userTaskService;
+    private final CourseUserService courseUserService;
+    private final PublicationFileService publicationFileService;
+
     @Autowired
-    private CourseRepository courseRepository;
-    @Autowired
-    private TaskRepository taskRepository;
-    @Autowired
-    private MaterialService materialService;
-    @Autowired
-    private UserTaskRepository userTaskRepository;
-    @Autowired
-    private UserTaskService userTaskService;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private CourseUserService courseUserService;
-    @Autowired
-    private PublicationFileRepository publicationFileRepository;
-    @Autowired
-    private PublicationFileService publicationFileService;
+    public TaskController(TaskService taskService, MaterialService materialService, UserTaskService userTaskService,
+                          CourseUserService courseUserService, PublicationFileService publicationFileService) {
+        this.taskService = taskService;
+        this.materialService = materialService;
+        this.userTaskService = userTaskService;
+        this.courseUserService = courseUserService;
+        this.publicationFileService = publicationFileService;
+    }
+
 
     @GetMapping("/course/{idCourse}/tasks/{idTask}")
     public String showTask(
@@ -50,20 +41,22 @@ public class TaskController {
             @PathVariable long idTask,
             Model model,
             @AuthenticationPrincipal User user) {
-        Course course = courseRepository.findCourseById(idCourse);
-        Task task = taskRepository.getTaskById(idTask);
-        UserTask userTask = userTaskRepository.findUserTaskByUserAndTask(user, task);
+        Course course = taskService.findCourseById(idCourse);
+        Task task = taskService.getTaskById(idTask);
+        UserTask userTask = taskService.findUserTaskByUserAndTask(user, task);
         if (userTask == null) {
             userTask = userTaskService.createUserTask(user, task);
         }
-        List<PublicationFile> publicationFiles = publicationFileRepository.findAllByUserAndTask(user, task);
+        List<PublicationFile> publicationFiles = taskService.findAllPubFilesByUserAndTask(user, task);
+        boolean isTeacher = materialService.canCreateMaterial(course, user);
+        List<UserTask> usertasks = taskService.findUserTaskByTask(task);
 
         model.addAttribute("course", course);
         model.addAttribute("task", task);
         model.addAttribute("usertask", userTask);
-        model.addAttribute("isStudent", !materialService.canCreateMaterial(course, user));
-        model.addAttribute("isTeacher", materialService.canCreateMaterial(course, user));
-        model.addAttribute("usertasks", userTaskRepository.findUserTaskByTask(task));
+        model.addAttribute("isStudent", !isTeacher);
+        model.addAttribute("isTeacher", isTeacher);
+        model.addAttribute("usertasks", usertasks);
         model.addAttribute("currentUser", user);
         model.addAttribute("pubFiles", publicationFiles);
 
@@ -93,14 +86,14 @@ public class TaskController {
             @PathVariable long idUser,
             @AuthenticationPrincipal User currentUser,
             Model model) {
-        Course course = courseRepository.findCourseById(idCourse);
+        Course course = taskService.findCourseById(idCourse);
         if (!courseUserService.isTeacher(currentUser, course)) {
             return "redirect:/course/{idCourse}/tasks/{idTask}";
         }
-        Task task = taskRepository.getTaskById(idTask);
-        User user = userRepository.findUserById(idUser);
-        List<PublicationFile> publicationFiles = publicationFileRepository.findAllByUserAndTask(user, task);
-        UserTask userTask = userTaskRepository.findUserTaskByUserAndTask(user, task);
+        Task task = taskService.getTaskById(idTask);
+        User user = taskService.findUserById(idUser);
+        List<PublicationFile> publicationFiles = taskService.findAllPubFilesByUserAndTask(user, task);
+        UserTask userTask = taskService.findUserTaskByUserAndTask(user, task);
 
         model.addAttribute("course", course);
         model.addAttribute("task", task);
@@ -130,8 +123,8 @@ public class TaskController {
             @PathVariable long id,
             Model model,
             @AuthenticationPrincipal User user) {
-        Course course = courseRepository.findCourseById(id);
-        List<Task> tasks = taskRepository.getTaskByCourseOrderById(course);
+        Course course = taskService.findCourseById(id);
+        List<Task> tasks = taskService.getTaskByCourseOrderById(course);
 
         model.addAttribute("course", course);
         model.addAttribute("tasks", tasks);
@@ -145,7 +138,7 @@ public class TaskController {
                               @AuthenticationPrincipal User user,
                                Task task) {
 
-        Course course = courseRepository.findCourseById(idCourse);
+        Course course = taskService.findCourseById(idCourse);
 
         materialService.createTask(course, user, task);
 
@@ -169,8 +162,8 @@ public class TaskController {
             @AuthenticationPrincipal User user,
             Model model
     ) {
-        Course course = courseRepository.findCourseById(idCourse);
-        Task task = taskRepository.getTaskById(idTask);
+        Course course = taskService.findCourseById(idCourse);
+        Task task = taskService.getTaskById(idTask);
 
         if (!materialService.canCreateMaterial(course, user)) {
             return "redirect:/course/{idCourse}/tasks";
