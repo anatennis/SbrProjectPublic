@@ -10,22 +10,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.sberbank.javaschool.edu.domain.TaskComment;
 import ru.sberbank.javaschool.edu.domain.User;
-import ru.sberbank.javaschool.edu.domain.UserTask;
-import ru.sberbank.javaschool.edu.repository.TaskCommentRepository;
-import ru.sberbank.javaschool.edu.repository.UserTaskRepository;
 import ru.sberbank.javaschool.edu.service.TaskCommentService;
 
 @Controller
 public class TaskCommentController {
-    private final TaskCommentRepository commentRepository;
     private final TaskCommentService commentService;
-    private final UserTaskRepository userTaskRepository;
 
     @Autowired
-    public TaskCommentController(TaskCommentRepository commentRepository, TaskCommentService commentService, UserTaskRepository userTaskRepository) {
-        this.commentRepository = commentRepository;
+    public TaskCommentController(TaskCommentService commentService) {
         this.commentService = commentService;
-        this.userTaskRepository = userTaskRepository;
     }
 
     @PostMapping("/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}/comment")
@@ -35,7 +28,6 @@ public class TaskCommentController {
             @AuthenticationPrincipal User user,
             TaskComment taskComment
     ) {
-
         commentService.addComment(idTask, idUser, user, taskComment);
 
         return "redirect:/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}";
@@ -47,7 +39,6 @@ public class TaskCommentController {
             @AuthenticationPrincipal User user,
             TaskComment taskComment
     ) {
-
         commentService.addComment(idTask, user.getId(), user, taskComment);
 
         return "redirect:/course/{idCourse}/tasks/{idTask}";
@@ -63,7 +54,7 @@ public class TaskCommentController {
             @AuthenticationPrincipal User user,
             Model model
     ) {
-        TaskComment comment = commentRepository.findTaskCommentById(idComment);
+        TaskComment comment = commentService.getTaskComment(idComment);
 
         if (!commentService.cantEditComment(user, comment)) {
             return "redirect:/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}";
@@ -86,7 +77,7 @@ public class TaskCommentController {
             @AuthenticationPrincipal User user,
             Model model
     ) {
-        TaskComment comment = commentRepository.findTaskCommentById(idComment);
+        TaskComment comment = commentService.getTaskComment(idComment);
 
         if (!commentService.cantEditComment(user, comment)) {
             return "redirect:/course/{idCourse}/tasks/{idTask}";

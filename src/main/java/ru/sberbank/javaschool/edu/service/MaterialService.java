@@ -1,6 +1,5 @@
 package ru.sberbank.javaschool.edu.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sberbank.javaschool.edu.domain.*;
 import ru.sberbank.javaschool.edu.repository.CourseRepository;
@@ -8,20 +7,24 @@ import ru.sberbank.javaschool.edu.repository.MaterialRepository;
 import ru.sberbank.javaschool.edu.repository.TaskRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class MaterialService {
     private final MaterialRepository materialRepository;
-    @Autowired
-    private CourseRepository courseRepository;
-    @Autowired
-    private TaskRepository taskRepository;
+    private final CourseRepository courseRepository;
+    private final TaskRepository taskRepository;
 
-    @Autowired
-    public MaterialService(MaterialRepository materialRepository) {
+    public MaterialService(
+            MaterialRepository materialRepository,
+            CourseRepository courseRepository,
+            TaskRepository taskRepository
+    ) {
         this.materialRepository = materialRepository;
+        this.courseRepository = courseRepository;
+        this.taskRepository = taskRepository;
     }
 
     public boolean createMaterial(Course course, User user, Material material) {
@@ -41,8 +44,8 @@ public class MaterialService {
         return true;
     }
 
-    public boolean removeMaterial(Long id) {
-        Material material = materialRepository.getMaterialById(id);
+    public boolean deleteMaterial(Long idMaterial) {
+        Material material = materialRepository.getMaterialById(idMaterial);
 
         if (material == null) {
             return false;
@@ -54,16 +57,16 @@ public class MaterialService {
     }
 
     public boolean editMaterial(Long id, Material material) {
-        Material materialfromDb = materialRepository.getMaterialById(id);
+        Material materialFromDb = materialRepository.getMaterialById(id);
 
-        if (materialfromDb == null) {
+        if (materialFromDb == null) {
             return false;
         }
 
-        materialfromDb.setTitle(material.getTitle());
-        materialfromDb.setText(material.getText());
+        materialFromDb.setTitle(material.getTitle());
+        materialFromDb.setText(material.getText());
 
-        materialRepository.save(materialfromDb);
+        materialRepository.save(materialFromDb);
         return true;
     }
 
@@ -74,31 +77,6 @@ public class MaterialService {
 
         return userRoles.containsKey(user) && userRoles.get(user) == Role.TEACHER;
 
-    }
-
-//    public boolean canEditMaterial(Course course, Material material, User user) {
-//        Map<User, Role> userRoles = course.getCourseUsers()
-//                .stream()
-//                .collect(Collectors.toMap(CourseUser::getUser, CourseUser::getRole));
-//
-//        if (userRoles.containsKey(user) && userRoles.get(user) == Role.TEACHER) {
-//            return material.getAuthor().equals(user);
-//        }
-//
-//        return false;
-//    }
-
-    //-----------------------------------------------------------------------------------------------------tasks methods
-
-    private boolean removeTask(long idTask) {
-        Task task = taskRepository.getTaskById(idTask);
-        if (task == null) {
-            return false;
-        }
-
-        taskRepository.delete(task);
-
-        return true;
     }
 
     public boolean createTask(Course course, User user, Task task) {
@@ -131,23 +109,44 @@ public class MaterialService {
         taskFromDB.setCompleteTime(task.getCompleteTime());
 
         taskRepository.save(taskFromDB);
+
         return true;
     }
 
-    //----------------------------------------------------------------------------------------------------common methods
-
     public boolean deletePublication(long idPublication, long idCourse, User user, boolean isMaterial) {
+
         Course course = courseRepository.findCourseById(idCourse);
+
         if (canCreateMaterial(course, user)) {
             if (isMaterial) {
-                return removeMaterial(idPublication);
+                return deleteMaterial(idPublication);
             } else {
                 return removeTask(idPublication);
             }
         }
+
         return false;
     }
 
+    public List<Material> getCourseMaterials(long idCourse) {
 
+        return materialRepository.getMaterialByCourseOrderById(idCourse);
+    }
 
+    public Material getMaterialById(long idMaterial) {
+
+        return materialRepository.getMaterialById(idMaterial);
+    }
+
+    private boolean removeTask(long idTask) {
+        Task task = taskRepository.getTaskById(idTask);
+
+        if (task == null) {
+            return false;
+        }
+
+        taskRepository.delete(task);
+
+        return true;
+    }
 }

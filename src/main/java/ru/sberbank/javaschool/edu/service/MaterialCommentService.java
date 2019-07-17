@@ -13,15 +13,17 @@ import java.time.LocalDateTime;
 public class MaterialCommentService {
 
     private final MaterialCommentRepository commentRepository;
+    private final MaterialService materialService;
 
     @Autowired
-    public MaterialCommentService(MaterialCommentRepository commentRepository) {
+    public MaterialCommentService(MaterialCommentRepository commentRepository, MaterialService materialService) {
         this.commentRepository = commentRepository;
+        this.materialService = materialService;
     }
 
-    public void addComment(Material material, User user, MaterialComment materialComment) {
+    public void addComment(long idMaterial, User user, MaterialComment materialComment) {
         materialComment.setAuthor(user);
-        materialComment.setMaterial(material);
+        materialComment.setMaterial(materialService.getMaterialById(idMaterial));
         materialComment.setCreatedate(LocalDateTime.now());
 
         commentRepository.save(materialComment);
@@ -55,5 +57,10 @@ public class MaterialCommentService {
         commentRepository.save(commentFromDb);
 
         return true;
+    }
+
+    public MaterialComment getMaterialComment(long idComment) {
+
+        return commentRepository.findMaterialCommentById(idComment);
     }
 }

@@ -4,9 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sberbank.javaschool.edu.domain.Course;
 import ru.sberbank.javaschool.edu.repository.CourseRepository;
-import ru.sberbank.javaschool.edu.repository.CourseUserRepository;
-import ru.sberbank.javaschool.edu.repository.UserRepository;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,7 +13,6 @@ import java.util.List;
 public class CourseService {
     private final CourseRepository courseRepository;
     private final CourseUserService courseUserService;
-    //private final UserRepository userRepository;
 
     @Autowired
     public CourseService(
@@ -64,6 +62,21 @@ public class CourseService {
         courseRepository.save(courseFromDb);
 
         return true;
+    }
+
+    public Course findCourseById(long id) {
+
+        return courseRepository.findCourseById(id);
+    }
+
+    public List<Course> findAll() {
+
+        return courseRepository.findAll();
+    }
+
+    public boolean hasAccess(Principal principal) {  //костыльненькое ограничение прав доступа на админку
+
+        return principal.getName().equals("admin");
     }
 
 }
