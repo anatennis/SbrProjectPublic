@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.sberbank.javaschool.edu.domain.Course;
 import ru.sberbank.javaschool.edu.domain.Material;
-import ru.sberbank.javaschool.edu.domain.Task;
 import ru.sberbank.javaschool.edu.domain.User;
 
 import java.util.List;
@@ -20,6 +19,6 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
                     "AND p.dtype = 'Material' ORDER BY id ASC",
             nativeQuery = true
     )
-    List<Material> getMaterialByCourseOrderById(@Param("course_id") Long courseId);
+    List<Material> getMaterialByCourseOrderById(@Param("course_id") long courseId);
 
 }

@@ -12,65 +12,64 @@ import ru.sberbank.javaschool.edu.domain.Course;
 import ru.sberbank.javaschool.edu.domain.CourseUser;
 import ru.sberbank.javaschool.edu.domain.Material;
 import ru.sberbank.javaschool.edu.domain.User;
-import ru.sberbank.javaschool.edu.repository.CourseRepository;
-import ru.sberbank.javaschool.edu.repository.CourseUserRepository;
-import ru.sberbank.javaschool.edu.repository.MaterialRepository;
 import ru.sberbank.javaschool.edu.service.CourseService;
 import ru.sberbank.javaschool.edu.service.CourseUserService;
 import ru.sberbank.javaschool.edu.service.MaterialService;
 
-import javax.jws.WebParam;
-import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.List;
 
 @Controller
 public class CourseController {
-    @Autowired
-    CourseService courseService;
-    @Autowired
-    CourseRepository courseRepository;
-    @Autowired
-    CourseUserService courseUserService;
-    @Autowired
-    CourseUserRepository courseUserRepository;
-    @Autowired
-    MaterialRepository materialRepository;
-    @Autowired
-    MaterialService materialService;
+    private final CourseService courseService;
+    private final CourseUserService courseUserService;
+    private final MaterialService materialService;
 
     @Autowired
-    HttpSession httpSession;
+    public CourseController(
+            CourseService courseService,
+            CourseUserService courseUserService,
+            MaterialService materialService
+    ) {
+        this.courseService = courseService;
+        this.courseUserService = courseUserService;
+        this.materialService = materialService;
+    }
 
-    @GetMapping("/course/{id}")
+    @GetMapping("/course/{idCourse}")
     public String showCourse(
-            @PathVariable long id,
-            Model model,
-            @AuthenticationPrincipal User user) {
-        Course course = courseRepository.findCourseById(id);
-        List<Material> materials = materialRepository.getMaterialByCourseOrderById(id);//course.getMaterials();
+            @PathVariable long idCourse,
+            @AuthenticationPrincipal User user,
+            Model model
+    ) {
+        Course course = courseService.findCourseById(idCourse);
+        List<Material> materials = materialService.getCourseMaterials(idCourse);// ToDo - подумать как испарвить на course.getMaterials();
 
         model.addAttribute("course", course);
         model.addAttribute("materials", materials);
         model.addAttribute("canCreate", materialService.canCreateMaterial(course, user));
         model.addAttribute("currentUser", user);
-        //model.addAttribute("canEdit", materialService.canEditMaterial(course, user));
 
         return "course";
     }
 
     @GetMapping("/courses")
     public String showAllUserCourses(Model model, Principal principal) {
+
         List<CourseUser> allUserCourses = courseUserService.getUserCourses(principal.getName());
+
         model.addAttribute("courses", allUserCourses);
+
         return "courses";
     }
 
     @PostMapping("/course/{idCourse}")
     public String addMaterial(@PathVariable long idCourse,
                               @AuthenticationPrincipal User user,
-                              Material material) {
-        Course course = courseRepository.findCourseById(idCourse);
+                              Material material
+    ) {
+        Course course = courseService.findCourseById(idCourse);
+
         materialService.createMaterial(course, user, material);
 
         return "redirect:/course/{idCourse}";
@@ -81,20 +80,24 @@ public class CourseController {
                                   Model model,
                                   @AuthenticationPrincipal User user) {
 
-        Course course = courseRepository.findCourseById(idCourse);
+        Course course = courseService.findCourseById(idCourse);
+
         if (!courseUserService.isTeacher(user, course)) {
             return "redirect:/course/{idCourse}";
         }
+
         List<CourseUser> courseUsers = courseUserService.getCourseUsersWithoutTeachers(course);
+
         model.addAttribute("course", course);
-        model.addAttribute("courseusers", courseUsers);
+        model.addAttribute("courseUsers", courseUsers);
+
         return "users";
     }
 
-    @DeleteMapping("/course/{idCourse}/users/{idCourseuser}")
-    public String removeCourseUser(@PathVariable long idCourseuser) {
+    @DeleteMapping("/course/{idCourse}/users/{idCourseUser}")
+    public String removeCourseUser(@PathVariable long idCourseUser) {
 
-        courseUserRepository.deleteById(idCourseuser);
+        courseUserService.deleteCourseUser(idCourseUser);
 
         return "redirect:/course/{idCourse}/users";
     }

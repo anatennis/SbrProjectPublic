@@ -11,24 +11,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import ru.sberbank.javaschool.edu.domain.Course;
 import ru.sberbank.javaschool.edu.domain.Material;
 import ru.sberbank.javaschool.edu.domain.User;
-import ru.sberbank.javaschool.edu.repository.CourseRepository;
-import ru.sberbank.javaschool.edu.repository.MaterialRepository;
 import ru.sberbank.javaschool.edu.service.CourseService;
-import ru.sberbank.javaschool.edu.service.CourseUserService;
 import ru.sberbank.javaschool.edu.service.MaterialService;
 
 @Controller
 public class MaterialController {
+
+    private final CourseService courseService;
+    private final MaterialService materialService;
+
     @Autowired
-    CourseService courseService;
-    @Autowired
-    CourseRepository courseRepository;
-    @Autowired
-    CourseUserService courseUserService;
-    @Autowired
-    MaterialRepository materialRepository;
-    @Autowired
-    MaterialService materialService;
+    public MaterialController(
+            CourseService courseService,
+            MaterialService materialService
+    ) {
+        this.courseService = courseService;
+        this.materialService = materialService;
+    }
 
     @DeleteMapping("/course/{idCourse}/delete/{idMaterial}")
     public String removeMaterial(
@@ -47,8 +46,8 @@ public class MaterialController {
             @AuthenticationPrincipal User user,
             Model model
     ) {
-        Course course = courseRepository.findCourseById(idCourse);
-        Material material = materialRepository.getMaterialById(idMaterial);
+        Course course = courseService.findCourseById(idCourse);
+        Material material = materialService.getMaterialById(idMaterial);
 
         if (!materialService.canCreateMaterial(course, user)) {
             return "redirect:/course/{idCourse}";

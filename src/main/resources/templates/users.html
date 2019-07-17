@@ -17,7 +17,7 @@
 <div>
     <span th:text="${course.caption}"></span>
 </div>
-<div th:if="!${courseusers.isEmpty()}">
+<div th:if="!${courseUsers.isEmpty()}">
     <table>
         <thead>
         <tr>
@@ -27,14 +27,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="cUser : ${courseusers}">
+        <tr th:each="cUser : ${courseUsers}">
             <td><span th:text="${cUser.getUser().getName()}"> Name </span></td>
             <td><span th:text="${cUser.getUser().getSurname()}"> SurName </span></td>
-            <td><span th:text="${cUser.getUser().getEmail()}"> Sdate </span></td>
+            <td><span th:text="${cUser.getUser().getEmail()}"> EMail </span></td>
             <td>
                 <form action="#"
-                      th:action= "@{'/course/{idCourse}/users/{idCourseuser}'(idCourse=${course.getId()},
-                      idCourseuser=${cUser.getId()})}"
+                      th:action= "@{'/course/{idCourse}/users/{idCourseUser}'(idCourse=${course.getId()},
+                      idCourseUser=${cUser.getId()})}"
                       th:method="delete" >
                     <input type="hidden" name="_method" value="delete" />
                     <button type="submit" id="deleteButton">Delete from course</button>

@@ -55,7 +55,6 @@ public class CourseUserService {
     }
 
     public List<CourseUser> getCourseUsersWithoutTeachers(Course course) {
-        //List<CourseUser> courseUsers = courseUserRepository.findCourseUserByCourse(course);
         List<CourseUser> courseUsersWithoutTeachers = courseUserRepository.findCourseUserByCourse(course)
                 .stream()
                 .filter(u -> u.getRole() != Role.TEACHER)
@@ -76,7 +75,6 @@ public class CourseUserService {
 
         courseUserRepository.deleteById(id);
     }
-
 
     //Для автоматического назначения админа на все курсы как учителя для возможности редактирования
     public void addAdminToAllCourses(Course course) {

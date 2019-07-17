@@ -91,4 +91,9 @@ public class TaskCommentService {
 
         return task.getUser().equals(user) || userRoles.get(user) == Role.TEACHER;
     }
+
+    public TaskComment getTaskComment(long idComment) {
+
+        return commentRepository.findTaskCommentById(idComment);
+    }
 }

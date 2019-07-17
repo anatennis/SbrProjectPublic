@@ -8,37 +8,26 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import ru.sberbank.javaschool.edu.domain.Material;
 import ru.sberbank.javaschool.edu.domain.MaterialComment;
 import ru.sberbank.javaschool.edu.domain.User;
-import ru.sberbank.javaschool.edu.repository.MaterialCommentRepository;
-import ru.sberbank.javaschool.edu.repository.MaterialRepository;
 import ru.sberbank.javaschool.edu.service.MaterialCommentService;
 
 @Controller
 public class MaterialCommentController {
-    private final MaterialRepository materialRepository;
     private final MaterialCommentService commentService;
-    private final MaterialCommentRepository materialCommentRepository;
 
     @Autowired
-    public MaterialCommentController(
-            MaterialRepository materialRepository,
-            MaterialCommentService commentService,
-            MaterialCommentRepository materialCommentRepository
-    ) {
-        this.materialRepository = materialRepository;
+    public MaterialCommentController(MaterialCommentService commentService) {
         this.commentService = commentService;
-        this.materialCommentRepository = materialCommentRepository;
     }
 
     @PostMapping("/course/{idCourse}/comment/{idMaterial}")
-    public String addComment(@PathVariable long idMaterial,
-                              @AuthenticationPrincipal User user,
-                              MaterialComment comment) {
-        Material material = materialRepository.getMaterialById(idMaterial);
-
-        commentService.addComment(material, user, comment);
+    public String addComment(
+            @PathVariable long idMaterial,
+            @AuthenticationPrincipal User user,
+            MaterialComment comment
+    ) {
+        commentService.addComment(idMaterial, user, comment);
 
         return "redirect:/course/{idCourse}";
     }
@@ -61,8 +50,7 @@ public class MaterialCommentController {
             @AuthenticationPrincipal User user,
             Model model
     ) {
-
-        MaterialComment comment = materialCommentRepository.findMaterialCommentById(idComment);
+        MaterialComment comment = commentService.getMaterialComment(idComment);
 
         if (!commentService.canEditComment(user, comment)) {
             return "redirect:/course/{idCourse}";
