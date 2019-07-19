@@ -44,18 +44,6 @@ public class MaterialService {
         return true;
     }
 
-    public boolean deleteMaterial(Long idMaterial) {
-        Material material = materialRepository.getMaterialById(idMaterial);
-
-        if (material == null) {
-            return false;
-        }
-
-        materialRepository.delete(material);
-
-        return true;
-    }
-
     public boolean editMaterial(Long id, Material material) {
         Material materialFromDb = materialRepository.getMaterialById(id);
 
@@ -121,7 +109,7 @@ public class MaterialService {
             if (isMaterial) {
                 return deleteMaterial(idPublication);
             } else {
-                return removeTask(idPublication);
+                return deleteTask(idPublication);
             }
         }
 
@@ -138,7 +126,7 @@ public class MaterialService {
         return materialRepository.getMaterialById(idMaterial);
     }
 
-    private boolean removeTask(long idTask) {
+    private boolean deleteTask(long idTask) {
         Task task = taskRepository.getTaskById(idTask);
 
         if (task == null) {
@@ -146,6 +134,18 @@ public class MaterialService {
         }
 
         taskRepository.delete(task);
+
+        return true;
+    }
+
+    private boolean deleteMaterial(long idMaterial) {
+        Material material = materialRepository.getMaterialById(idMaterial);
+
+        if (material == null) {
+            return false;
+        }
+
+        materialRepository.delete(material);
 
         return true;
     }
