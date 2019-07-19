@@ -1,6 +1,7 @@
 package ru.sberbank.javaschool.edu.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Service;
 import ru.sberbank.javaschool.edu.domain.*;
 import ru.sberbank.javaschool.edu.repository.CourseRepository;
@@ -74,7 +75,12 @@ public class UserTaskService {
         );
         for (CourseUser teacher : teachers) {
             if (teacher.getUser().getEmail() != null) {
-                mailSender.send(teacher.getUser().getEmail(), messageTitle, message);
+                try {
+                    mailSender.send(teacher.getUser().getEmail(), messageTitle, message);
+                } catch (MailSendException ex) {
+
+                }
+
             }
         }
 

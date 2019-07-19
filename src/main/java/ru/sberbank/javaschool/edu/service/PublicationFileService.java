@@ -19,7 +19,6 @@ import java.util.UUID;
 public class PublicationFileService {
 
     private final PublicationFileRepository publicationFileRepository;
-    private final TaskRepository taskRepository;
     private final PublicationRepository publicationRepository;
 
     @Value("${upload.path}")
@@ -27,9 +26,8 @@ public class PublicationFileService {
 
     @Autowired
     public PublicationFileService(PublicationFileRepository publicationFileRepository,
-                                  TaskRepository taskRepository, PublicationRepository publicationRepository) {
+                                  PublicationRepository publicationRepository) {
         this.publicationFileRepository = publicationFileRepository;
-        this.taskRepository = taskRepository;
         this.publicationRepository = publicationRepository;
     }
 
@@ -51,9 +49,7 @@ public class PublicationFileService {
 
             PublicationFile publicationFile = new PublicationFile();
             publicationFile.setFilename(filename);
-            //Task task = taskRepository.getTaskById(idTask);
             Publication publication = publicationRepository.findPublicationById(idPublication);
-            //publicationFile.setTask(task);
             publicationFile.setPublication(publication);
             publicationFile.setPath(uploadPath);
             publicationFile.setUser(user);

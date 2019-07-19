@@ -1,6 +1,7 @@
 package ru.sberbank.javaschool.edu.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailSendException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -41,30 +42,37 @@ public class UserService implements UserDetailsService {
         return userRepo.findUserByLogin(login);
     }
 
-    public boolean addUser(User user) {
+    public String addUser(User user) {
+        if (user.getLogin().isEmpty() || user.getPassword().isEmpty()
+                || user.getEmail().isEmpty()) {
+            return "Необходимые для заполнения поля пусты";
+        }
         User uFromDB = userRepo.findUserByLogin(user.getLogin());
         if (uFromDB != null) {
-            return false;
+            return "Пользователь существует";
         }
         user.setRegdate(LocalDateTime.now());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        if (user.getEmail() != null) {
+        if (!user.getEmail().isEmpty()) {
             String code = UUID.randomUUID().toString();
             user.setActcode(code);
             String message = String.format(
-                    "Привет, %s!\n Добро пожаловать в наш класс, мы лучше чем Гугл :D\n" +
+                    "Привет, %s!\n Добро пожаловать в наш класс, мы почти как Гугл :D\n" +
                             "Ссылка для активации твоего аккаунта уже здесь: " +
                             "http://localhost:8080/activate/%s",
                     user.getName(),
                     code
             );
-            mailSender.send(user.getEmail(), "Activation code EDUClassroom", message);
+            try {
+                mailSender.send(user.getEmail(), "Activation code EDUClassroom", message);
+            } catch (MailSendException ex) {
+
+            }
         }
 
-
         userRepo.save(user);
-        return true;
+        return "ok";
     }
 
     public boolean updateUser(String login, User user) {

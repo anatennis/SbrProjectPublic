@@ -27,8 +27,9 @@ public class RegistrationController {
 
     @PostMapping("/registration")
     public String addUser(User user, Model model) {
-        if (!userService.addUser(user)) {
-            model.addAttribute("message", user.getLogin() + "User exists!");
+        String userAdding = userService.addUser(user);
+        if (!userAdding.equals("ok")) {
+            model.addAttribute("message", userAdding);
             return "registration";
         }
         return "redirect:/login";
