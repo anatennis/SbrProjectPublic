@@ -1,9 +1,9 @@
 package ru.sberbank.javaschool.edu.service;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +16,6 @@ import ru.sberbank.javaschool.edu.domain.UserTask;
 import ru.sberbank.javaschool.edu.repository.TaskRepository;
 import ru.sberbank.javaschool.edu.repository.UserRepository;
 import ru.sberbank.javaschool.edu.repository.UserTaskRepository;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest("UserTaskService")
@@ -67,7 +65,7 @@ public class UserTaskServiceTest {
                 .findUserTaskByUserAndTask(userRepository.findUserByLogin("testUser"), taskRepository.getTaskById(21));
         Mockito.verify(userTaskRepository,
                 Mockito.times(1)).findUserTaskByUserAndTask(user, task);
-        Assertions.assertEquals(userTaskService.createUserTask(admin, task), null);
+        Assert.assertNull(userTaskService.createUserTask(admin, task));
 
     }
 

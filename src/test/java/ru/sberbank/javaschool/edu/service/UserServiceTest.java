@@ -1,9 +1,9 @@
 package ru.sberbank.javaschool.edu.service;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.sberbank.javaschool.edu.domain.Course;
-import ru.sberbank.javaschool.edu.domain.CourseUser;
 import ru.sberbank.javaschool.edu.domain.User;
 import ru.sberbank.javaschool.edu.repository.CourseRepository;
 import ru.sberbank.javaschool.edu.repository.UserRepository;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest("UserService")
@@ -80,8 +76,8 @@ public class UserServiceTest {
     @Test
     public void updateUser() {
         User userFromDB = userRepository.findUserByLogin("test");
-        Assertions.assertEquals(userFromDB.getName(), "");
-        Assertions.assertEquals(userFromDB.getSurname(), "");
+        Assert.assertEquals(userFromDB.getName(), "");
+        Assert.assertEquals(userFromDB.getSurname(), "");
 
         User user = new User();
         user.setName("NewName");
@@ -100,10 +96,10 @@ public class UserServiceTest {
 
         User userFromDB = userRepository.findUserByLogin("test");
 
-        Assertions.assertEquals(userFromDB.getActcode(), null);
+        Assert.assertNull(userFromDB.getActcode());
 
         User userFromDB2 = userRepository.findUserByLogin("anaR");
-        Assertions.assertEquals(userFromDB2.getActcode(), "ok");
+        Assert.assertEquals(userFromDB2.getActcode(), "ok");
 
     }
 
@@ -111,7 +107,7 @@ public class UserServiceTest {
     public void getUsersNotPresentOnCourse() {
         User userFromDB = userRepository.findUserByLogin("test");
         Course course = courseRepository.findCourseById(new Long(12));
-        Assertions.assertNotEquals(course, null);
+        Assert.assertNotEquals(course, null);
 
 //        Mockito.doReturn(users)
 //                .when(userService)
