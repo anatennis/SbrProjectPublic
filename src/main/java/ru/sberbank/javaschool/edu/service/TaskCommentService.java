@@ -1,6 +1,5 @@
 package ru.sberbank.javaschool.edu.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sberbank.javaschool.edu.domain.*;
 import ru.sberbank.javaschool.edu.repository.TaskCommentRepository;

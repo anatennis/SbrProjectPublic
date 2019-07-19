@@ -49,38 +49,41 @@ public class CourseUserService {
 
     public List<CourseUser> getUserCourses(String login) {
         User user = userRepository.findUserByLogin(login);
-        List<CourseUser> courses = courseUserRepository.findCourseUserByUser(user);
 
-        return courses;
+        return courseUserRepository.findCourseUserByUser(user);
     }
 
     public List<CourseUser> getCourseUsersWithoutTeachers(Course course) {
-        List<CourseUser> courseUsersWithoutTeachers = courseUserRepository.findCourseUserByCourse(course)
+
+        return courseUserRepository.findCourseUserByCourse(course)
                 .stream()
                 .filter(u -> u.getRole() != Role.TEACHER)
                 .collect(Collectors.toList());
-
-        return courseUsersWithoutTeachers;
     }
 
     public boolean isTeacher(User user, Course course) {
         CourseUser courseUser = courseUserRepository.findCourseUserByCourseAndUser(course, user);
-        if (courseUser.getRole() != Role.TEACHER) {
-            return false;
-        }
-        return true;
+
+        return courseUser.getRole() == Role.TEACHER;
     }
 
-    public void deleteCourseUser(long id) {
+    public boolean deleteCourseUser(long id) {
+        CourseUser courseUser = courseUserRepository.findCourseUserById(id);
 
-        courseUserRepository.deleteById(id);
+        if (courseUser == null) {
+            return false;
+        }
+
+        courseUserRepository.delete(courseUser);
+
+        return true;
     }
 
     //Для автоматического назначения админа на все курсы как учителя для возможности редактирования
     public void addAdminToAllCourses(Course course) {
         User admin = userRepository.findUserByLogin("admin");
         CourseUser courseUserAdmin = new CourseUser(course, admin, Role.TEACHER);
-        courseUserRepository.save(courseUserAdmin);
 
+        courseUserRepository.save(courseUserAdmin);
     }
 }

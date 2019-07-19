@@ -8,6 +8,8 @@ import ru.sberbank.javaschool.edu.domain.User;
 import java.util.List;
 
 public interface CourseUserRepository extends JpaRepository<CourseUser, Long> {
+    CourseUser findCourseUserById(long id);
+
     CourseUser findCourseUserByCourseAndUser(Course course, User user);
 
     List<CourseUser> findCourseUserByUser(User user);
