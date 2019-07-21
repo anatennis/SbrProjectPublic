@@ -42,6 +42,7 @@ public class CourseUserService {
         }
 
         CourseUser courseUser = new CourseUser(course, user, userRole);
+
         courseUserRepository.save(courseUser);
 
         return true;

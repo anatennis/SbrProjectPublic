@@ -2,6 +2,7 @@ package ru.sberbank.javaschool.edu.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.sberbank.javaschool.edu.domain.Course;
 import ru.sberbank.javaschool.edu.repository.CourseRepository;
 
@@ -38,6 +39,7 @@ public class CourseService {
         return true;
     }
 
+    @Transactional
     public boolean removeCourse(Long id) {
         Course courseFromDb = courseRepository.findCourseById(id);
 
@@ -45,7 +47,7 @@ public class CourseService {
             return false;
         }
 
-        courseRepository.delete(courseFromDb);
+        courseRepository.delete(courseFromDb);// лучше через базу
 
         return true;
     }
@@ -74,7 +76,7 @@ public class CourseService {
         return courseRepository.findAll();
     }
 
-    public boolean hasAccess(Principal principal) {  //костыльненькое ограничение прав доступа на админку
+    public boolean hasAccess(Principal principal) {
 
         return principal.getName().equals("admin");
     }

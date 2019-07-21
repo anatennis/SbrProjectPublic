@@ -1,18 +1,14 @@
 package ru.sberbank.javaschool.edu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.sberbank.javaschool.edu.domain.*;
 import ru.sberbank.javaschool.edu.service.*;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -183,16 +179,6 @@ public class TaskController {
         materialService.editTask(idTask, task);
 
         return "redirect:/course/{idCourse}/tasks";
-    }
-
-    //для передачи даты из формы, пока что-то идет не так
-    @InitBinder("task")
-    public void initBinder(WebDataBinder binder)
-    {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        dateFormat.setLenient(false);
-        binder.registerCustomEditor(LocalDateTime.class, "completeTime", new CustomDateEditor(
-                dateFormat, true));
     }
 
 
