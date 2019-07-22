@@ -15,5 +15,6 @@
     <include file="refactor_publications.xml" relativeToChangelogFile="true"/>
     <include file="add_table_material.xml" relativeToChangelogFile="true"/>
     <include file="return_to_single_table_publication.xml" relativeToChangelogFile="true"/>
+    <include file="add_parents_to_comments.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
