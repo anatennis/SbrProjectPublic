@@ -4,12 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Service;
 import ru.sberbank.javaschool.edu.domain.*;
-import ru.sberbank.javaschool.edu.repository.CourseRepository;
-import ru.sberbank.javaschool.edu.repository.TaskRepository;
-import ru.sberbank.javaschool.edu.repository.UserRepository;
-import ru.sberbank.javaschool.edu.repository.UserTaskRepository;
+import ru.sberbank.javaschool.edu.repository.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -20,16 +18,18 @@ public class UserTaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
+    private final CourseUserRepository courseUserRepository;
     private final MailSender mailSender;
 
     @Autowired
     public UserTaskService(UserTaskRepository userTaskRepository, TaskRepository taskRepository,
                            UserRepository userRepository, CourseRepository courseRepository,
-                           MailSender mailSender) {
+                           CourseUserRepository courseUserRepository, MailSender mailSender) {
         this.userTaskRepository = userTaskRepository;
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
         this.courseRepository = courseRepository;
+        this.courseUserRepository = courseUserRepository;
         this.mailSender = mailSender;
     }
 
@@ -103,10 +103,27 @@ public class UserTaskService {
         return true;
     }
 
+    public void createUserTasksForAllStudents(Task task, Course course) {
+        List<CourseUser> courseUsers = courseUserRepository.findCourseUserByCourse(course);
+        for (CourseUser courseUser : courseUsers) {
+            createUserTask(courseUser.getUser(), task);
+        }
+    }
+
     private Set<CourseUser> getTeachers(Course course) {
         return course.getCourseUsers()
                 .stream()
                 .filter(u -> u.getRole() == Role.TEACHER)
                 .collect(Collectors.toSet());
+    }
+
+
+    public void createUserTasksForNewStudent(String userLogin, Long idCourse) {
+        User user = userRepository.findUserByLogin(userLogin);
+        Course course = courseRepository.findCourseById(idCourse);
+        List<Task> tasks = taskRepository.getTaskByCourse(course);
+        for (Task task : tasks) {
+            createUserTask(user, task);
+        }
     }
 }

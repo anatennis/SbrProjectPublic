@@ -63,11 +63,11 @@ public class TaskController {
     public String submitTask(
             @PathVariable long idCourse,
             @PathVariable long idTask,
-            @RequestParam("file[]") MultipartFile files[],
+            @RequestParam("file[]") MultipartFile []files,
             @AuthenticationPrincipal User user) {
 
         for (MultipartFile file : files) {
-            publicationFileService.saveFiles(file, idTask, user);
+            publicationFileService.saveFile(file, idTask, user);
         }
 
         userTaskService.submitTask(idTask, user, idCourse);
@@ -135,8 +135,10 @@ public class TaskController {
                                Task task) {
 
         Course course = taskService.findCourseById(idCourse);
-
         materialService.createTask(course, user, task);
+
+        userTaskService.createUserTasksForAllStudents(task, course);
+
 
         return "redirect:/course/{idCourse}/tasks";
     }

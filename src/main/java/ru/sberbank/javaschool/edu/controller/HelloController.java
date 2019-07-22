@@ -1,5 +1,7 @@
 package ru.sberbank.javaschool.edu.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -10,8 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class HelloController {
 
+    private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
+
     @GetMapping("/")
     public String greeting(Model model) {
+        logger.info("Main page");
         return "main";
     }
 
@@ -21,8 +26,10 @@ public class HelloController {
                 SecurityContextHolder.getContext().getAuthentication().isAuthenticated() &&
                 !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken)
         ) {
+            logger.info("Try to login in login statement");
             return "redirect:/user";
         }
+
         return "/login";
     }
 

@@ -6,14 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.sberbank.javaschool.edu.domain.Course;
-import ru.sberbank.javaschool.edu.domain.CourseUser;
-import ru.sberbank.javaschool.edu.domain.Material;
-import ru.sberbank.javaschool.edu.domain.User;
-import ru.sberbank.javaschool.edu.service.CourseService;
-import ru.sberbank.javaschool.edu.service.CourseUserService;
-import ru.sberbank.javaschool.edu.service.MaterialService;
-import ru.sberbank.javaschool.edu.service.PublicationFileService;
+import ru.sberbank.javaschool.edu.domain.*;
+import ru.sberbank.javaschool.edu.service.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -24,17 +18,22 @@ public class CourseController {
     private final CourseUserService courseUserService;
     private final MaterialService materialService;
     private final PublicationFileService publicationFileService;
+    private final UserService userService;
+    private final UserTaskService userTaskService;
 
     @Autowired
     public CourseController(
             CourseService courseService,
             CourseUserService courseUserService,
             MaterialService materialService,
-            PublicationFileService publicationFileService) {
+            PublicationFileService publicationFileService,
+            UserService userService, UserTaskService userTaskService) {
         this.courseService = courseService;
         this.courseUserService = courseUserService;
         this.materialService = materialService;
         this.publicationFileService = publicationFileService;
+        this.userService = userService;
+        this.userTaskService = userTaskService;
     }
 
     @GetMapping("/course/{idCourse}")
@@ -74,7 +73,7 @@ public class CourseController {
         Course course = courseService.findCourseById(idCourse);
         materialService.createMaterial(course, user, material);
         for (MultipartFile file : files) {
-            publicationFileService.saveFiles(file, material.getId(), user);
+            publicationFileService.saveFile(file, material.getId(), user);
         }
 
 
@@ -96,8 +95,22 @@ public class CourseController {
 
         model.addAttribute("course", course);
         model.addAttribute("courseUsers", courseUsers);
+        model.addAttribute("roles", Role.values());
+        model.addAttribute("allUsers", userService.getUsersNotPresentOnCourse(idCourse));
 
         return "users";
+    }
+
+    @PostMapping("/course/{idCourse}/users/add")
+    public String addUser(
+            @PathVariable Long idCourse,
+            @RequestParam String userLogin,
+            @RequestParam String userRole
+    ) {
+
+        courseUserService.addCourseUser(idCourse, userLogin, userRole);
+        userTaskService.createUserTasksForNewStudent(userLogin, idCourse);
+        return "redirect:/course/{idCourse}/users";
     }
 
     @DeleteMapping("/course/{idCourse}/users/{idCourseUser}")

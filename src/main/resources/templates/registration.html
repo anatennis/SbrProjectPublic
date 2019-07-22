@@ -12,7 +12,8 @@ Registration of new user
 </div>
 <form th:action="@{/registration}" method="post">
     <div><label> Login : <input type="text" name="login" placeholder="Логин"/> </label></div>
-    <div><label> Password: <input type="password" name="password" placeholder="Пароль"/> </label></div>
+    <div><label> Password: <input type="password" name="password"
+                                  placeholder="Пароль (может быть сгенерирован автоматически)"/> </label></div>
     <div><label> Name: <input type="text" name="name" placeholder="Имя"/> </label></div>
     <div><label> Surname: <input type="text" name="surname" placeholder="Фамилия"/> </label></div>
     <div><label> E-mail: <input type="text" name="email" placeholder="E-mail"/> </label></div>

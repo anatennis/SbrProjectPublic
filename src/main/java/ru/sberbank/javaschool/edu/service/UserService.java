@@ -39,14 +39,27 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
-        return userRepo.findUserByLogin(login);
+        User user = userRepo.findUserByLogin(login);
+        if ((user != null) && (user.getActcode().equals("ok"))) {
+            return user;
+        }
+        throw new UsernameNotFoundException("Invalid name and password or user is not activated: " + login);
+        //return userRepo.findUserByLogin(login);
     }
 
     public String addUser(User user) {
-        if (user.getLogin().isEmpty() || user.getPassword().isEmpty()
+        if (user.getLogin().isEmpty()
+                //|| user.getPassword().isEmpty()
                 || user.getEmail().isEmpty()) {
             return "Необходимые для заполнения поля пусты";
         }
+        String newPassword = user.getPassword();
+        if (newPassword.isEmpty()) {
+            newPassword = UUID.randomUUID().toString().substring(1, 11);
+            user.setPassword(newPassword);
+        }
+
+
         User uFromDB = userRepo.findUserByLogin(user.getLogin());
         if (uFromDB != null) {
             return "Пользователь существует";
@@ -60,9 +73,13 @@ public class UserService implements UserDetailsService {
             String message = String.format(
                     "Привет, %s!\n Добро пожаловать в наш класс, мы почти как Гугл :D\n" +
                             "Ссылка для активации твоего аккаунта уже здесь: " +
-                            "http://localhost:8080/activate/%s",
+                            "http://localhost:8080/activate/%s " +
+                            "Логин: %s\n " +
+                            "Пароль: %s",
                     user.getName(),
-                    code
+                    code,
+                    user.getLogin(),
+                    newPassword
             );
             try {
                 mailSender.send(user.getEmail(), "Activation code EDUClassroom", message);

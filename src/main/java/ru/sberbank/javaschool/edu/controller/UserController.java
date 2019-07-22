@@ -1,5 +1,7 @@
 package ru.sberbank.javaschool.edu.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,8 @@ public class UserController {
 
     private final UserService userService;
 
+    private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
+
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
@@ -28,23 +32,29 @@ public class UserController {
 
     @GetMapping
     public String userGreeting(@AuthenticationPrincipal User user, Model model, HttpSession httpSession) {
+        logger.debug(userService.getInfoFromSession(httpSession, user));
+
         String username = user.getUsername();
         String sessionInfo = userService.getInfoFromSession(httpSession, user);
         Set<CourseUser> courseUsersSet = user.getCourseUsers();
 
         model.addAttribute("username", username);
-        model.addAttribute("oursession", sessionInfo);
         model.addAttribute("courseusers", courseUsersSet);
         return "user";
     }
 
     @PostMapping
     public String update(Model model, Principal principal, User user) {
+
         String login = principal.getName();
         if (userService.updateUser(login, user)) {
             model.addAttribute("message", "Ваши данные успешно обновлены");
-            return "user";
+
+            logger.debug(principal.getName() + " change name & surname to "+user.getName()+" "+user.getSurname());
+
+            return "redirect:/user";
         }
+        logger.debug(principal.getName() + "can't change name & surname");
         return "redirect:/user";
     }
 

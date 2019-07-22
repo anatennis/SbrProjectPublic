@@ -45,29 +45,14 @@
 
 <div th:if="${isStudent}">
     <table>
-        <thead>
-        <tr>
-            <th> Task caption</th>
-            <th> Task text</th>
-            <th> Complete date</th>
-            <th> Max mark</th>
-            <th> Your mark</th>
-            <th> Task state</th>
-            <th> Submit date</th>
-        </tr>
-        </thead>
         <tbody>
         <tr>
-            <td><b><span th:text="${task.getTitle()}"> Title</span></b></td>
+            <td><b><span th:text="${task.getTitle()}"> </span></b></td>
         </tr>
         <tr>
-            <td><span th:text="${task.getText()}"> Text </span></td>
+            <td><span th:text="${task.getText()}"> </span></td>
         </tr>
         <tr>
-            <td><span th:text="${#temporals.format(task.getCompleteTime(), 'dd-MM-yyyy HH:mm:ss')}">
-                                Complete date
-                </span>
-            </td>
             <td>Max mark: <span th:text="${task.getMaxMark()}"> Max Mark </span></td>
             <td>My mark:
                 <span th:if="${usertask.getTaskState()}">
@@ -84,8 +69,9 @@
                     <p th:text="${usertask.getSubmittedDate()}"></p>
                 </span>
             </td>
-            <td>Files
-
+            <td>Complete date
+                <b><span th:text="${#temporals.format(task.getCompleteTime(), 'dd-MM-yyyy HH:mm')}">
+                </span></b>
             </td>
         </tr>
         <tr>

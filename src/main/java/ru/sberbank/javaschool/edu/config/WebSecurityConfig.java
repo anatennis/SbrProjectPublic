@@ -30,26 +30,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authenticationProvider(new AuthenticationProvider() {
-                    @Override
-                    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-                        return null;
-                    }
-
-                    @Override
-                    public boolean supports(Class<?> authentication) {
-                        return false;
-                    }
-                })
+//                .authenticationProvider(new AuthenticationProvider() {
+//                    @Override
+//                    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+//                        return null;
+//                    }
+//
+//                    @Override
+//                    public boolean supports(Class<?> authentication) {
+//                        return false;
+//                    }
+//                })
                 .authorizeRequests()
                 .antMatchers("/", "/registration", "/activate/*").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
-                //.addFilter()
                 .formLogin()
                 .loginPage("/login")
-
                 .defaultSuccessUrl("/user")
                 .permitAll()
                 .and()
@@ -62,10 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService)
-                .passwordEncoder(passwordEncoder)
-
-
-        ;
+                .passwordEncoder(passwordEncoder);
 
     }
 

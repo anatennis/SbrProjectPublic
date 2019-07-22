@@ -14,11 +14,10 @@
     </form>
 </div>
 <p th:text="'Привет, ' + ${username} + '!'" />
-<p th:text="'Сессия ' + ${oursession}" />
 
-<div th:if="${message}">
-    <p th:text="${message}"></p>
-</div>
+<!--<div th:if="${message}">-->
+    <!--<p th:text="${message}"></p>-->
+<!--</div>-->
 
 <a th:href="@{/courses}">Мои курсы</a>
 <!--<section th:each="courseUser : ${courseusers}">-->
