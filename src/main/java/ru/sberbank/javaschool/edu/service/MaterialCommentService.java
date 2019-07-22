@@ -28,6 +28,15 @@ public class MaterialCommentService {
         commentRepository.save(materialComment);
     }
 
+    public void addNestedComment(long idMaterial, long idParent, User user, MaterialComment childComment) {
+        childComment.setAuthor(user);
+        childComment.setParentComment(commentRepository.findMaterialCommentById(idParent));
+        childComment.setMaterial(materialService.getMaterialById(idMaterial));
+        childComment.setCreatedate(LocalDateTime.now());
+
+        commentRepository.save(childComment);
+    }
+
     public boolean canEditComment(User user, MaterialComment comment) {
 
         return comment.getAuthor().equals(user);

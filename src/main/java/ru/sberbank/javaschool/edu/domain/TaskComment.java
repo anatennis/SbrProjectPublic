@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "edu_task_comment")
@@ -28,4 +30,11 @@ public class TaskComment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author")
     protected User author;
+
+    @ManyToOne
+    @JoinColumn(name = "parent")
+    private TaskComment parentComment;
+
+    @OneToMany(mappedBy = "parentComment", fetch = FetchType.EAGER)
+    private List<TaskComment> comments = new ArrayList<>();
 }

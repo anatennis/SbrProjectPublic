@@ -44,6 +44,31 @@ public class TaskCommentController {
         return "redirect:/course/{idCourse}/tasks/{idTask}";
     }
 
+    @PostMapping("/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}/comment/{idParent}")
+    public String addNestedCommentTeacher(
+            @PathVariable long idTask,
+            @PathVariable long idParent,
+            @PathVariable long idUser,
+            @AuthenticationPrincipal User user,
+            TaskComment taskComment
+    ) {
+        commentService.addNestedComment(idTask, idParent, idUser, user, taskComment);
+
+        return "redirect:/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}";
+    }
+
+    @PostMapping("/course/{idCourse}/tasks/{idTask}/comment/{idParent}")
+    public String addNestedCommentStudent(
+            @PathVariable long idTask,
+            @PathVariable long idParent,
+            @AuthenticationPrincipal User user,
+            TaskComment taskComment
+    ) {
+        commentService.addNestedComment(idTask, idParent, user.getId(), user, taskComment);
+
+        return "redirect:/course/{idCourse}/tasks/{idTask}";
+    }
+
     @GetMapping("/course/{idCourse}/tasks/{idTask}/{taskCaption}/{idUser}/edit_comment/{idComment}")
     public String showEditCommentTeacher(
             @PathVariable long idCourse,
