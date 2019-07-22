@@ -32,6 +32,18 @@ public class MaterialCommentController {
         return "redirect:/course/{idCourse}";
     }
 
+    @PostMapping("/course/{idCourse}/comment/{idMaterial}/{idComment}")
+    public String addChildComment(
+            @PathVariable long idMaterial,
+            @PathVariable long idComment,
+            @AuthenticationPrincipal User user,
+            MaterialComment comment
+    ) {
+        commentService.addNestedComment(idMaterial, idComment, user, comment);
+
+        return "redirect:/course/{idCourse}";
+    }
+
     @DeleteMapping("/course/{idCourse}/delete_comment/{idComment}")
     public String deleteComment(
             @PathVariable Long idComment,

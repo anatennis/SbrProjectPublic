@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -36,5 +37,6 @@ public class UserTask {
     private Long curMark;
 
     @OneToMany(mappedBy = "userTask", fetch = FetchType.LAZY)
+    @Where(clause = "parent is null")
     private List<TaskComment> comments = new ArrayList<>();
 }

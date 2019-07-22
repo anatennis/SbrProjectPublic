@@ -1,9 +1,12 @@
 package ru.sberbank.javaschool.edu.domain;
 
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "edu_publication_comment")
@@ -27,4 +30,11 @@ public class MaterialComment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author")
     protected User author;
+
+    @ManyToOne
+    @JoinColumn(name = "parent")
+    private MaterialComment parentComment;
+
+    @OneToMany(mappedBy = "parentComment")
+    private List<MaterialComment> comments = new ArrayList<>();
 }

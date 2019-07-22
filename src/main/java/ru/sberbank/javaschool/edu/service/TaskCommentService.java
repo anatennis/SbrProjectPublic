@@ -32,18 +32,17 @@ public class TaskCommentService {
 
     public boolean addComment(long idTask, long idUser, User user, TaskComment taskComment) {
 
-        Task commonTask = taskRepository.getTaskById(idTask);
-        User taskUser = userRepository.findUserById(idUser);
-        UserTask task = userTaskRepository.findUserTaskByUserAndTask(taskUser, commonTask);
+        if (createTaskComment(idTask, idUser, user, taskComment)) return false;
 
+        commentRepository.save(taskComment);
 
-        if (!canAddComment(task, user)) {
-            return false;
-        }
+        return true;
+    }
 
-        taskComment.setUserTask(task);
-        taskComment.setAuthor(user);
-        taskComment.setCreateDate(LocalDateTime.now());
+    public boolean addNestedComment(long idTask, long idParent, long idUser, User user, TaskComment taskComment) {
+
+        if (createTaskComment(idTask, idUser, user, taskComment)) return false;
+        taskComment.setParentComment(commentRepository.findTaskCommentById(idParent));
 
         commentRepository.save(taskComment);
 
@@ -94,5 +93,21 @@ public class TaskCommentService {
     public TaskComment getTaskComment(long idComment) {
 
         return commentRepository.findTaskCommentById(idComment);
+    }
+
+    private boolean createTaskComment(long idTask, long idUser, User user, TaskComment taskComment) {
+        Task commonTask = taskRepository.getTaskById(idTask);
+        User taskUser = userRepository.findUserById(idUser);
+        UserTask task = userTaskRepository.findUserTaskByUserAndTask(taskUser, commonTask);
+
+        if (!canAddComment(task, user)) {
+            return true;
+        }
+
+        taskComment.setUserTask(task);
+        taskComment.setAuthor(user);
+        taskComment.setCreateDate(LocalDateTime.now());
+
+        return false;
     }
 }
