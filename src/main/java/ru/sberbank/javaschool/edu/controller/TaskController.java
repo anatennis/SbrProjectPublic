@@ -1,5 +1,6 @@
 package ru.sberbank.javaschool.edu.controller;
 
+import com.github.sardine.model.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -47,6 +48,8 @@ public class TaskController {
         boolean isTeacher = materialService.canCreateMaterial(course, user);
         List<UserTask> usertasks = taskService.findUserTaskByTask(task);
 
+        //publicationFileService.getFilesFromYDisk();
+
         model.addAttribute("course", course);
         model.addAttribute("task", task);
         model.addAttribute("usertask", userTask);
@@ -63,7 +66,7 @@ public class TaskController {
     public String submitTask(
             @PathVariable long idCourse,
             @PathVariable long idTask,
-            @RequestParam("file[]") MultipartFile []files,
+            @RequestParam("file[]") MultipartFile[] files,
             @AuthenticationPrincipal User user) {
 
         for (MultipartFile file : files) {
@@ -71,6 +74,17 @@ public class TaskController {
         }
 
         userTaskService.submitTask(idTask, user, idCourse);
+
+        return "redirect:/course/{idCourse}/tasks/{idTask}";
+    }
+
+    @DeleteMapping("/course/{idCourse}/tasks/{idTask}/delete/{idFile}")
+    public String removeFile(
+            @PathVariable long idFile,
+            @PathVariable long idCourse,
+            @AuthenticationPrincipal User user) {
+
+        publicationFileService.deleteFile(idFile);
 
         return "redirect:/course/{idCourse}/tasks/{idTask}";
     }
@@ -113,7 +127,6 @@ public class TaskController {
     }
 
 
-
     @GetMapping("/course/{id}/tasks")
     public String showTasks(
             @PathVariable long id,
@@ -131,8 +144,8 @@ public class TaskController {
 
     @PostMapping("/course/{idCourse}/tasks")
     public String addTask(@PathVariable long idCourse,
-                              @AuthenticationPrincipal User user,
-                               Task task) {
+                          @AuthenticationPrincipal User user,
+                          Task task) {
 
         Course course = taskService.findCourseById(idCourse);
         materialService.createTask(course, user, task);
