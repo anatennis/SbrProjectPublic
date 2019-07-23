@@ -23,7 +23,7 @@ public class UserController {
 
     private final UserService userService;
 
-    private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     public UserController(UserService userService) {
@@ -35,7 +35,6 @@ public class UserController {
         logger.debug(userService.getInfoFromSession(httpSession, user));
 
         String username = user.getUsername();
-        String sessionInfo = userService.getInfoFromSession(httpSession, user);
         Set<CourseUser> courseUsersSet = user.getCourseUsers();
 
         model.addAttribute("username", username);
