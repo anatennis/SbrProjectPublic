@@ -60,82 +60,18 @@ public class CourseServiceTest {
 
     @Test
     public void removeCourse() {
-        Course course = new Course();
-        long id = 1L;
+        courseService.removeCourse(1L);
 
-        course.setId(id);
-
-        Mockito.doReturn(course)
-                .when(courseRepository)
-                .findCourseById(id);
-
-        boolean isRemoved = courseService.removeCourse(id);
-
-        Assert.assertTrue(isRemoved);
-
-        Mockito.verify(courseRepository, Mockito.times(1)).findCourseById(id);
-        Mockito.verify(courseRepository, Mockito.times(1)).delete(course);
-
-    }
-
-    @Test
-    public void removeCourseThatDothNotExist() {
-        Course course = new Course();
-        long id = 1L;
-
-        Mockito.doReturn(null)
-                .when(courseRepository)
-                .findCourseById(id);
-
-        boolean isRemoved = courseService.removeCourse(id);
-
-        Assert.assertFalse(isRemoved);
-
-        Mockito.verify(courseRepository, Mockito.times(1)).findCourseById(id);
-        Mockito.verify(courseRepository, Mockito.times(0)).delete(course);
+        Mockito.verify(courseRepository, Mockito.times(1)).deleteById(1L);
 
     }
 
     @Test
     public void updateCourse() {
-        Course course = new Course();
-        long id = 1L;
+        courseService.updateCourse(1L, "new");
 
-        course.setId(id);
-        course.setCaption("old");
-
-        Mockito.doReturn(course)
-                .when(courseRepository)
-                .findCourseById(id);
-
-        boolean isUpdated = courseService.updateCourse(id, "new");
-
-        Assert.assertTrue(isUpdated);
-        Assert.assertEquals("new", course.getCaption());
-
-        Mockito.verify(courseRepository, Mockito.times(1)).findCourseById(id);
-        Mockito.verify(courseRepository, Mockito.times(1)).save(course);
-    }
-
-    @Test
-    public void updateCourseThatDothNotExist() {
-        Course course = new Course();
-        long id = 1L;
-
-        course.setId(id);
-        course.setCaption("old");
-
-        Mockito.doReturn(null)
-                .when(courseRepository)
-                .findCourseById(id);
-
-        boolean isUpdated = courseService.updateCourse(id, "new");
-
-        Assert.assertFalse(isUpdated);
-        Assert.assertEquals("old", course.getCaption());
-
-        Mockito.verify(courseRepository, Mockito.times(1)).findCourseById(id);
-        Mockito.verify(courseRepository, Mockito.times(0)).save(course);
+        Mockito.verify(courseRepository, Mockito.times(1))
+                .updateCourse(1L, "new");
     }
 
 }

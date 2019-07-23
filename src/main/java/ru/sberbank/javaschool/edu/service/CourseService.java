@@ -24,6 +24,7 @@ public class CourseService {
         this.courseUserService = courseUserService;
     }
 
+    @Transactional
     public boolean addCourse(Course course) {
         Course courseFromDB = courseRepository.findCourseByCaption(course.getCaption());
 
@@ -40,30 +41,15 @@ public class CourseService {
     }
 
     @Transactional
-    public boolean removeCourse(Long id) {
-        Course courseFromDb = courseRepository.findCourseById(id);
+    public void removeCourse(Long id) {
 
-        if (courseFromDb == null) {
-            return false;
-        }
-
-        courseRepository.delete(courseFromDb);// лучше через базу
-
-        return true;
+        courseRepository.deleteById(id);
     }
 
-    public boolean updateCourse(Long id, String newCaption) {
-        Course courseFromDb = courseRepository.findCourseById(id);
+    @Transactional
+    public void updateCourse(Long id, String newCaption) {
 
-        if (courseFromDb == null) {
-            return false;
-        }
-
-        courseFromDb.setCaption(newCaption);
-
-        courseRepository.save(courseFromDb);
-
-        return true;
+        courseRepository.updateCourse(id, newCaption);
     }
 
     public Course findCourseById(long id) {

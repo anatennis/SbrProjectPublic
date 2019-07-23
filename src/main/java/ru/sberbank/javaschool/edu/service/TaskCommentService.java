@@ -1,6 +1,7 @@
 package ru.sberbank.javaschool.edu.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.sberbank.javaschool.edu.domain.*;
 import ru.sberbank.javaschool.edu.repository.TaskCommentRepository;
 import ru.sberbank.javaschool.edu.repository.TaskRepository;
@@ -30,48 +31,38 @@ public class TaskCommentService {
         this.userTaskRepository = userTaskRepository;
     }
 
-    public boolean addComment(long idTask, long idUser, User user, TaskComment taskComment) {
+    public void addComment(long idTask, long idUser, User user, TaskComment taskComment) {
 
-        if (createTaskComment(idTask, idUser, user, taskComment)) return false;
-
-        commentRepository.save(taskComment);
-
-        return true;
+        if (createTaskComment(idTask, idUser, user, taskComment))  {
+            commentRepository.save(taskComment);
+        }
     }
 
-    public boolean addNestedComment(long idTask, long idParent, long idUser, User user, TaskComment taskComment) {
+    public void addNestedComment(long idTask, long idParent, long idUser, User user, TaskComment taskComment) {
 
-        if (createTaskComment(idTask, idUser, user, taskComment)) return false;
-        taskComment.setParentComment(commentRepository.findTaskCommentById(idParent));
+        if (createTaskComment(idTask, idUser, user, taskComment)) {
+            taskComment.setParentComment(commentRepository.findTaskCommentById(idParent));
 
-        commentRepository.save(taskComment);
-
-        return true;
+            commentRepository.save(taskComment);
+        }
     }
 
-    public boolean deleteComment(User user, long id) {
+    @Transactional
+    public void deleteComment(User user, long id) {
         TaskComment comment = commentRepository.findTaskCommentById(id);
 
-        if (comment == null || !cantEditComment(user, comment)) {
-            return false;
+        if (comment != null && cantEditComment(user, comment)) {
+            commentRepository.deleteById(id);
         }
-
-        commentRepository.delete(comment);
-
-        return true;
     }
 
-    public boolean editComment(long id, TaskComment comment, User user) {
+    @Transactional
+    public void editComment(long id, TaskComment comment, User user) {
         TaskComment commentFromDb = commentRepository.findTaskCommentById(id);
 
-        if (commentFromDb == null || !cantEditComment(user, commentFromDb)) {
-            return false;
+        if (commentFromDb != null && cantEditComment(user, commentFromDb)) {
+            commentRepository.updateTaskComent(id, comment.getText());
         }
-
-        commentFromDb.setText(comment.getText());
-        commentRepository.save(commentFromDb);
-
-        return true;
     }
 
     public boolean cantEditComment(User user, TaskComment comment) {
@@ -101,13 +92,13 @@ public class TaskCommentService {
         UserTask task = userTaskRepository.findUserTaskByUserAndTask(taskUser, commonTask);
 
         if (!canAddComment(task, user)) {
-            return true;
+            return false;
         }
 
         taskComment.setUserTask(task);
         taskComment.setAuthor(user);
         taskComment.setCreateDate(LocalDateTime.now());
 
-        return false;
+        return true;
     }
 }

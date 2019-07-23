@@ -63,12 +63,9 @@ public class MaterialCommentServiceTest {
                 .when(commentRepository)
                 .findMaterialCommentById(ID);
 
-        boolean isDeleted = commentService.deleteComment(user, ID);
+        commentService.deleteComment(user, ID);
 
-        Assert.assertTrue(isDeleted);
-
-        Mockito.verify(commentRepository, Mockito.times(1)).findMaterialCommentById(ID);
-        Mockito.verify(commentRepository, Mockito.times(1)).delete(comment);
+        Mockito.verify(commentRepository, Mockito.times(1)).deleteById(ID);
 
     }
 
@@ -83,39 +80,12 @@ public class MaterialCommentServiceTest {
         comment.setId(ID);
         comment.setAuthor(elseUser);
 
-        Mockito.doReturn(comment)
-                .when(commentRepository)
-                .findMaterialCommentById(ID);
+        commentService.deleteComment(user, ID);
 
-        boolean isDeleted = commentService.deleteComment(user, ID);
-
-        Assert.assertFalse(isDeleted);
-
-        Mockito.verify(commentRepository, Mockito.times(1)).findMaterialCommentById(ID);
-        Mockito.verify(commentRepository, Mockito.times(0)).delete(comment);
+        Mockito.verify(commentRepository, Mockito.times(0)).deleteById(ID);
     }
 
-    @Test
-    public void deleteNonexistentComment() {
-        MaterialComment comment = new MaterialComment();
-        User user = new User();
 
-        user.setId(ID);
-        comment.setId(ID);
-        comment.setAuthor(user);
-
-        Mockito.doReturn(null)
-                .when(commentRepository)
-                .findMaterialCommentById(ID);
-
-        boolean isDeleted = commentService.deleteComment(user, ID);
-
-        Assert.assertFalse(isDeleted);
-
-        Mockito.verify(commentRepository, Mockito.times(1)).findMaterialCommentById(ID);
-        Mockito.verify(commentRepository, Mockito.times(0)).delete(comment);
-
-    }
 
     @Test
     public void editComment() {
@@ -123,24 +93,16 @@ public class MaterialCommentServiceTest {
         MaterialComment newComment = new MaterialComment();
         User user = new User();
 
-
         user.setId(ID);
         comment.setId(ID);
         comment.setAuthor(user);
         comment.setText("oldText");
         newComment.setText("newText");
 
-        Mockito.doReturn(comment)
-                .when(commentRepository)
-                .findMaterialCommentById(ID);
+        commentService.editComment(ID, newComment, user);
 
-        boolean isEdited = commentService.editComment(ID, newComment, user);
-
-        Assert.assertTrue(isEdited);
-        Assert.assertEquals("newText", comment.getText());
-
-        Mockito.verify(commentRepository, Mockito.times(1)).findMaterialCommentById(ID);
-        Mockito.verify(commentRepository, Mockito.times(1)).save(comment);
+        Mockito.verify(commentRepository, Mockito.times(0))
+                .updateMaterialComment(ID, newComment.getText());
     }
 
     @Test
@@ -157,40 +119,7 @@ public class MaterialCommentServiceTest {
         comment.setText("oldText");
         newComment.setText("newText");
 
-        Mockito.doReturn(comment)
-                .when(commentRepository)
-                .findMaterialCommentById(ID);
-
-        boolean isEdited = commentService.editComment(ID, newComment, user);
-
-        Assert.assertFalse(isEdited);
-
-        Mockito.verify(commentRepository, Mockito.times(1)).findMaterialCommentById(ID);
-        Mockito.verify(commentRepository, Mockito.times(0)).save(comment);
-    }
-
-    @Test
-    public void editNonexistentComment() {
-        MaterialComment comment = new MaterialComment();
-        MaterialComment newComment = new MaterialComment();
-        User user = new User();
-
-        user.setId(ID);
-        comment.setId(ID);
-        comment.setAuthor(user);
-        comment.setText("oldText");
-        newComment.setText("newText");
-
-        Mockito.doReturn(null)
-                .when(commentRepository)
-                .findMaterialCommentById(ID);
-
-        boolean isEdited = commentService.editComment(ID, newComment, user);
-
-        Assert.assertFalse(isEdited);
-        Assert.assertNotEquals("newText", comment.getText());
-
-        Mockito.verify(commentRepository, Mockito.times(1)).findMaterialCommentById(ID);
-        Mockito.verify(commentRepository, Mockito.times(0)).save(comment);
+        Mockito.verify(commentRepository, Mockito.times(0))
+                .updateMaterialComment(ID, newComment.getText());
     }
 }

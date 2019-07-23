@@ -35,8 +35,6 @@ public class MaterialServiceTest {
 
     private final long ID = 1L;
 
-
-
     @Test
     public void createMaterial() {
         Material material = new Material();
@@ -55,7 +53,7 @@ public class MaterialServiceTest {
         Assert.assertNotNull(material.getCreateDate());
 
         Mockito.verify(materialRepository, Mockito.times(1))
-                .getMaterialByCourseAndAuthorAndTitle(course, user, "test");
+                .getMaterialByCourseAndTitle(course, "test");
         Mockito.verify(materialRepository, Mockito.times(1)).save(material);
     }
 
@@ -71,14 +69,14 @@ public class MaterialServiceTest {
 
         Mockito.doReturn(new Material())
                 .when(materialRepository)
-                .getMaterialByCourseAndAuthorAndTitle(course, user, "test");
+                .getMaterialByCourseAndTitle(course,"test");
 
         boolean isCreated = materialService.createMaterial(course, user, material);
 
         Assert.assertFalse(isCreated);
 
         Mockito.verify(materialRepository, Mockito.times(1))
-                .getMaterialByCourseAndAuthorAndTitle(course, user, "test");
+                .getMaterialByCourseAndTitle(course,"test");
         Mockito.verify(materialRepository, Mockito.times(0)).save(material);
     }
 
@@ -99,33 +97,11 @@ public class MaterialServiceTest {
                 .when(materialRepository)
                 .getMaterialById(ID);
 
-        boolean isEdited = materialService.editMaterial(ID, material);
+        materialService.editMaterial(ID, material);
 
-        Assert.assertTrue(isEdited);
-        Assert.assertEquals("new", materialOld.getTitle());
-        Assert.assertEquals("newText", materialOld.getText());
 
-        Mockito.verify(materialRepository, Mockito.times(1)).getMaterialById(ID);
-        Mockito.verify(materialRepository, Mockito.times(1)).save(materialOld);
-    }
-
-    @Test
-    public void editNonexistentMaterial() {
-        Material materialOld = new Material();
-        Material material = new Material();
-
-        materialOld.setId(ID);
-
-        Mockito.doReturn(null)
-                .when(materialRepository)
-                .getMaterialById(ID);
-
-        boolean isEdited = materialService.editMaterial(ID, material);
-
-        Assert.assertFalse(isEdited);
-
-        Mockito.verify(materialRepository, Mockito.times(1)).getMaterialById(ID);
-        Mockito.verify(materialRepository, Mockito.times(0)).save(materialOld);
+        Mockito.verify(materialRepository, Mockito.times(1))
+                .updateMaterial(ID, "new", "newText");
     }
 
     @Test

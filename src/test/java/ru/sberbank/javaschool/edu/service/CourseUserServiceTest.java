@@ -53,9 +53,8 @@ public class CourseUserServiceTest {
                 .when(courseRepository)
                 .findCourseById(1L);
 
-        boolean isAdded = courseUserService.addCourseUser(1L,"test", "TEACHER");
+        courseUserService.addCourseUser(1L,"test", "TEACHER");
 
-        Assert.assertTrue(isAdded);
 
         Mockito.verify(courseRepository, Mockito.times(1)).findCourseById(1L);
         Mockito.verify(userRepository, Mockito.times(1)).findUserByLogin("test");
@@ -87,9 +86,8 @@ public class CourseUserServiceTest {
                 .when(courseUserRepository)
                 .findCourseUserByCourseAndUser(course, user);
 
-        boolean isAdded = courseUserService.addCourseUser(1L,"test", "TEACHER");
+        courseUserService.addCourseUser(1L,"test", "TEACHER");
 
-        Assert.assertFalse(isAdded);
 
         Mockito.verify(courseRepository, Mockito.times(1)).findCourseById(1L);
         Mockito.verify(userRepository, Mockito.times(1)).findUserByLogin("test");
@@ -101,40 +99,9 @@ public class CourseUserServiceTest {
 
     @Test
     public void deleteCourseUser() {
-        CourseUser courseUser = new CourseUser();
+        courseUserService.deleteCourseUser(1L);
 
-        courseUser.setId(1L);
-
-        Mockito.doReturn(courseUser)
-                .when(courseUserRepository)
-                .findCourseUserById(1L);
-
-        boolean isDeleted = courseUserService.deleteCourseUser(1L);
-
-        Assert.assertTrue(isDeleted);
-
-        Mockito.verify(courseUserRepository, Mockito.times(1))
-                .findCourseUserById(1L);
-        Mockito.verify(courseUserRepository, Mockito.times(1)).delete(courseUser);
-    }
-
-    @Test
-    public void deleteNonexistentCourseUser() {
-        CourseUser courseUser = new CourseUser();
-
-        courseUser.setId(1L);
-
-        Mockito.doReturn(null)
-                .when(courseUserRepository)
-                .findCourseUserById(1L);
-
-        boolean isDeleted = courseUserService.deleteCourseUser(1L);
-
-        Assert.assertFalse(isDeleted);
-
-        Mockito.verify(courseUserRepository, Mockito.times(1))
-                .findCourseUserById(1L);
-        Mockito.verify(courseUserRepository, Mockito.times(0)).delete(courseUser);
+        Mockito.verify(courseUserRepository, Mockito.times(1)).deleteById(1L);
     }
 
     @Test

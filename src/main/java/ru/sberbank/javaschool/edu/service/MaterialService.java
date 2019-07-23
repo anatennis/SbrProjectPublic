@@ -1,6 +1,7 @@
 package ru.sberbank.javaschool.edu.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.sberbank.javaschool.edu.domain.*;
 import ru.sberbank.javaschool.edu.repository.CourseRepository;
 import ru.sberbank.javaschool.edu.repository.MaterialRepository;
@@ -27,9 +28,10 @@ public class MaterialService {
         this.taskRepository = taskRepository;
     }
 
+    @Transactional
     public boolean createMaterial(Course course, User user, Material material) {
         Material materialFromDb =
-                materialRepository.getMaterialByCourseAndAuthorAndTitle(course, user, material.getTitle());
+                materialRepository.getMaterialByCourseAndTitle(course, material.getTitle());
 
         if (materialFromDb != null) {
             return false;
@@ -44,18 +46,10 @@ public class MaterialService {
         return true;
     }
 
-    public boolean editMaterial(Long id, Material material) {
-        Material materialFromDb = materialRepository.getMaterialById(id);
+    @Transactional
+    public void editMaterial(Long id, Material material) {
 
-        if (materialFromDb == null) {
-            return false;
-        }
-
-        materialFromDb.setTitle(material.getTitle());
-        materialFromDb.setText(material.getText());
-
-        materialRepository.save(materialFromDb);
-        return true;
+        materialRepository.updateMaterial(id, material.getTitle(), material.getText());
     }
 
     public boolean canCreateMaterial(Course course, User user) {
@@ -67,6 +61,7 @@ public class MaterialService {
 
     }
 
+    @Transactional
     public boolean createTask(Course course, User user, Task task) {
         Task taskFromDb =
                 taskRepository.getTaskByCourseAndAuthorAndTitle(course, user, task.getTitle());
@@ -84,6 +79,7 @@ public class MaterialService {
         return true;
     }
 
+    @Transactional
     public boolean editTask(Long id, Task task) {
         Task taskFromDB = taskRepository.getTaskById(id);
 
@@ -101,6 +97,7 @@ public class MaterialService {
         return true;
     }
 
+    @Transactional
     public boolean deletePublication(long idPublication, long idCourse, User user, boolean isMaterial) {
 
         Course course = courseRepository.findCourseById(idCourse);
