@@ -32,9 +32,8 @@ public class MaterialController {
     @DeleteMapping("/course/{idCourse}/delete/{idMaterial}")
     public String removeMaterial(
             @PathVariable long idMaterial,
-            @PathVariable long idCourse,
             @AuthenticationPrincipal User user) {
-        materialService.deletePublication(idMaterial, idCourse, user, true);
+        materialService.deleteMaterial(idMaterial, user);
 
         return "redirect:/course/{idCourse}";
     }

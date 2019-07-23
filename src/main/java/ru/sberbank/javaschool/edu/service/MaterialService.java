@@ -1,11 +1,10 @@
 package ru.sberbank.javaschool.edu.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sberbank.javaschool.edu.domain.*;
-import ru.sberbank.javaschool.edu.repository.CourseRepository;
 import ru.sberbank.javaschool.edu.repository.MaterialRepository;
-import ru.sberbank.javaschool.edu.repository.TaskRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,17 +14,10 @@ import java.util.stream.Collectors;
 @Service
 public class MaterialService {
     private final MaterialRepository materialRepository;
-    private final CourseRepository courseRepository;
-    private final TaskRepository taskRepository;
 
-    public MaterialService(
-            MaterialRepository materialRepository,
-            CourseRepository courseRepository,
-            TaskRepository taskRepository
-    ) {
+    @Autowired
+    public MaterialService(MaterialRepository materialRepository) {
         this.materialRepository = materialRepository;
-        this.courseRepository = courseRepository;
-        this.taskRepository = taskRepository;
     }
 
     @Transactional
@@ -33,17 +25,16 @@ public class MaterialService {
         Material materialFromDb =
                 materialRepository.getMaterialByCourseAndTitle(course, material.getTitle());
 
-        if (materialFromDb != null) {
-            return false;
+        if (materialFromDb == null && canCreateMaterial(course, user)) {
+            material.setAuthor(user);
+            material.setCourse(course);
+            material.setCreateDate(LocalDateTime.now());
+
+            materialRepository.save(material);
+
+            return true;
         }
-
-        material.setAuthor(user);
-        material.setCourse(course);
-        material.setCreateDate(LocalDateTime.now());
-
-        materialRepository.save(material);
-
-        return true;
+        return false;
     }
 
     @Transactional
@@ -52,65 +43,21 @@ public class MaterialService {
         materialRepository.updateMaterial(id, material.getTitle(), material.getText());
     }
 
+    @Transactional
+    public void deleteMaterial(long idMaterial, User user) {
+        Material material = materialRepository.getMaterialById(idMaterial);
+
+        if (material != null && canCreateMaterial(material.getCourse(), user)) {
+            materialRepository.deleteById(idMaterial);
+        }
+    }
+
     public boolean canCreateMaterial(Course course, User user) {
         Map<User, Role> userRoles = course.getCourseUsers()
                 .stream()
                 .collect(Collectors.toMap(CourseUser::getUser, CourseUser::getRole));
 
         return userRoles.containsKey(user) && userRoles.get(user) == Role.TEACHER;
-
-    }
-
-    @Transactional
-    public boolean createTask(Course course, User user, Task task) {
-        Task taskFromDb =
-                taskRepository.getTaskByCourseAndAuthorAndTitle(course, user, task.getTitle());
-
-        if (taskFromDb != null) {
-            return false;
-        }
-
-        task.setAuthor(user);
-        task.setCourse(course);
-        task.setCreateDate(LocalDateTime.now());;
-
-        taskRepository.save(task);
-
-        return true;
-    }
-
-    @Transactional
-    public boolean editTask(Long id, Task task) {
-        Task taskFromDB = taskRepository.getTaskById(id);
-
-        if (taskFromDB == null) {
-            return false;
-        }
-
-        taskFromDB.setTitle(task.getTitle());
-        taskFromDB.setText(task.getText());
-        taskFromDB.setMaxMark(task.getMaxMark());
-        taskFromDB.setCompleteTime(task.getCompleteTime());
-
-        taskRepository.save(taskFromDB);
-
-        return true;
-    }
-
-    @Transactional
-    public boolean deletePublication(long idPublication, long idCourse, User user, boolean isMaterial) {
-
-        Course course = courseRepository.findCourseById(idCourse);
-
-        if (canCreateMaterial(course, user)) {
-            if (isMaterial) {
-                return deleteMaterial(idPublication);
-            } else {
-                return deleteTask(idPublication);
-            }
-        }
-
-        return false;
     }
 
     public List<Material> getCourseMaterials(long idCourse) {
@@ -121,29 +68,5 @@ public class MaterialService {
     public Material getMaterialById(long idMaterial) {
 
         return materialRepository.getMaterialById(idMaterial);
-    }
-
-    private boolean deleteTask(long idTask) {
-        Task task = taskRepository.getTaskById(idTask);
-
-        if (task == null) {
-            return false;
-        }
-
-        taskRepository.delete(task);
-
-        return true;
-    }
-
-    private boolean deleteMaterial(long idMaterial) {
-        Material material = materialRepository.getMaterialById(idMaterial);
-
-        if (material == null) {
-            return false;
-        }
-
-        materialRepository.delete(material);
-
-        return true;
     }
 }

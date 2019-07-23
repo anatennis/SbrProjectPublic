@@ -44,7 +44,7 @@ public class TaskController {
             userTask = userTaskService.createUserTask(user, task);
         }
         List<PublicationFile> publicationFiles = taskService.findAllPubFilesByUserAndTask(user, task);
-        boolean isTeacher = materialService.canCreateMaterial(course, user);
+        boolean isTeacher = taskService.canCreateTask(idCourse, user);
         List<UserTask> usertasks = taskService.findUserTaskByTask(task);
 
         model.addAttribute("course", course);
@@ -130,12 +130,13 @@ public class TaskController {
     }
 
     @PostMapping("/course/{idCourse}/tasks")
-    public String addTask(@PathVariable long idCourse,
-                              @AuthenticationPrincipal User user,
-                               Task task) {
-
+    public String addTask(
+            @PathVariable long idCourse,
+            @AuthenticationPrincipal User user,
+            Task task
+    ) {
         Course course = taskService.findCourseById(idCourse);
-        materialService.createTask(course, user, task);
+        taskService.createTask(course, user, task);
 
         userTaskService.createUserTasksForAllStudents(task, course);
 
@@ -147,8 +148,9 @@ public class TaskController {
     public String removeTask(
             @PathVariable long idTask,
             @PathVariable long idCourse,
-            @AuthenticationPrincipal User user) {
-        materialService.deletePublication(idTask, idCourse, user, false);
+            @AuthenticationPrincipal User user
+    ) {
+        taskService.deleteTask(idTask, idCourse, user);
 
         return "redirect:/course/{idCourse}/tasks";
     }
@@ -176,9 +178,10 @@ public class TaskController {
     @PostMapping("/course/{idCourse}/tasks/edit/{idTask}")
     public String editTask(
             @PathVariable Long idTask,
+            @AuthenticationPrincipal User user,
             Task task
     ) {
-        materialService.editTask(idTask, task);
+        taskService.editTask(idTask, task, user);
 
         return "redirect:/course/{idCourse}/tasks";
     }

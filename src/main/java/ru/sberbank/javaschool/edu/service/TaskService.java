@@ -2,10 +2,14 @@ package ru.sberbank.javaschool.edu.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.sberbank.javaschool.edu.domain.*;
 import ru.sberbank.javaschool.edu.repository.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
@@ -25,6 +29,40 @@ public class TaskService {
         this.userTaskRepository = userTaskRepository;
         this.userRepository = userRepository;
         this.publicationFileRepository = publicationFileRepository;
+    }
+
+    @Transactional
+    public boolean createTask(Course course, User user, Task task) {
+        Task taskFromDb =
+                taskRepository.getTaskByCourseAndAuthorAndTitle(course, user, task.getTitle());
+
+        if (taskFromDb == null && canCreateTask(course.getId(), user)) {
+            task.setAuthor(user);
+            task.setCourse(course);
+            task.setCreateDate(LocalDateTime.now());;
+
+            taskRepository.save(task);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Transactional
+    public void editTask(Long id, Task task, User user) {
+        Task taskFromDB = taskRepository.getTaskById(id);
+
+        if (taskFromDB != null && canCreateTask(taskFromDB.getCourse().getId(), user)) {
+            taskRepository.updateTask(id, task.getTitle(), task.getText(), task.getMaxMark(), task.getCompleteTime());
+        }
+    }
+
+    @Transactional
+    public void deleteTask(long idTask, long idCourse, User user) {
+
+        if (canCreateTask(idCourse, user)) {
+            taskRepository.deleteById(idTask);
+        }
     }
 
     public Course findCourseById(long idCourse) {
@@ -53,5 +91,15 @@ public class TaskService {
 
     public List<Task> getTaskByCourseOrderById(Course course) {
         return taskRepository.getTaskByCourseOrderById(course);
+    }
+
+    public boolean canCreateTask(long idCourse, User user) {
+        Course course = courseRepository.findCourseById(idCourse);
+
+        Map<User, Role> userRoles = course.getCourseUsers()
+                .stream()
+                .collect(Collectors.toMap(CourseUser::getUser, CourseUser::getRole));
+
+        return userRoles.containsKey(user) && userRoles.get(user) == Role.TEACHER;
     }
 }
