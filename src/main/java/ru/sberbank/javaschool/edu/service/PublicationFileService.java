@@ -3,20 +3,19 @@ package ru.sberbank.javaschool.edu.service;
 import com.github.sardine.DavResource;
 import com.github.sardine.Sardine;
 import com.github.sardine.SardineFactory;
-import com.github.sardine.model.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.sberbank.javaschool.edu.domain.Publication;
-import ru.sberbank.javaschool.edu.domain.PublicationFile;
-import ru.sberbank.javaschool.edu.domain.User;
+import ru.sberbank.javaschool.edu.domain.*;
 import ru.sberbank.javaschool.edu.repository.PublicationFileRepository;
 import ru.sberbank.javaschool.edu.repository.PublicationRepository;
 
+import javax.jws.soap.SOAPBinding;
 import java.io.*;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -56,14 +55,14 @@ public class PublicationFileService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            //saveFileToYDisk(filename);
+            saveFileToYDisk(filename);
 
             PublicationFile publicationFile = new PublicationFile();
             publicationFile.setFilename(filename);
             Publication publication = publicationRepository.findPublicationById(idPublication);
             publicationFile.setPublication(publication);
-            publicationFile.setPath("educlassroom/");
-            //publicationFile.setPath(uploadPath);
+            //publicationFile.setPath("educlassroom/");
+            publicationFile.setPath(uploadPath);
             publicationFile.setUser(user);
             publicationFileRepository.save(publicationFile);
 
@@ -97,21 +96,62 @@ public class PublicationFileService {
         logger.info("Successfully save file to YDisk, filename: " + filename);
     }
 
-    public void getFilesFromYDisk() {
+    public void getFilesFromYDisk(User user, Task task) {
+        List<PublicationFile> publicationFileList
+                = publicationFileRepository.findAllByUserAndPublication(user, task);
         String URL = "https://webdav.yandex.ru/";
 
         Sardine sardine = SardineFactory.begin(email, emailPass);
 
-        try {
-            for (DavResource res : sardine.list(URL + "educlassroom/")) {
-                System.out.println(res.getHref());
-                System.out.println(res.getCustomProps());
-                System.out.println(res.getEtag());
-                System.out.println(res.toString());
+        for (PublicationFile pf : publicationFileList) {
+            try {
+                InputStream is = sardine.get(URL + "educlassroom/" + pf.getFilename());
+
+                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+                int nRead;
+                byte[] data = new byte[16384];
+
+                while (true) {
+
+                    if (!((nRead = is.read(data, 0, data.length)) != -1)) break;
+
+                    buffer.write(data, 0, nRead);
+                }
+
+                try (OutputStream outputStream
+                             = new FileOutputStream(uploadPath + "/" + pf.getFilename())) {
+                    buffer.writeTo(outputStream);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
+
+//        try {
+//            for (DavResource res : sardine.list(URL + "educlassroom/")) {
+//                if (!res.isDirectory()) {
+//                    InputStream is = sardine.get(URL + "educlassroom/" + res.getDisplayName());
+//
+//                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+//
+//                    int nRead;
+//                    byte[] data = new byte[16384];
+//
+//                    while ((nRead = is.read(data, 0, data.length)) != -1) {
+//                        buffer.write(data, 0, nRead);
+//                    }
+//
+//                    try (OutputStream outputStream
+//                                 = new FileOutputStream(uploadPath + "/" + res.getDisplayName())) {
+//                        buffer.writeTo(outputStream);
+//                    }
+//
+//                }
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void deleteFile(Long fileId) {

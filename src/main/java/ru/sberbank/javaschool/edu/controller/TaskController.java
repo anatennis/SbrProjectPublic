@@ -48,7 +48,7 @@ public class TaskController {
         boolean isTeacher = materialService.canCreateMaterial(course, user);
         List<UserTask> usertasks = taskService.findUserTaskByTask(task);
 
-        //publicationFileService.getFilesFromYDisk();
+        publicationFileService.getFilesFromYDisk(user, task);
 
         model.addAttribute("course", course);
         model.addAttribute("task", task);
