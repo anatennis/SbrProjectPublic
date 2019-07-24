@@ -2,6 +2,7 @@ package ru.sberbank.javaschool.edu.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.sberbank.javaschool.edu.domain.Course;
 import ru.sberbank.javaschool.edu.domain.CourseUser;
 import ru.sberbank.javaschool.edu.domain.Role;
@@ -30,22 +31,18 @@ public class CourseUserService {
         this.userRepository = userRepository;
     }
 
-    public boolean addCourseUser(Long courseId, String userLogin, String role) {
+    @Transactional
+    public void addCourseUser(Long courseId, String userLogin, String role) {
         Course course = courseRepository.findCourseById(courseId);
         User user = userRepository.findUserByLogin(userLogin);
         Role userRole = Role.valueOf(role);
 
         CourseUser courseUserFromDb = courseUserRepository.findCourseUserByCourseAndUser(course, user);
 
-        if (courseUserFromDb != null) {
-            return false;
+        if (courseUserFromDb == null) {
+            CourseUser courseUser = new CourseUser(course, user, userRole);
+            courseUserRepository.save(courseUser);
         }
-
-        CourseUser courseUser = new CourseUser(course, user, userRole);
-
-        courseUserRepository.save(courseUser);
-
-        return true;
     }
 
     public List<CourseUser> getUserCourses(String login) {
@@ -68,19 +65,13 @@ public class CourseUserService {
         return courseUser.getRole() == Role.TEACHER;
     }
 
-    public boolean deleteCourseUser(long id) {
-        CourseUser courseUser = courseUserRepository.findCourseUserById(id);
+    public void deleteCourseUser(long id) {
 
-        if (courseUser == null) {
-            return false;
-        }
-
-        courseUserRepository.delete(courseUser);
-
-        return true;
+        courseUserRepository.deleteById(id);
     }
 
     //Для автоматического назначения админа на все курсы как учителя для возможности редактирования
+    @Transactional
     public void addAdminToAllCourses(Course course) {
         User admin = userRepository.findUserByLogin("admin");
         CourseUser courseUserAdmin = new CourseUser(course, admin, Role.TEACHER);

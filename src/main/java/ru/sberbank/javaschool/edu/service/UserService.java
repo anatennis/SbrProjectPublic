@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.sberbank.javaschool.edu.domain.Course;
 import ru.sberbank.javaschool.edu.domain.CourseUser;
 import ru.sberbank.javaschool.edu.domain.User;
@@ -47,6 +48,7 @@ public class UserService implements UserDetailsService {
         //return userRepo.findUserByLogin(login);
     }
 
+    @Transactional
     public String addUser(User user) {
         if (user.getLogin().isEmpty()
                 //|| user.getPassword().isEmpty()
@@ -92,6 +94,7 @@ public class UserService implements UserDetailsService {
         return "ok";
     }
 
+    @Transactional
     public boolean updateUser(String login, User user) {
         User uFromDB = userRepo.findUserByLogin(login);
         if (uFromDB == null) {

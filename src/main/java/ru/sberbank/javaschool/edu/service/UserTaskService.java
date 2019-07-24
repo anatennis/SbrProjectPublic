@@ -3,6 +3,7 @@ package ru.sberbank.javaschool.edu.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.sberbank.javaschool.edu.domain.*;
 import ru.sberbank.javaschool.edu.repository.*;
 
@@ -49,6 +50,7 @@ public class UserTaskService {
         return userTask;
     }
 
+    @Transactional
     public boolean submitTask(long idTask, User user, long idCourse) {
         Task task = taskRepository.getTaskById(idTask);
         UserTask userTask = userTaskRepository.findUserTaskByUserAndTask(user, task);
@@ -68,8 +70,8 @@ public class UserTaskService {
         String link = "http://localhost:8080/course/" + idCourse + "/tasks/"
                 + idTask + "/" + task.getTitle() + "/" + user.getId();
         String message = String.format(
-                "Здравствуйте!\n Ученик %s сдал задание %s .\n" +
-                        "Посмотреть на то, как он пытался, можно здесь: " + link,
+                "Здравствуйте!\n Ученик %s сдал задание %s .\n"
+                        + "Посмотреть на то, как он пытался, можно здесь: " + link,
                 user.getName(),
                 task.getTitle()
         );
@@ -77,25 +79,23 @@ public class UserTaskService {
             if (teacher.getUser().getEmail() != null) {
                 try {
                     mailSender.send(teacher.getUser().getEmail(), messageTitle, message);
-                } catch (MailSendException ex) {
-
+                } catch (MailSendException ignore) {
+                    //ignore
                 }
 
             }
         }
 
-
         return true;
-
     }
 
-
+    @Transactional
     public boolean setMarkToUser(long idTask, long idUser, long curMark) {
         Task task = taskRepository.getTaskById(idTask);
         User user = userRepository.findUserById(idUser);
         UserTask userTask = userTaskRepository.findUserTaskByUserAndTask(user, task);
-        if (userTask == null || userTask.getTaskState() == null ||
-                curMark > task.getMaxMark() || curMark < 0) {
+        if (userTask == null || userTask.getTaskState() == null
+                || curMark > task.getMaxMark() || curMark < 0) {
             return false;
         }
         userTask.setCurMark(curMark);
@@ -103,6 +103,7 @@ public class UserTaskService {
         return true;
     }
 
+    @Transactional
     public void createUserTasksForAllStudents(Task task, Course course) {
         List<CourseUser> courseUsers = courseUserRepository.findCourseUserByCourse(course);
         for (CourseUser courseUser : courseUsers) {
@@ -118,6 +119,7 @@ public class UserTaskService {
     }
 
 
+    @Transactional
     public void createUserTasksForNewStudent(String userLogin, Long idCourse) {
         User user = userRepository.findUserByLogin(userLogin);
         Course course = courseRepository.findCourseById(idCourse);

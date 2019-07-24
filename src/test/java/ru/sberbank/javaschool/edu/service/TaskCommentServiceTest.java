@@ -76,9 +76,8 @@ public class TaskCommentServiceTest {
                 .when(userTaskRepository)
                 .findUserTaskByUserAndTask(user, task);
 
-        boolean isAdded = taskCommentService.addComment(ID, ID, user, taskComment);
+        taskCommentService.addComment(ID, ID, user, taskComment);
 
-        Assert.assertTrue(isAdded);
         Assert.assertEquals(user, taskComment.getAuthor());
         Assert.assertNotNull(taskComment.getCreateDate());
 
@@ -97,11 +96,9 @@ public class TaskCommentServiceTest {
                 .when(taskCommentRepository)
                 .findTaskCommentById(ID);
 
-        boolean isDeleted = taskCommentService.deleteComment(user, ID);
+        taskCommentService.deleteComment(user, ID);
 
-        Assert.assertTrue(isDeleted);
-
-        Mockito.verify(taskCommentRepository, Mockito.times(1)).delete(taskComment);
+        Mockito.verify(taskCommentRepository, Mockito.times(1)).deleteById(ID);
     }
 
     @Test
@@ -116,11 +113,9 @@ public class TaskCommentServiceTest {
                 .when(taskCommentRepository)
                 .findTaskCommentById(ID);
 
-        boolean isDeleted = taskCommentService.deleteComment(user, ID);
+        taskCommentService.deleteComment(user, ID);
 
-        Assert.assertFalse(isDeleted);
-
-        Mockito.verify(taskCommentRepository, Mockito.times(0)).delete(taskComment);
+        Mockito.verify(taskCommentRepository, Mockito.times(0)).deleteById(ID);
     }
 
     @Test
@@ -138,12 +133,10 @@ public class TaskCommentServiceTest {
                 .when(taskCommentRepository)
                 .findTaskCommentById(ID);
 
-        boolean isEdited = taskCommentService.editComment(ID, newComment, user);
+        taskCommentService.editComment(ID, newComment, user);
 
-        Assert.assertTrue(isEdited);
-        Assert.assertEquals("newText", taskComment.getText());
-
-        Mockito.verify(taskCommentRepository, Mockito.times(1)).save(taskComment);
+        Mockito.verify(taskCommentRepository, Mockito.times(1))
+                .updateTaskComent(ID, "newText");
     }
 
     @Test
@@ -161,10 +154,9 @@ public class TaskCommentServiceTest {
                 .when(taskCommentRepository)
                 .findTaskCommentById(ID);
 
-        boolean isEdited = taskCommentService.editComment(ID, newComment, user);
+        taskCommentService.editComment(ID, newComment, user);
 
-        Assert.assertFalse(isEdited);
-
-        Mockito.verify(taskCommentRepository, Mockito.times(0)).save(taskComment);
+        Mockito.verify(taskCommentRepository, Mockito.times(0))
+                .updateTaskComent(ID, "newText");
     }
 }

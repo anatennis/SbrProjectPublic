@@ -64,7 +64,7 @@ public class MaterialCommentController {
     ) {
         MaterialComment comment = commentService.getMaterialComment(idComment);
 
-        if (!commentService.canEditComment(user, comment)) {
+        if (!commentService.canEditComment(user, idComment)) {
             return "redirect:/course/{idCourse}";
         }
 
