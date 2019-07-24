@@ -25,14 +25,19 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepo;
     private final CourseRepository courseRepository;
+    private final CourseUserService courseUserService;
     private final MailSender mailSender;
     private final PasswordEncoder passwordEncoder;
 
+
     @Autowired
     public UserService(UserRepository userRepo, CourseRepository courseRepository,
-                       MailSender mailSender, PasswordEncoder passwordEncoder) {
+                       CourseUserService courseUserService, MailSender mailSender,
+                       PasswordEncoder passwordEncoder)
+    {
         this.userRepo = userRepo;
         this.courseRepository = courseRepository;
+        this.courseUserService = courseUserService;
         this.mailSender = mailSender;
         this.passwordEncoder = passwordEncoder;
     }
@@ -135,6 +140,7 @@ public class UserService implements UserDetailsService {
         }
 
         users.removeAll(presentUser);
+        users.removeIf(u -> !u.isEnabled());
 
         return users;
     }
@@ -149,5 +155,19 @@ public class UserService implements UserDetailsService {
         user.setActcode("ok");
         userRepo.save(user);
         return true;
+    }
+
+    public void deleteUser(String login) {
+        User user = userRepo.findUserByLogin(login);
+        user.setName("DELETED");
+        user.setSurname("DELETED");
+        user.setEmail("DELETED");
+        user.setPhone("DELETED");
+        user.setCourseUsers(null);
+        userRepo.save(user);
+        List<CourseUser> usersCourses = courseUserService.getUserCourses(login);
+        for (CourseUser courseUser : usersCourses) {
+            courseUserService.deleteCourseUser(courseUser.getId());
+        }
     }
 }

@@ -8,7 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -49,11 +52,6 @@ public class User implements UserDetails {
         return roles;
     }
 
-    /**
-     * Returns the username used to authenticate the user. Cannot return <code>null</code>.
-     *
-     * @return the username (never <code>null</code>)
-     */
     @Override
     public String getUsername() {
         return getLogin();
@@ -102,6 +100,7 @@ public class User implements UserDetails {
      */
     @Override
     public boolean isEnabled() {
-        return true;
+        return !email.equals("DELETED");
+        //return true;
     }
 }

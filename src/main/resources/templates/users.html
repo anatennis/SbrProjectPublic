@@ -42,16 +42,20 @@
     <table>
         <thead>
         <tr>
+            <th> Login</th>
             <th> Name</th>
             <th> Surname</th>
             <th> E-mail</th>
+            <th> Role</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="cUser : ${courseUsers}">
+            <td><span th:text="${cUser.getUser().getLogin()}"> Login </span></td>
             <td><span th:text="${cUser.getUser().getName()}"> Name </span></td>
             <td><span th:text="${cUser.getUser().getSurname()}"> SurName </span></td>
-            <td><span th:text="${cUser.getUser().getEmail()}"> EMail </span></td>
+            <td><span th:text="${cUser.getUser().getEmail()}"> E-mail </span></td>
+            <td><span th:text="${cUser.getRole()}"> Role </span></td>
             <td>
                 <form action="#"
                       th:action="@{'/course/{idCourse}/users/{idCourseUser}'(idCourse=${course.getId()},

@@ -53,10 +53,11 @@ public class CourseUserService {
 
     public List<CourseUser> getCourseUsersWithoutTeachers(Course course) {
 
-        return courseUserRepository.findCourseUserByCourse(course)
-                .stream()
-                .filter(u -> u.getRole() != Role.TEACHER)
-                .collect(Collectors.toList());
+        List<CourseUser> courseUsers = courseUserRepository.findCourseUserByCourse(course);
+        return courseUserRepository.findCourseUserByCourse(course);
+//                .stream()
+//                .filter(u -> u.getRole() != Role.TEACHER)
+//                .collect(Collectors.toList());
     }
 
     public boolean isTeacher(User user, Course course) {

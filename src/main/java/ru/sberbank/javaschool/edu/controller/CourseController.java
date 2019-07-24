@@ -67,7 +67,7 @@ public class CourseController {
     @PostMapping("/course/{idCourse}")
     public String addMaterial(@PathVariable long idCourse,
                               @AuthenticationPrincipal User user,
-                              @RequestParam("file[]") MultipartFile []files,
+                              @RequestParam("file[]") MultipartFile[] files,
                               Material material
     ) {
         Course course = courseService.findCourseById(idCourse);
@@ -92,10 +92,11 @@ public class CourseController {
         }
 
         List<CourseUser> courseUsers = courseUserService.getCourseUsersWithoutTeachers(course);
+        Role[] roles = {Role.TEACHER, Role.STUDENT};
 
         model.addAttribute("course", course);
         model.addAttribute("courseUsers", courseUsers);
-        model.addAttribute("roles", Role.values());
+        model.addAttribute("roles", roles);
         model.addAttribute("allUsers", userService.getUsersNotPresentOnCourse(idCourse));
 
         return "users";
@@ -120,7 +121,6 @@ public class CourseController {
 
         return "redirect:/course/{idCourse}/users";
     }
-
 
 
 }

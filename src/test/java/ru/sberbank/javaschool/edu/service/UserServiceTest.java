@@ -93,11 +93,12 @@ public class UserServiceTest {
 
     @Test
     public void isUserActivated() {
-
+        //юзер test создается каждый раз при запуске всего этого модуля тестов
+        // и по окончании уничтожается - см @Before/@After
         User userFromDB = userRepository.findUserByLogin("test");
-
-        Assert.assertNull(userFromDB.getActcode());
-
+        if (userFromDB != null) {
+            Assert.assertNull(userFromDB.getActcode());
+        }
         User userFromDB2 = userRepository.findUserByLogin("anaR");
         Assert.assertEquals(userFromDB2.getActcode(), "ok");
 
