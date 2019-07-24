@@ -23,14 +23,11 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Task task "
-            + "SET task.title=:newTitle, task.text=:newText,"
-            + " task.maxMark=:newMaxMark , task.completeTime=:newCompleteTime"
+            + "SET task.title=:newTitle, task.text=:newText"
             + "  WHERE task.id=:id")
     void updateTask(
             @Param("id") long idMaterial,
             @Param("newTitle") String newTitle,
-            @Param("newText") String newText,
-            @Param("newMaxMark") long newMaxMark,
-            @Param("newCompleteTime") LocalDateTime newCompleteTime
+            @Param("newText") String newText
     );
 }

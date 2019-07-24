@@ -146,10 +146,11 @@ public class TaskController {
     public String addTask(
             @PathVariable long idCourse,
             @AuthenticationPrincipal User user,
-            Task task
+            Task task,
+            TaskInfo taskInfo
     ) {
         Course course = taskService.findCourseById(idCourse);
-        taskService.createTask(course, user, task);
+        taskService.createTask(course, user, task, taskInfo);
 
         userTaskService.createUserTasksForAllStudents(task, course);
 
@@ -192,9 +193,10 @@ public class TaskController {
     public String editTask(
             @PathVariable Long idTask,
             @AuthenticationPrincipal User user,
-            Task task
+            Task task,
+            TaskInfo taskInfo
     ) {
-        taskService.editTask(idTask, task, user);
+        taskService.editTask(idTask, task, taskInfo, user);
 
         return "redirect:/course/{idCourse}/tasks";
     }
