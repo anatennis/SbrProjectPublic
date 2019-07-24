@@ -95,7 +95,7 @@ public class UserTaskService {
         User user = userRepository.findUserById(idUser);
         UserTask userTask = userTaskRepository.findUserTaskByUserAndTask(user, task);
         if (userTask == null || userTask.getTaskState() == null
-                || curMark > task.getMaxMark() || curMark < 0) {
+                || curMark > task.getTaskInfo().getMaxMark() || curMark < 0) {
             return false;
         }
         userTask.setCurMark(curMark);
@@ -105,7 +105,7 @@ public class UserTaskService {
 
     @Transactional
     public void createUserTasksForAllStudents(Task task, Course course) {
-        List<CourseUser> courseUsers = courseUserRepository.findCourseUserByCourse(course);
+        List<CourseUser> courseUsers = courseUserRepository.findCourseUserByCourseAndRole(course, Role.STUDENT);
         for (CourseUser courseUser : courseUsers) {
             createUserTask(courseUser.getUser(), task);
         }

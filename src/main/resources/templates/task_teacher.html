@@ -43,7 +43,7 @@ Student <b><span th:text="${usertask.getUser().getName()}"></span></b>
                                 Submitted date
                 </span>
             </td>
-            <td>Max mark: <span th:text="${task.getMaxMark()}"> Max Mark </span></td>
+            <td>Max mark: <span th:text="${task.getTaskInfo().getMaxMark()}"> Max Mark </span></td>
             <td>My mark:
                 <span th:if="${usertask.getTaskState()}">
                     <p th:text="${usertask.curMark}"></p>

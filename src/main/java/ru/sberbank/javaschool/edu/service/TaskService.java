@@ -19,29 +19,40 @@ public class TaskService {
     private final UserTaskRepository userTaskRepository;
     private final UserRepository userRepository;
     private final PublicationFileRepository publicationFileRepository;
+    private final TaskInfoService taskInfoService;
 
     @Autowired
-    public TaskService(CourseRepository courseRepository, TaskRepository taskRepository,
-                       UserTaskRepository userTaskRepository, UserRepository userRepository,
-                       PublicationFileRepository publicationFileRepository) {
+    public TaskService(
+            CourseRepository courseRepository,
+            TaskRepository taskRepository,
+            UserTaskRepository userTaskRepository,
+            UserRepository userRepository,
+            PublicationFileRepository publicationFileRepository,
+            TaskInfoService taskInfoService
+    ) {
         this.courseRepository = courseRepository;
         this.taskRepository = taskRepository;
         this.userTaskRepository = userTaskRepository;
         this.userRepository = userRepository;
         this.publicationFileRepository = publicationFileRepository;
+        this.taskInfoService = taskInfoService;
     }
 
     @Transactional
-    public boolean createTask(Course course, User user, Task task) {
+    public boolean createTask(Course course, User user, Task task, TaskInfo taskInfo) {
         Task taskFromDb =
                 taskRepository.getTaskByCourseAndAuthorAndTitle(course, user, task.getTitle());
 
         if (taskFromDb == null && canCreateTask(course.getId(), user)) {
             task.setAuthor(user);
             task.setCourse(course);
-            task.setCreateDate(LocalDateTime.now());;
+            task.setCreateDate(LocalDateTime.now());
+
+            TaskInfo newTaskInfo = taskInfoService.addTaskInfo(taskInfo);
 
             taskRepository.save(task);
+            taskInfoService.setTask(task, newTaskInfo);
+
             return true;
         }
 
@@ -49,11 +60,13 @@ public class TaskService {
     }
 
     @Transactional
-    public void editTask(Long id, Task task, User user) {
-        Task taskFromDB = taskRepository.getTaskById(id);
+    public void editTask(Long idTask, Task task, TaskInfo taskInfo, User user) {
+        Task taskFromDB = taskRepository.getTaskById(idTask);
 
         if (taskFromDB != null && canCreateTask(taskFromDB.getCourse().getId(), user)) {
-            taskRepository.updateTask(id, task.getTitle(), task.getText(), task.getMaxMark(), task.getCompleteTime());
+            taskRepository.updateTask(idTask, task.getTitle(), task.getText());
+
+            taskInfoService.updateTaskInfo(idTask, taskInfo);
         }
     }
 

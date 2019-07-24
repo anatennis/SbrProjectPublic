@@ -53,11 +53,11 @@
                             <span th:text="${#temporals.format(task.getCreateDate(), 'dd-MM-yyyy HH:mm:ss')}">
                                 Publication date
                             </span>
-                            <span th:text="${#temporals.format(task.getCompleteTime(), 'dd-MM-yyyy HH:mm:ss')}">
+                            <span th:text="${#temporals.format(task.getTaskInfo().getCompleteTime(), 'dd-MM-yyyy HH:mm:ss')}">
                                 Complete date
                             </span>
                         </td>
-                        <td>Max mark: <span th:text="${task.getMaxMark()}"> Max Mark </span></td>
+                        <td>Max mark: <span th:text="${task.getTaskInfo().getMaxMark()}"> Max Mark </span></td>
                         <!--<td>My mark: <span th:text="${task.getMaxMark()}"> My Mark </span></td>-->
                     </tr>
                     <tr th:if="${canEdit}">

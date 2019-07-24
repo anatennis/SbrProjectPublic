@@ -53,7 +53,7 @@
             <td><span th:text="${task.getText()}"> </span></td>
         </tr>
         <tr>
-            <td>Max mark: <span th:text="${task.getMaxMark()}"> Max Mark </span></td>
+            <td>Max mark: <span th:text="${task.getTaskInfo().getMaxMark()}"> Max Mark </span></td>
             <td>My mark:
                 <span th:if="${usertask.getTaskState()}">
                     <p th:text="${usertask.curMark}"></p>
@@ -70,7 +70,7 @@
                 </span>
             </td>
             <td>Complete date
-                <b><p><span th:text="${#temporals.format(task.getCompleteTime(), 'dd-MM-yyyy HH:mm')}">
+                <b><p><span th:text="${#temporals.format(task.getTaskInfo().getCompleteTime(), 'dd-MM-yyyy HH:mm')}">
                 </span></p></b>
             </td>
         </tr>
