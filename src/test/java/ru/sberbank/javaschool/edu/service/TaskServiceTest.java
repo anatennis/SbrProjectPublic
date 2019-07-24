@@ -10,6 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.sberbank.javaschool.edu.domain.*;
 import ru.sberbank.javaschool.edu.repository.CourseRepository;
+import ru.sberbank.javaschool.edu.repository.TaskInfoRepository;
 import ru.sberbank.javaschool.edu.repository.TaskRepository;
 import ru.sberbank.javaschool.edu.repository.UserTaskRepository;
 
@@ -30,6 +31,8 @@ public class TaskServiceTest {
     private TaskRepository taskRepository;
     @MockBean
     private UserTaskRepository userTaskRepository;
+    @MockBean
+    private TaskInfoRepository taskInfoRepository;
     private final long ID = 1L;
 
     @Test
@@ -37,6 +40,7 @@ public class TaskServiceTest {
         Task task = new Task();
         User user = new User();
         Course course = new Course();
+        TaskInfo taskInfo = new TaskInfo();
 
         task.setTitle("test");
         user.setId(ID);
@@ -48,22 +52,21 @@ public class TaskServiceTest {
                 .findCourseById(ID);
 
 
-        boolean isCreated = taskService.createTask(course, user, task);
+        boolean isCreated = taskService.createTask(course, user, task, taskInfo);
 
         Assert.assertTrue(isCreated);
-        Assert.assertEquals(course, task.getCourse());
-        Assert.assertEquals(user, task.getAuthor());
-        Assert.assertNotNull(task.getCreateDate());
 
         Mockito.verify(taskRepository, Mockito.times(1))
                 .getTaskByCourseAndAuthorAndTitle(course, user, "test");
         Mockito.verify(taskRepository, Mockito.times(1)).save(task);
+        Mockito.verify(taskInfoRepository, Mockito.times(1)).save(taskInfo);
     }
 
     @Test
     public void editTask() {
         Task taskOld = new Task();
         Task taskNew = new Task();
+        TaskInfo taskInfo = new TaskInfo();
         User user = new User();
         Course course = new Course();
         LocalDateTime dateTime = LocalDateTime.of(2019,8,15,20,0);
@@ -76,8 +79,9 @@ public class TaskServiceTest {
 
         taskNew.setTitle("new");
         taskNew.setText("newText");
-        taskNew.setMaxMark(200L);
-        taskNew.setCompleteTime(dateTime);
+
+        taskInfo.setMaxMark(100L);
+        taskInfo.setCompleteTime(dateTime);
 
         Mockito.doReturn(taskOld)
                 .when(taskRepository)
@@ -88,31 +92,34 @@ public class TaskServiceTest {
                 .findCourseById(ID);
 
 
-        taskService.editTask(ID, taskNew, user);
+        taskService.editTask(ID, taskNew, taskInfo, user);
 
         Mockito.verify(taskRepository, Mockito.times(1))
-                .updateTask(ID, "new", "newText", 200L, dateTime);
+                .updateTask(ID, "new", "newText");
+        Mockito.verify(taskInfoRepository, Mockito.times(1))
+                .updateTaskInfoByTaskId(ID, dateTime, 100L);
     }
 
     @Test
     public void editNonexistentTask() {
         Task taskNew = new Task();
         User user = new User();
+        TaskInfo taskInfo = new TaskInfo();
         LocalDateTime dateTime = LocalDateTime.of(2019,8,15,20,0);
 
         taskNew.setTitle("new");
         taskNew.setText("newText");
-        taskNew.setMaxMark(200L);
-        taskNew.setCompleteTime(dateTime);
 
         Mockito.doReturn(null)
                 .when(taskRepository)
                 .getTaskById(ID);
 
-        taskService.editTask(ID, taskNew, user);
+        taskService.editTask(ID, taskNew, taskInfo, user);
 
         Mockito.verify(taskRepository, Mockito.times(0))
-                .updateTask(ID, "new", "newText", 200L, dateTime);
+                .updateTask(ID, "new", "newText");
+        Mockito.verify(taskInfoRepository, Mockito.times(0))
+                .updateTaskInfoByTaskId(ID, dateTime, 100L);
     }
 
     @Test
@@ -120,6 +127,7 @@ public class TaskServiceTest {
         Task task = new Task();
         User user = new User();
         Course course = new Course();
+        TaskInfo taskInfo = new TaskInfo();
 
         task.setTitle("test");
         user.setId(ID);
@@ -129,7 +137,7 @@ public class TaskServiceTest {
                 .when(taskRepository)
                 .getTaskByCourseAndAuthorAndTitle(course, user, "test");
 
-        boolean isCreated = taskService.createTask(course, user, task);
+        boolean isCreated = taskService.createTask(course, user, task, taskInfo);
 
         Assert.assertFalse(isCreated);
 
