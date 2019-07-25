@@ -31,6 +31,9 @@ public class MaterialComment {
     @JoinColumn(name = "author")
     protected User author;
 
+    @Column(name = "edited")
+    protected boolean edited;
+
     @ManyToOne
     @JoinColumn(name = "parent")
     private MaterialComment parentComment;

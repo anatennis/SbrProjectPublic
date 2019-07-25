@@ -75,7 +75,7 @@ public class MaterialCommentController {
     }
 
     @PostMapping("/course/{idCourse}/edit_comment/{idComment}")
-    public String editMaterial(
+    public String editMaterialComment(
             @PathVariable long idComment,
             MaterialComment comment,
             @AuthenticationPrincipal User user

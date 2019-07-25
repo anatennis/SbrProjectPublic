@@ -40,7 +40,7 @@ public class MaterialService {
     @Transactional
     public void editMaterial(Long id, Material material) {
 
-        materialRepository.updateMaterial(id, material.getTitle(), material.getText());
+        materialRepository.updateMaterial(id, material.getTitle(), material.getText(), LocalDateTime.now());
     }
 
     @Transactional

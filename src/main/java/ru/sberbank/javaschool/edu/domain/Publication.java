@@ -24,6 +24,8 @@ public abstract class Publication implements Serializable {
     protected String text;
     @Column(name = "createdate")
     protected LocalDateTime createDate;
+    @Column(name = "edited")
+    protected boolean edited;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course")
     protected Course course;
