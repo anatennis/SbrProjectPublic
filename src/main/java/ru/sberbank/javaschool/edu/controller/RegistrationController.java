@@ -1,7 +1,6 @@
 package ru.sberbank.javaschool.edu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,7 +42,7 @@ public class RegistrationController {
         } else {
             model.addAttribute("active", "Аккаунт уже был активирован");
         }
-        return "login";
+        return "_login";
     }
 
 

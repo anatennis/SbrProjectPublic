@@ -28,8 +28,6 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.springframework.boot:spring-boot-starter-mail")
     compile 'mysql:mysql-connector-java'
-    // https://mvnrepository.com/artifact/com.github.lookfirst/sardine
-    compile group: 'com.github.lookfirst', name: 'sardine', version: '5.0'
     
     //compile "com.h2database:h2:1.4.197"
     compileOnly 'org.projectlombok:lombok'
@@ -37,5 +35,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     
     compile ("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
-    //compile ("org.thymeleaf.extras:springsecurity3.dialect.SpringSecurityDialect")
+
+    compile ("org.thymeleaf.extras:springsecurity3.dialect.SpringSecurityDialect")
+    compile group: 'com.github.lookfirst', name: 'sardine', version: '5.0'
 }
