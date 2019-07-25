@@ -1,15 +1,18 @@
 package ru.sberbank.javaschool.edu.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.sberbank.javaschool.edu.domain.Course;
 import ru.sberbank.javaschool.edu.domain.Role;
+import ru.sberbank.javaschool.edu.domain.User;
 import ru.sberbank.javaschool.edu.service.CourseService;
 import ru.sberbank.javaschool.edu.service.CourseUserService;
 import ru.sberbank.javaschool.edu.service.UserService;
 
+import javax.jws.soap.SOAPBinding;
 import java.security.Principal;
 
 @Controller
@@ -31,13 +34,14 @@ public class AdminController {
     }
 
     @GetMapping
-    public String administration(Model model, Principal principal) {
+    public String administration(Model model, Principal principal, @AuthenticationPrincipal User user) {
 
         if (!courseService.hasAccess(principal)) {
 
             return "redirect:/";
         }
 
+        model.addAttribute("user", user);
         model.addAttribute("courses", courseService.findAll());
 
         return "courseList";
@@ -47,7 +51,7 @@ public class AdminController {
     public String addCourse(Course course, Model model) {
 
         if (!courseService.addCourse(course)) {
-            model.addAttribute("message", course.getCaption() + " already exist!");
+            model.addAttribute("message", course.getCaption() + " уже существует!");
             model.addAttribute("courses", courseService.findAll());
             return "courseList";
         }
@@ -64,7 +68,8 @@ public class AdminController {
     }
 
     @GetMapping("/course/{id}")
-    public String courseEdit(@PathVariable Long id, Model model, Principal principal) {
+    public String courseEdit(@PathVariable Long id, Model model,
+                             Principal principal, @AuthenticationPrincipal User user) {
 
         if (!courseService.hasAccess(principal)) {
 
@@ -73,6 +78,7 @@ public class AdminController {
 
         Course course = courseService.findCourseById(id);
 
+        model.addAttribute("user", user);
         model.addAttribute("course", course);
         model.addAttribute("courseusers", course.getCourseUsers());
         model.addAttribute("roles", Role.values());
