@@ -22,12 +22,16 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> getTaskByCourse(Course course);
 
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE Task task "
-            + "SET task.title=:newTitle, task.text=:newText"
-            + "  WHERE task.id=:id")
+    @Query(
+            "UPDATE Task task "
+            + "SET task.title=:newTitle, task.text=:newText,"
+            + " task.edited=true, task.createDate=:editDate"
+            + "  WHERE task.id=:id"
+    )
     void updateTask(
             @Param("id") long idMaterial,
             @Param("newTitle") String newTitle,
-            @Param("newText") String newText
+            @Param("newText") String newText,
+            @Param("editDate") LocalDateTime editDate
     );
 }

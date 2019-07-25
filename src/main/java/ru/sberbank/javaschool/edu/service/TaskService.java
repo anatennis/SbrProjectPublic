@@ -64,7 +64,7 @@ public class TaskService {
         Task taskFromDB = taskRepository.getTaskById(idTask);
 
         if (taskFromDB != null && canCreateTask(taskFromDB.getCourse().getId(), user)) {
-            taskRepository.updateTask(idTask, task.getTitle(), task.getText());
+            taskRepository.updateTask(idTask, task.getTitle(), task.getText(), LocalDateTime.now());
 
             taskInfoService.updateTaskInfo(idTask, taskInfo);
         }

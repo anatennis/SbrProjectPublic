@@ -21,6 +21,7 @@ public class MaterialCommentService {
         this.materialService = materialService;
     }
 
+    @Transactional
     public void addComment(long idMaterial, User user, MaterialComment materialComment) {
         materialComment.setAuthor(user);
         materialComment.setMaterial(materialService.getMaterialById(idMaterial));
@@ -29,6 +30,7 @@ public class MaterialCommentService {
         commentRepository.save(materialComment);
     }
 
+    @Transactional
     public void addNestedComment(long idMaterial, long idParent, User user, MaterialComment childComment) {
         childComment.setAuthor(user);
         childComment.setParentComment(commentRepository.findMaterialCommentById(idParent));
@@ -38,6 +40,7 @@ public class MaterialCommentService {
         commentRepository.save(childComment);
     }
 
+    @Transactional
     public boolean canEditComment(User user, long id) {
         MaterialComment comment = commentRepository.findMaterialCommentById(id);
 
@@ -60,7 +63,7 @@ public class MaterialCommentService {
     public void editComment(long id, MaterialComment comment, User user) {
 
         if (canEditComment(user, id)) {
-            commentRepository.updateMaterialComment(id, comment.getText());
+            commentRepository.updateMaterialComment(id, comment.getText(), LocalDateTime.now());
         }
     }
 

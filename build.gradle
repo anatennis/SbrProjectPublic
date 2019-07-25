@@ -35,6 +35,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     
     compile ("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
+
     compile ("org.thymeleaf.extras:springsecurity3.dialect.SpringSecurityDialect")
     compile group: 'com.github.lookfirst', name: 'sardine', version: '5.0'
 }

@@ -38,6 +38,7 @@ public class TaskCommentService {
         }
     }
 
+    @Transactional
     public void addNestedComment(long idTask, long idParent, long idUser, User user, TaskComment taskComment) {
 
         if (createTaskComment(idTask, idUser, user, taskComment)) {
@@ -61,7 +62,7 @@ public class TaskCommentService {
         TaskComment commentFromDb = commentRepository.findTaskCommentById(id);
 
         if (commentFromDb != null && cantEditComment(user, commentFromDb)) {
-            commentRepository.updateTaskComent(id, comment.getText());
+            commentRepository.updateTaskComment(id, comment.getText(), LocalDateTime.now());
         }
     }
 

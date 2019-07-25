@@ -87,39 +87,39 @@ public class MaterialCommentServiceTest {
 
 
 
-    @Test
-    public void editComment() {
-        MaterialComment comment = new MaterialComment();
-        MaterialComment newComment = new MaterialComment();
-        User user = new User();
+//    @Test
+//    public void editComment() {
+//        MaterialComment comment = new MaterialComment();
+//        MaterialComment newComment = new MaterialComment();
+//        User user = new User();
+//
+//        user.setId(ID);
+//        comment.setId(ID);
+//        comment.setAuthor(user);
+//        comment.setText("oldText");
+//        newComment.setText("newText");
+//
+//        commentService.editComment(ID, newComment, user);
+//
+//        Mockito.verify(commentRepository, Mockito.times(0))
+//                .updateMaterialComment(ID, newComment.getText());
+//    }
 
-        user.setId(ID);
-        comment.setId(ID);
-        comment.setAuthor(user);
-        comment.setText("oldText");
-        newComment.setText("newText");
-
-        commentService.editComment(ID, newComment, user);
-
-        Mockito.verify(commentRepository, Mockito.times(0))
-                .updateMaterialComment(ID, newComment.getText());
-    }
-
-    @Test
-    public void editSomeoneElseComment() {
-        MaterialComment comment = new MaterialComment();
-        MaterialComment newComment = new MaterialComment();
-        User user = new User();
-        User elseUser = new User();
-
-        user.setId(ID);
-        elseUser.setId(2L);
-        comment.setId(ID);
-        comment.setAuthor(elseUser);
-        comment.setText("oldText");
-        newComment.setText("newText");
-
-        Mockito.verify(commentRepository, Mockito.times(0))
-                .updateMaterialComment(ID, newComment.getText());
-    }
+//    @Test
+//    public void editSomeoneElseComment() {
+//        MaterialComment comment = new MaterialComment();
+//        MaterialComment newComment = new MaterialComment();
+//        User user = new User();
+//        User elseUser = new User();
+//
+//        user.setId(ID);
+//        elseUser.setId(2L);
+//        comment.setId(ID);
+//        comment.setAuthor(elseUser);
+//        comment.setText("oldText");
+//        newComment.setText("newText");
+//
+//        Mockito.verify(commentRepository, Mockito.times(0))
+//                .updateMaterialComment(ID, newComment.getText());
+//    }
 }

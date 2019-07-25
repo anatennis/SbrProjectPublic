@@ -50,7 +50,10 @@
                     </tr>
                     <tr>
                         <td>
-                            <span th:text="${#temporals.format(task.getCreateDate(), 'dd-MM-yyyy HH:mm:ss')}">
+                            <span th:if="${task.isEdited()}" th:text="'Изменено ' + ${#temporals.format(task.getCreateDate(), 'dd-MM-yyyy HH:mm:ss')}">
+                                Publication date
+                            </span>
+                            <span th:unless="${task.isEdited()}" th:text="${#temporals.format(task.getCreateDate(), 'dd-MM-yyyy HH:mm:ss')}">
                                 Publication date
                             </span>
                             <span th:text="${#temporals.format(task.getTaskInfo().getCompleteTime(), 'dd-MM-yyyy HH:mm:ss')}">

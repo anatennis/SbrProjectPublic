@@ -31,6 +31,9 @@ public class TaskComment {
     @JoinColumn(name = "author")
     protected User author;
 
+    @Column(name = "edited")
+    protected boolean edited;
+
     @ManyToOne
     @JoinColumn(name = "parent")
     private TaskComment parentComment;

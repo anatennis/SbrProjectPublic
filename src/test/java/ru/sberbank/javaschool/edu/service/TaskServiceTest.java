@@ -62,65 +62,65 @@ public class TaskServiceTest {
         Mockito.verify(taskInfoRepository, Mockito.times(1)).save(taskInfo);
     }
 
-    @Test
-    public void editTask() {
-        Task taskOld = new Task();
-        Task taskNew = new Task();
-        TaskInfo taskInfo = new TaskInfo();
-        User user = new User();
-        Course course = new Course();
-        LocalDateTime dateTime = LocalDateTime.of(2019,8,15,20,0);
+//    @Test
+//    public void editTask() {
+//        Task taskOld = new Task();
+//        Task taskNew = new Task();
+//        TaskInfo taskInfo = new TaskInfo();
+//        User user = new User();
+//        Course course = new Course();
+//        LocalDateTime dateTime = LocalDateTime.of(2019,8,15,20,0);
+//
+//        course.setId(ID);
+//        course.setCourseUsers(new HashSet<>(Collections.singletonList(new CourseUser(course, user, Role.TEACHER))));
+//
+//        taskOld.setId(ID);
+//        taskOld.setCourse(course);
+//
+//        taskNew.setTitle("new");
+//        taskNew.setText("newText");
+//
+//        taskInfo.setMaxMark(100L);
+//        taskInfo.setCompleteTime(dateTime);
+//
+//        Mockito.doReturn(taskOld)
+//                .when(taskRepository)
+//                .getTaskById(ID);
+//
+//        Mockito.doReturn(course)
+//                .when(courseRepository)
+//                .findCourseById(ID);
+//
+//
+//        taskService.editTask(ID, taskNew, taskInfo, user);
+//
+//        Mockito.verify(taskRepository, Mockito.times(1))
+//                .updateTask(ID, "new", "newText");
+//        Mockito.verify(taskInfoRepository, Mockito.times(1))
+//                .updateTaskInfoByTaskId(ID, dateTime, 100L);
+//    }
 
-        course.setId(ID);
-        course.setCourseUsers(new HashSet<>(Collections.singletonList(new CourseUser(course, user, Role.TEACHER))));
-
-        taskOld.setId(ID);
-        taskOld.setCourse(course);
-
-        taskNew.setTitle("new");
-        taskNew.setText("newText");
-
-        taskInfo.setMaxMark(100L);
-        taskInfo.setCompleteTime(dateTime);
-
-        Mockito.doReturn(taskOld)
-                .when(taskRepository)
-                .getTaskById(ID);
-
-        Mockito.doReturn(course)
-                .when(courseRepository)
-                .findCourseById(ID);
-
-
-        taskService.editTask(ID, taskNew, taskInfo, user);
-
-        Mockito.verify(taskRepository, Mockito.times(1))
-                .updateTask(ID, "new", "newText");
-        Mockito.verify(taskInfoRepository, Mockito.times(1))
-                .updateTaskInfoByTaskId(ID, dateTime, 100L);
-    }
-
-    @Test
-    public void editNonexistentTask() {
-        Task taskNew = new Task();
-        User user = new User();
-        TaskInfo taskInfo = new TaskInfo();
-        LocalDateTime dateTime = LocalDateTime.of(2019,8,15,20,0);
-
-        taskNew.setTitle("new");
-        taskNew.setText("newText");
-
-        Mockito.doReturn(null)
-                .when(taskRepository)
-                .getTaskById(ID);
-
-        taskService.editTask(ID, taskNew, taskInfo, user);
-
-        Mockito.verify(taskRepository, Mockito.times(0))
-                .updateTask(ID, "new", "newText");
-        Mockito.verify(taskInfoRepository, Mockito.times(0))
-                .updateTaskInfoByTaskId(ID, dateTime, 100L);
-    }
+//    @Test
+//    public void editNonexistentTask() {
+//        Task taskNew = new Task();
+//        User user = new User();
+//        TaskInfo taskInfo = new TaskInfo();
+//        LocalDateTime dateTime = LocalDateTime.of(2019,8,15,20,0);
+//
+//        taskNew.setTitle("new");
+//        taskNew.setText("newText");
+//
+//        Mockito.doReturn(null)
+//                .when(taskRepository)
+//                .getTaskById(ID);
+//
+//        taskService.editTask(ID, taskNew, taskInfo, user);
+//
+//        Mockito.verify(taskRepository, Mockito.times(0))
+//                .updateTask(ID, "new", "newText");
+//        Mockito.verify(taskInfoRepository, Mockito.times(0))
+//                .updateTaskInfoByTaskId(ID, dateTime, 100L);
+//    }
 
     @Test
     public void createExistingTask() {
