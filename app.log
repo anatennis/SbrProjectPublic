@@ -2316,3 +2316,73 @@ org.springframework.expression.spel.SpelEvaluationException: EL1012E: Cannot ind
 2019-07-25 20:21:01,786 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
 2019-07-25 20:21:01,787 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
 2019-07-25 20:21:07,892 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 6.95 seconds (JVM running for 7.814)
+2019-07-25 21:18:11,500 INFO ru.sberbank.javaschool.edu.Application [main] Starting Application on MacBook-Pro-Nikolaj.local with PID 20371 (/Users/nick/IdeaProjects/SbrProject/out/production/classes started by nick in /Users/nick/IdeaProjects/SbrProject)
+2019-07-25 21:18:11,502 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
+2019-07-25 21:18:11,503 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
+2019-07-25 21:18:25,584 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 15.256 seconds (JVM running for 16.047)
+2019-07-25 21:20:46,928 INFO ru.sberbank.javaschool.edu.controller.HelloController [http-nio-8080-exec-5] Main page
+2019-07-25 21:46:12,530 INFO ru.sberbank.javaschool.edu.Application [main] Starting Application on MacBook-Pro-Nikolaj.local with PID 20787 (/Users/nick/IdeaProjects/SbrProject/out/production/classes started by nick in /Users/nick/IdeaProjects/SbrProject)
+2019-07-25 21:46:12,533 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
+2019-07-25 21:46:12,533 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
+2019-07-25 21:46:27,251 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 15.992 seconds (JVM running for 16.734)
+2019-07-25 21:56:20,415 INFO ru.sberbank.javaschool.edu.Application [main] Starting Application on MacBook-Pro-Nikolaj.local with PID 20932 (/Users/nick/IdeaProjects/SbrProject/out/production/classes started by nick in /Users/nick/IdeaProjects/SbrProject)
+2019-07-25 21:56:20,428 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
+2019-07-25 21:56:20,429 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
+2019-07-25 21:56:37,116 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 18.024 seconds (JVM running for 18.824)
+2019-07-25 21:56:49,018 INFO ru.sberbank.javaschool.edu.controller.HelloController [http-nio-8080-exec-3] Try to login in login statement
+2019-07-25 21:56:50,048 DEBUG ru.sberbank.javaschool.edu.controller.UserController [http-nio-8080-exec-4] first access time : 2019-07-25T20:03:55.383
+session id: ed4d5755-c176-4804-abba-f775ba3efb5a
+User login admin
+2019-07-25 22:08:32,039 INFO ru.sberbank.javaschool.edu.Application [main] Starting Application on MacBook-Pro-Nikolaj.local with PID 21119 (/Users/nick/IdeaProjects/SbrProject/out/production/classes started by nick in /Users/nick/IdeaProjects/SbrProject)
+2019-07-25 22:08:32,041 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
+2019-07-25 22:08:32,042 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
+2019-07-25 22:08:40,615 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 9.763 seconds (JVM running for 10.548)
+2019-07-25 22:34:49,681 INFO ru.sberbank.javaschool.edu.Application [main] Starting Application on MacBook-Pro-Nikolaj.local with PID 21527 (/Users/nick/IdeaProjects/SbrProject/out/production/classes started by nick in /Users/nick/IdeaProjects/SbrProject)
+2019-07-25 22:34:49,684 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
+2019-07-25 22:34:49,684 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
+2019-07-25 22:34:58,218 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 9.756 seconds (JVM running for 10.518)
+2019-07-25 22:35:49,539 INFO ru.sberbank.javaschool.edu.Application [main] Starting Application on MacBook-Pro-Nikolaj.local with PID 21545 (/Users/nick/IdeaProjects/SbrProject/out/production/classes started by nick in /Users/nick/IdeaProjects/SbrProject)
+2019-07-25 22:35:49,543 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
+2019-07-25 22:35:49,543 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
+2019-07-25 22:36:17,585 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 29.22 seconds (JVM running for 29.906)
+2019-07-25 22:42:01,829 INFO ru.sberbank.javaschool.edu.Application [main] Starting Application on MacBook-Pro-Nikolaj.local with PID 21643 (/Users/nick/IdeaProjects/SbrProject/out/production/classes started by nick in /Users/nick/IdeaProjects/SbrProject)
+2019-07-25 22:42:01,831 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
+2019-07-25 22:42:01,832 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
+2019-07-25 22:42:15,558 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 14.927 seconds (JVM running for 15.599)
+2019-07-25 22:42:50,410 INFO ru.sberbank.javaschool.edu.Application [main] Starting Application on MacBook-Pro-Nikolaj.local with PID 21663 (/Users/nick/IdeaProjects/SbrProject/out/production/classes started by nick in /Users/nick/IdeaProjects/SbrProject)
+2019-07-25 22:42:50,413 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
+2019-07-25 22:42:50,413 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
+2019-07-25 22:43:07,409 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 18.297 seconds (JVM running for 19.013)
+2019-07-25 22:43:36,063 DEBUG ru.sberbank.javaschool.edu.controller.UserController [http-nio-8080-exec-8] first access time : 2019-07-25T22:43:36.063
+session id: 969d5941-bf62-469f-a12a-d76cd648b8ea
+User login admin
+2019-07-25 22:45:20,434 INFO ru.sberbank.javaschool.edu.Application [main] Starting Application on MacBook-Pro-Nikolaj.local with PID 21704 (/Users/nick/IdeaProjects/SbrProject/out/production/classes started by nick in /Users/nick/IdeaProjects/SbrProject)
+2019-07-25 22:45:20,437 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
+2019-07-25 22:45:20,437 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
+2019-07-25 22:45:39,699 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 20.491 seconds (JVM running for 21.217)
+2019-07-25 22:47:28,065 INFO ru.sberbank.javaschool.edu.Application [main] Starting Application on MacBook-Pro-Nikolaj.local with PID 21736 (/Users/nick/IdeaProjects/SbrProject/out/production/classes started by nick in /Users/nick/IdeaProjects/SbrProject)
+2019-07-25 22:47:28,068 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
+2019-07-25 22:47:28,068 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
+2019-07-25 22:47:41,779 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 14.988 seconds (JVM running for 15.733)
+2019-07-25 22:48:53,622 INFO ru.sberbank.javaschool.edu.Application [main] Starting Application on MacBook-Pro-Nikolaj.local with PID 21776 (/Users/nick/IdeaProjects/SbrProject/out/production/classes started by nick in /Users/nick/IdeaProjects/SbrProject)
+2019-07-25 22:48:53,630 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
+2019-07-25 22:48:53,630 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
+2019-07-25 22:49:02,170 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 9.744 seconds (JVM running for 10.379)
+2019-07-25 22:50:07,094 DEBUG ru.sberbank.javaschool.edu.controller.UserController [http-nio-8080-exec-8] first access time : 2019-07-25T22:50:07.093
+session id: f8ade796-f6e2-4b56-8a3c-6504d227a622
+User login admin
+2019-07-25 22:52:53,745 INFO ru.sberbank.javaschool.edu.Application [main] Starting Application on MacBook-Pro-Nikolaj.local with PID 21833 (/Users/nick/IdeaProjects/SbrProject/out/production/classes started by nick in /Users/nick/IdeaProjects/SbrProject)
+2019-07-25 22:52:53,749 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
+2019-07-25 22:52:53,749 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
+2019-07-25 22:53:02,564 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 10.048 seconds (JVM running for 10.783)
+2019-07-25 22:55:18,890 INFO ru.sberbank.javaschool.edu.Application [main] Starting Application on MacBook-Pro-Nikolaj.local with PID 21868 (/Users/nick/IdeaProjects/SbrProject/out/production/classes started by nick in /Users/nick/IdeaProjects/SbrProject)
+2019-07-25 22:55:18,892 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
+2019-07-25 22:55:18,893 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
+2019-07-25 22:55:32,819 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 15.098 seconds (JVM running for 15.903)
+2019-07-25 22:59:04,797 INFO ru.sberbank.javaschool.edu.Application [main] Starting Application on MacBook-Pro-Nikolaj.local with PID 21938 (/Users/nick/IdeaProjects/SbrProject/out/production/classes started by nick in /Users/nick/IdeaProjects/SbrProject)
+2019-07-25 22:59:04,800 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
+2019-07-25 22:59:04,800 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
+2019-07-25 22:59:19,000 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 15.446 seconds (JVM running for 16.206)
+2019-07-25 23:00:07,028 DEBUG ru.sberbank.javaschool.edu.controller.UserController [http-nio-8080-exec-8] first access time : 2019-07-25T23:00:07.028
+session id: 15509941-5ecc-4556-901d-f912839476d4
+User login admin
