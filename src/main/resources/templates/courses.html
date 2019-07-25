@@ -29,13 +29,23 @@
             <li class="nav-item">
                 <a class="nav-link" href="/tasks">Tasks</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" href="/login?logout">Logout</a>
+            <li th:if="${user.getName().equals('admin')}" class="nav-item">
+                <a class="nav-link" href="/administration">Администрирование</a>
             </li>
         </ul>
     </div>
     <div class="navbar-text">
-        <span th:text="${user.getName()}"></span>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span th:text="${user.getName()}"></span>
+            </button>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                <form action="/logout" method="post">
+                    <button type="submit" class="dropdown-item">Выход</button>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                </form>
+            </div>
+        </div>
     </div>
 </nav>
 

@@ -45,7 +45,6 @@ public class CourseController {
     ) {
         Course course = courseService.findCourseById(idCourse);
         List<Material> materials = course.getMaterials();
-        //materialService.getCourseMaterials(idCourse); ToDo - подумать как лучше
         Set<CourseUser> courseUsers = course.getCourseUsers();
         List<CourseUser> teachers = new ArrayList<>();
         List<CourseUser> students = new ArrayList<>();
