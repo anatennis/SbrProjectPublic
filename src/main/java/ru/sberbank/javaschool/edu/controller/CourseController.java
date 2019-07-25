@@ -6,13 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.w3c.dom.ls.LSInput;
 import ru.sberbank.javaschool.edu.domain.*;
 import ru.sberbank.javaschool.edu.service.*;
 
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class CourseController {
@@ -47,11 +46,23 @@ public class CourseController {
         Course course = courseService.findCourseById(idCourse);
         List<Material> materials = course.getMaterials();
         //materialService.getCourseMaterials(idCourse); ToDo - подумать как лучше
+        Set<CourseUser> courseUsers = course.getCourseUsers();
+        List<CourseUser> teachers = new ArrayList<>();
+        List<CourseUser> students = new ArrayList<>();
 
+        for (CourseUser courseUser : courseUsers) {
+            if (courseUser.getRole().equals(Role.TEACHER)) {
+                teachers.add(courseUser);
+            } else {
+                students.add(courseUser);
+            }
+        }
         model.addAttribute("course", course);
         model.addAttribute("materials", materials);
         model.addAttribute("canCreate", materialService.canCreateMaterial(course, user));
         model.addAttribute("currentUser", user);
+        model.addAttribute("students", students);
+        model.addAttribute("teachers", teachers);
 
         return "course";
     }

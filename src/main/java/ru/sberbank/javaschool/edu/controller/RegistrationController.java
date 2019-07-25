@@ -42,7 +42,7 @@ public class RegistrationController {
         } else {
             model.addAttribute("active", "Аккаунт уже был активирован");
         }
-        return "_login";
+        return "login";
     }
 
 

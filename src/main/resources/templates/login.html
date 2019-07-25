@@ -15,10 +15,13 @@
         <div class="col-sm-9 main-section">
             <div class="modal-content">
                 <div th:if="${param.error}" class="alert alert-danger" role="alert">
-                    Не верный логин или пароль
+                    <p>Не верный логин или пароль</p>
                 </div>
                 <div th:if="${param.logout}" class="alert alert-primary" role="alert">
-                    Вы вышли из аккаунта
+                    <p>Вы вышли из аккаунта</p>
+                </div>
+                <div th:if="${active}" class="alert alert-success" role="alert">
+                    <p th:text="${active}"></p>
                 </div>
                 <div class="col-12 user-img">
                     <img src="/img/login-cat.png"/>
