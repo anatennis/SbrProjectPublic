@@ -3,11 +3,13 @@ package ru.sberbank.javaschool.edu.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.sberbank.javaschool.edu.domain.User;
 
 @Controller
 public class HelloController {
@@ -34,12 +36,12 @@ public class HelloController {
     }
 
     @GetMapping("/test")
-    public String greeting(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model) {
-        model.addAttribute("name", name);
+    public String greeting(@AuthenticationPrincipal User user, Model model) {
+        model.addAttribute("user", user);
 
         //activateUsers();
 
-        return "testpage";
+        return "test";
     }
 
 

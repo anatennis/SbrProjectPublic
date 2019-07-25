@@ -1,0 +1,10 @@
+.main-section {
+    margin: 0 auto;
+    margin-top: 130px;
+    padding: 0;
+}
+.modal-content {
+    background-color: #434e5a;
+    opacity: .8;
+    padding: 10px 18px;
+}
