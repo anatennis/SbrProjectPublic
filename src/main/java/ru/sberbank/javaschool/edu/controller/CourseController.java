@@ -10,7 +10,9 @@ import ru.sberbank.javaschool.edu.domain.*;
 import ru.sberbank.javaschool.edu.service.*;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class CourseController {
@@ -56,10 +58,21 @@ public class CourseController {
 
     @GetMapping("/courses")
     public String showAllUserCourses(Model model, Principal principal) {
+        Map<Long, Map<String, String>> coursesInfo = new HashMap<>();
 
         List<CourseUser> allUserCourses = courseUserService.getUserCourses(principal.getName());
+        for (CourseUser courseUser : allUserCourses) {
+            Course course = courseUser.getCourse();
+            coursesInfo.put(course.getId(), new HashMap<>());
+            Map<String, String> params = coursesInfo.get(course.getId());
+            params.put("usersCount", String.valueOf(course.getCourseUsers().size()));
+            params.put("materialsCount", String.valueOf(course.getMaterials().size()));
+        }
 
         model.addAttribute("courses", allUserCourses);
+        model.addAttribute("user", principal);
+        model.addAttribute("coursesInfo", coursesInfo);
+
 
         return "courses";
     }
