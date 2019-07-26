@@ -29,7 +29,7 @@ public class RegistrationController {
         String userAdding = userService.addUser(user);
         if (!userAdding.equals("ok")) {
             model.addAttribute("message", userAdding);
-            return "_registration";
+            return "registration";
         }
         return "redirect:/login";
     }

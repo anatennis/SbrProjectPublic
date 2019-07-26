@@ -1,6 +1,5 @@
 package ru.sberbank.javaschool.edu.service;
 
-import com.github.sardine.DavResource;
 import com.github.sardine.Sardine;
 import com.github.sardine.SardineFactory;
 import org.slf4j.Logger;
@@ -9,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.sberbank.javaschool.edu.domain.*;
+import ru.sberbank.javaschool.edu.domain.Publication;
+import ru.sberbank.javaschool.edu.domain.PublicationFile;
+import ru.sberbank.javaschool.edu.domain.Task;
+import ru.sberbank.javaschool.edu.domain.User;
 import ru.sberbank.javaschool.edu.repository.PublicationFileRepository;
 import ru.sberbank.javaschool.edu.repository.PublicationRepository;
 
-import javax.jws.soap.SOAPBinding;
 import java.io.*;
 import java.util.List;
 import java.util.UUID;
@@ -34,8 +35,10 @@ public class PublicationFileService {
     private String emailPass;
 
     @Autowired
-    public PublicationFileService(PublicationFileRepository publicationFileRepository,
-                                  PublicationRepository publicationRepository) {
+    public PublicationFileService(
+            PublicationFileRepository publicationFileRepository,
+            PublicationRepository publicationRepository
+    ) {
         this.publicationFileRepository = publicationFileRepository;
         this.publicationRepository = publicationRepository;
     }
@@ -61,7 +64,6 @@ public class PublicationFileService {
             publicationFile.setFilename(filename);
             Publication publication = publicationRepository.findPublicationById(idPublication);
             publicationFile.setPublication(publication);
-            //publicationFile.setPath("educlassroom/");
             publicationFile.setPath(uploadPath);
             publicationFile.setUser(user);
             publicationFileRepository.save(publicationFile);
@@ -88,7 +90,8 @@ public class PublicationFileService {
             if (inStr != null) {
                 try {
                     inStr.close();
-                } catch (Exception e) {
+                } catch (Exception ignored) {
+                    //ignore
                 }
             }
         }
@@ -114,7 +117,9 @@ public class PublicationFileService {
 
                 while (true) {
 
-                    if (!((nRead = is.read(data, 0, data.length)) != -1)) break;
+                    if ((nRead = is.read(data, 0, data.length)) == -1) {
+                        break;
+                    }
 
                     buffer.write(data, 0, nRead);
                 }
@@ -127,31 +132,6 @@ public class PublicationFileService {
                 e.printStackTrace();
             }
         }
-
-//        try {
-//            for (DavResource res : sardine.list(URL + "educlassroom/")) {
-//                if (!res.isDirectory()) {
-//                    InputStream is = sardine.get(URL + "educlassroom/" + res.getDisplayName());
-//
-//                    ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-//
-//                    int nRead;
-//                    byte[] data = new byte[16384];
-//
-//                    while ((nRead = is.read(data, 0, data.length)) != -1) {
-//                        buffer.write(data, 0, nRead);
-//                    }
-//
-//                    try (OutputStream outputStream
-//                                 = new FileOutputStream(uploadPath + "/" + res.getDisplayName())) {
-//                        buffer.writeTo(outputStream);
-//                    }
-//
-//                }
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
     }
 
     public void deleteFile(Long fileId) {

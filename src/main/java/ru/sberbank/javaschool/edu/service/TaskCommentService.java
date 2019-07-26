@@ -1,5 +1,7 @@
 package ru.sberbank.javaschool.edu.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.sberbank.javaschool.edu.domain.*;
@@ -19,6 +21,8 @@ public class TaskCommentService {
     private final UserRepository userRepository;
     private final UserTaskRepository userTaskRepository;
 
+    private static final Logger logger = LoggerFactory.getLogger(TaskCommentService.class);
+
     public TaskCommentService(
             TaskCommentRepository commentRepository,
             TaskRepository taskRepository,
@@ -35,6 +39,7 @@ public class TaskCommentService {
 
         if (createTaskComment(idTask, idUser, user, taskComment))  {
             commentRepository.save(taskComment);
+            logger.info("Пользователь " + user.getLogin() + " прокомментировал задание с id = " + idTask);
         }
     }
 
@@ -45,6 +50,8 @@ public class TaskCommentService {
             taskComment.setParentComment(commentRepository.findTaskCommentById(idParent));
 
             commentRepository.save(taskComment);
+
+            logger.info("Пользователь " + user.getLogin() + " прокомментировал коммнетарий с id = " + idParent);
         }
     }
 
@@ -54,6 +61,8 @@ public class TaskCommentService {
 
         if (comment != null && cantEditComment(user, comment)) {
             commentRepository.deleteById(id);
+
+            logger.info("Пользователь " + user.getLogin() + " удалил комментарий с id = " + id);
         }
     }
 
@@ -63,6 +72,8 @@ public class TaskCommentService {
 
         if (commentFromDb != null && cantEditComment(user, commentFromDb)) {
             commentRepository.updateTaskComment(id, comment.getText(), LocalDateTime.now());
+
+            logger.info("Пользователь " + user.getLogin() + " отредактировал комментарий с id = " + id);
         }
     }
 

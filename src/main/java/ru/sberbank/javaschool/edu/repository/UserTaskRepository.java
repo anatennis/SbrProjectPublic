@@ -1,7 +1,8 @@
 package ru.sberbank.javaschool.edu.repository;
 
-import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.sberbank.javaschool.edu.domain.Task;
 import ru.sberbank.javaschool.edu.domain.User;
 import ru.sberbank.javaschool.edu.domain.UserTask;
@@ -13,5 +14,9 @@ public interface UserTaskRepository extends JpaRepository<UserTask, Long> {
 
     List<UserTask> findUserTaskByTask(Task task);
 
-    List<UserTask> findAllByUser(User user);
+    @Query(
+            value = "SELECT u.* FROM edu_user_task u WHERE u.user = :user_id ",
+            nativeQuery = true
+    )
+    List<UserTask> getUserTasksByUserId(@Param("user_id") long idUser);
 }

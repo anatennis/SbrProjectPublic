@@ -1,5 +1,7 @@
 package ru.sberbank.javaschool.edu.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ public class UserTaskService {
     private final CourseUserRepository courseUserRepository;
     private final MailSender mailSender;
 
+    private static final Logger logger = LoggerFactory.getLogger(UserTaskService.class);
+
     @Autowired
     public UserTaskService(UserTaskRepository userTaskRepository, TaskRepository taskRepository,
                            UserRepository userRepository, CourseRepository courseRepository,
@@ -35,18 +39,25 @@ public class UserTaskService {
     }
 
 
+    @Transactional
     public UserTask createUserTask(User user, Task task) {
         Set<CourseUser> teachers = getTeachers(task.getCourse());
+
         for (CourseUser teacher : teachers) {
             if (teacher.getUser().getName().equals(user.getName())) {
                 return null;
             }
         }
+
         UserTask userTask = new UserTask();
         userTask.setUser(user);
         userTask.setCurMark(new Long(0));
         userTask.setTask(task);
+
         userTaskRepository.save(userTask);
+
+        logger.info("Пользователю " + user.getLogin() + " назначено задание " + task.getTitle());
+
         return userTask;
     }
 
@@ -60,6 +71,8 @@ public class UserTaskService {
         userTask.setTaskState("COMPLETE");
         userTask.setSubmittedDate(LocalDateTime.now());
         userTaskRepository.save(userTask);
+
+        logger.info("Пользователь " + user.getLogin() + " сдал на проверку задание " + task.getTitle());
 
         //send mail
 
@@ -94,12 +107,17 @@ public class UserTaskService {
         Task task = taskRepository.getTaskById(idTask);
         User user = userRepository.findUserById(idUser);
         UserTask userTask = userTaskRepository.findUserTaskByUserAndTask(user, task);
+
         if (userTask == null || userTask.getTaskState() == null
                 || curMark > task.getTaskInfo().getMaxMark() || curMark < 0) {
             return false;
         }
+
         userTask.setCurMark(curMark);
         userTaskRepository.save(userTask);
+
+        logger.info("Пользователю " + user.getLogin() + " поставлена оценка за задание " + task.getTitle());
+
         return true;
     }
 
@@ -109,6 +127,8 @@ public class UserTaskService {
         for (CourseUser courseUser : courseUsers) {
             createUserTask(courseUser.getUser(), task);
         }
+
+        logger.info("Слушателям курса " + course.getCaption() + " назначено задание " + task.getTitle());
     }
 
     private Set<CourseUser> getTeachers(Course course) {
@@ -124,8 +144,16 @@ public class UserTaskService {
         User user = userRepository.findUserByLogin(userLogin);
         Course course = courseRepository.findCourseById(idCourse);
         List<Task> tasks = taskRepository.getTaskByCourse(course);
+
         for (Task task : tasks) {
             createUserTask(user, task);
         }
+
+        logger.info("Задания курса " + course.getCaption() + " назначены пользователю " + user.getLogin());
+    }
+
+    public List<UserTask> getUserTasksFromAllCourseByUser(User user) {
+
+        return userTaskRepository.getUserTasksByUserId(user.getId());
     }
 }

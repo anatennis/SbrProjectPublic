@@ -1,5 +1,7 @@
 package ru.sberbank.javaschool.edu.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,7 @@ public class MaterialCommentService {
 
     private final MaterialCommentRepository commentRepository;
     private final MaterialService materialService;
+    private static final Logger logger = LoggerFactory.getLogger(MaterialCommentService.class);
 
     @Autowired
     public MaterialCommentService(MaterialCommentRepository commentRepository, MaterialService materialService) {
@@ -28,6 +31,8 @@ public class MaterialCommentService {
         materialComment.setCreatedate(LocalDateTime.now());
 
         commentRepository.save(materialComment);
+
+        logger.info("Пользователь " + user.getLogin() + " прокомментировал материал с id = " + idMaterial);
     }
 
     @Transactional
@@ -38,6 +43,8 @@ public class MaterialCommentService {
         childComment.setCreatedate(LocalDateTime.now());
 
         commentRepository.save(childComment);
+
+        logger.info("Пользователь " + user.getLogin() + " прокомментировал комментарий с id = " + idParent);
     }
 
     @Transactional
@@ -56,6 +63,9 @@ public class MaterialCommentService {
 
         if (canEditComment(user, id)) {
             commentRepository.deleteById(id);
+
+            logger.info("Пользователь " + user.getLogin() + " удалил комментарий с id = " + id);
+
         }
     }
 
@@ -64,6 +74,8 @@ public class MaterialCommentService {
 
         if (canEditComment(user, id)) {
             commentRepository.updateMaterialComment(id, comment.getText(), LocalDateTime.now());
+
+            logger.info("Пользователь " + user.getLogin() + " отредактировал комментарий с id = " + id);
         }
     }
 
