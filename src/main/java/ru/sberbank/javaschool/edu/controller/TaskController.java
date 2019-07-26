@@ -149,10 +149,9 @@ public class TaskController {
             TaskInfo taskInfo
     ) {
         Course course = taskService.findCourseById(idCourse);
-        taskService.createTask(course, user, task, taskInfo);
-
-        userTaskService.createUserTasksForAllStudents(task, course);
-
+        if (taskService.createTask(course, user, task, taskInfo)) {
+            userTaskService.createUserTasksForAllStudents(task, course);
+        }
 
         return "redirect:/course/{idCourse}/tasks";
     }
