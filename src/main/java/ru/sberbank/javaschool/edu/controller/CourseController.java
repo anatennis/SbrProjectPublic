@@ -59,6 +59,8 @@ public class CourseController {
                 students.add(courseUser);
             }
         }
+
+        publicationFileService.getMaterialsFilesFromYDisk(materials);
         model.addAttribute("course", course);
         model.addAttribute("materials", materials);
         model.addAttribute("canCreate", materialService.canCreateMaterial(course, user));

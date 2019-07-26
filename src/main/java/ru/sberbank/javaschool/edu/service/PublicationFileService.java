@@ -8,14 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import ru.sberbank.javaschool.edu.domain.Publication;
-import ru.sberbank.javaschool.edu.domain.PublicationFile;
-import ru.sberbank.javaschool.edu.domain.Task;
-import ru.sberbank.javaschool.edu.domain.User;
+import ru.sberbank.javaschool.edu.domain.*;
 import ru.sberbank.javaschool.edu.repository.PublicationFileRepository;
 import ru.sberbank.javaschool.edu.repository.PublicationRepository;
 
 import java.io.*;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -102,6 +100,19 @@ public class PublicationFileService {
     public void getFilesFromYDisk(User user, Task task) {
         List<PublicationFile> publicationFileList
                 = publicationFileRepository.findAllByUserAndPublication(user, task);
+        gettingFromYDisk(publicationFileList);
+
+    }
+
+    public void getMaterialsFilesFromYDisk(List<Material> materials) {
+        List<PublicationFile> publicationFileList = new LinkedList<>();
+        for (Material material : materials) {
+            publicationFileList.addAll(publicationFileRepository.findAllByPublication(material));
+        }
+        gettingFromYDisk(publicationFileList);
+    }
+
+    private void gettingFromYDisk(List<PublicationFile> publicationFileList) {
         String URL = "https://webdav.yandex.ru/";
 
         Sardine sardine = SardineFactory.begin(email, emailPass);
