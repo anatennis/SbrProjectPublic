@@ -48,11 +48,12 @@ public class AdminController {
     }
 
     @PostMapping
-    public String addCourse(Course course, Model model) {
+    public String addCourse(Course course, Model model, @AuthenticationPrincipal User user) {
 
         if (!courseService.addCourse(course)) {
             model.addAttribute("message", course.getCaption() + " уже существует!");
             model.addAttribute("courses", courseService.findAll());
+            model.addAttribute("user", user);
             return "courseList";
         }
 
