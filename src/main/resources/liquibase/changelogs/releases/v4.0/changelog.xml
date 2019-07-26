@@ -19,5 +19,6 @@
     <include file="another_refactor_publications.xml" relativeToChangelogFile="true"/>
     <include file="change_publications_add_edit.xml" relativeToChangelogFile="true"/>
     <include file="change_comments_add_edit.xml" relativeToChangelogFile="true"/>
+    <include file="change_table_user_phone.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
