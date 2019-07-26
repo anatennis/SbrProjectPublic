@@ -1,5 +1,6 @@
 package ru.sberbank.javaschool.edu.repository;
 
+import org.springframework.data.domain.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.sberbank.javaschool.edu.domain.Task;
 import ru.sberbank.javaschool.edu.domain.User;
@@ -11,4 +12,6 @@ public interface UserTaskRepository extends JpaRepository<UserTask, Long> {
     UserTask findUserTaskByUserAndTask(User user, Task task);
 
     List<UserTask> findUserTaskByTask(Task task);
+
+    List<UserTask> findAllByUser(User user);
 }

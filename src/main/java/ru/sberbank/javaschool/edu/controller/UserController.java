@@ -34,10 +34,9 @@ public class UserController {
     public String userGreeting(@AuthenticationPrincipal User user, Model model, HttpSession httpSession) {
         logger.debug(userService.getInfoFromSession(httpSession, user));
 
-        String username = user.getUsername();
         Set<CourseUser> courseUsersSet = user.getCourseUsers();
 
-        model.addAttribute("username", username);
+        model.addAttribute("user", user);
         model.addAttribute("courseusers", courseUsersSet);
         return "user";
     }
