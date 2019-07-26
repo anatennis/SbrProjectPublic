@@ -18,4 +18,7 @@ public class Material extends Publication {
     @OneToMany(mappedBy = "material", fetch = FetchType.LAZY)
     @Where(clause = "parent is null")
     private List<MaterialComment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "publication", fetch = FetchType.LAZY)
+    private List<PublicationFile> publicationFiles = new ArrayList<>();
 }
