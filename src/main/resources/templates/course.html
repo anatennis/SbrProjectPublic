@@ -139,6 +139,29 @@
                     <p>Нет студентов</p>
                 </div>
             </div>
+            <div class="card" th:if="${tasks}" style="margin-top: 10px">
+                <div class="card-header">
+                    <h5>Задания курса</h5>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item" th:each="task : ${tasks}">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <span th:text="${task.getTitle()}"></span>
+                            </div>
+                            <div class="col-md-4">
+                                <a class="btn btn-light" th:href="@{'/course/{idCourse}/tasks/{idTask}'
+                            (idCourse=${course.getId()}, idTask=${task.getId()})}"><i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="card" th:unless="${tasks}" style="margin-top: 5px">
+                <div class="card-body text-center">
+                    <p>Нет заданий</p>
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal fade text-center" id="modalDialog">
@@ -181,10 +204,10 @@
                 </div>
                 <form th:action="@{'/course/{id}/tasks'(id=${course.id})}" method="post">
                     <div class="modal-body">
-                        <input type="text" name="title" class="form-control" placeholder="Название материала"/>
-                        <textarea type="text" name="text" class="form-control" placeholder="Содержание"></textarea>
-                        <input type="number" name="maxMark" class="form-control" placeholder="Макс. оценка"/>
-                        <input type="datetime-local" class="form-control" name="completeTime" placeholder="Дата сдачи">
+                        <input type="text" name="title" class="form-control" style="margin-bottom: 5px" placeholder="Название материала"/>
+                        <textarea type="text" name="text" class="form-control" style="margin-bottom: 5px" placeholder="Содержание"></textarea>
+                        <input type="number" name="maxMark" class="form-control" style="margin-bottom: 5px" placeholder="Макс. оценка"/>
+                        <input type="datetime-local" class="form-control" name="completeTime" style="margin-bottom: 5px" placeholder="Дата сдачи">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     </div>
                     <div class="modal-footer">

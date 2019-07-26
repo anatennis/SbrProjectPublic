@@ -21,6 +21,7 @@ public class CourseController {
     private final PublicationFileService publicationFileService;
     private final UserService userService;
     private final UserTaskService userTaskService;
+    private final TaskService taskService;
 
     @Autowired
     public CourseController(
@@ -28,13 +29,14 @@ public class CourseController {
             CourseUserService courseUserService,
             MaterialService materialService,
             PublicationFileService publicationFileService,
-            UserService userService, UserTaskService userTaskService) {
+            UserService userService, UserTaskService userTaskService, TaskService taskService) {
         this.courseService = courseService;
         this.courseUserService = courseUserService;
         this.materialService = materialService;
         this.publicationFileService = publicationFileService;
         this.userService = userService;
         this.userTaskService = userTaskService;
+        this.taskService = taskService;
     }
 
     @GetMapping("/course/{idCourse}")
@@ -46,6 +48,7 @@ public class CourseController {
         Course course = courseService.findCourseById(idCourse);
         List<Material> materials = course.getMaterials();
         Set<CourseUser> courseUsers = course.getCourseUsers();
+        List<Task> tasks = taskService.getTaskByCourseOrderById(course);
         List<CourseUser> teachers = new ArrayList<>();
         List<CourseUser> students = new ArrayList<>();
 
@@ -62,6 +65,7 @@ public class CourseController {
         model.addAttribute("currentUser", user);
         model.addAttribute("students", students);
         model.addAttribute("teachers", teachers);
+        model.addAttribute("tasks", tasks);
 
         return "course";
     }
