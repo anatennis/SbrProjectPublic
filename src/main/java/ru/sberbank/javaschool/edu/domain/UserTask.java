@@ -24,7 +24,8 @@ public class UserTask {
     @Column(name = "submitteddate")
     private LocalDateTime submittedDate;
     @Column(name = "taskstate")
-    private String taskState;
+    @Enumerated(EnumType.STRING)
+    private TaskState taskState;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task")

@@ -53,6 +53,7 @@ public class UserTaskService {
         userTask.setUser(user);
         userTask.setCurMark(new Long(0));
         userTask.setTask(task);
+        userTask.setTaskState(TaskState.ASSIGNED);
 
         userTaskRepository.save(userTask);
 
@@ -68,7 +69,7 @@ public class UserTaskService {
         if (userTask == null) {
             return false;
         }
-        userTask.setTaskState("COMPLETE");
+        userTask.setTaskState(TaskState.SUBMITTED);
         userTask.setSubmittedDate(LocalDateTime.now());
         userTaskRepository.save(userTask);
 
@@ -114,6 +115,7 @@ public class UserTaskService {
         }
 
         userTask.setCurMark(curMark);
+        userTask.setTaskState(TaskState.RATED);
         userTaskRepository.save(userTask);
 
         logger.info("Пользователю " + user.getLogin() + " поставлена оценка за задание " + task.getTitle());

@@ -69,7 +69,9 @@ public class TaskController {
             @AuthenticationPrincipal User user) {
 
         for (MultipartFile file : files) {
-            publicationFileService.saveFile(file, idTask, user);
+            if (file.getSize() != 0) {
+                publicationFileService.saveFile(file, idTask, user);
+            }
         }
 
         userTaskService.submitTask(idTask, user, idCourse);
