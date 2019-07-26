@@ -31,7 +31,8 @@ public class UserController {
     }
 
     @GetMapping
-    public String userGreeting(@AuthenticationPrincipal User user, Model model, HttpSession httpSession) {
+    public String userGreeting(Principal principal, Model model, HttpSession httpSession) {
+        User user = (User)userService.loadUserByUsername(principal.getName());
         logger.debug(userService.getInfoFromSession(httpSession, user));
 
         Set<CourseUser> courseUsersSet = user.getCourseUsers();
@@ -46,7 +47,7 @@ public class UserController {
 
         String login = principal.getName();
         if (userService.updateUser(login, user)) {
-            model.addAttribute("message", "Ваши данные успешно обновлены");
+            //model.addAttribute("message", "Ваши данные успешно обновлены");
 
             logger.debug(principal.getName() + " change name & surname to " + user.getName() + " " + user.getSurname());
 
@@ -56,20 +57,12 @@ public class UserController {
         return "redirect:/user";
     }
 
-    @GetMapping("/delete")
-    public String askForDeleteAccount(Principal principal, Model model) {
-        logger.debug("Ask for deleting of account from ", principal.getName());
-        model.addAttribute("username", principal.getName());
-
-        return "delete_user";
-    }
-
     @PostMapping("/delete")
     public String deleteAccount(Principal principal, HttpSession httpSession) {
         logger.debug("Deleting account ", principal.getName());
         userService.deleteUser(principal.getName());
         httpSession.invalidate();
 
-        return "redirect:/";
+        return "redirect:/login";
     }
 }
