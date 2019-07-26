@@ -71,10 +71,10 @@ public class CourseController {
     }
 
     @GetMapping("/courses")
-    public String showAllUserCourses(Model model, Principal principal) {
+    public String showAllUserCourses(Model model, @AuthenticationPrincipal User user) {
         Map<Long, Map<String, String>> coursesInfo = new HashMap<>();
 
-        List<CourseUser> allUserCourses = courseUserService.getUserCourses(principal.getName());
+        List<CourseUser> allUserCourses = courseUserService.getUserCourses(user.getLogin());
         for (CourseUser courseUser : allUserCourses) {
             Course course = courseUser.getCourse();
             coursesInfo.put(course.getId(), new HashMap<>());
@@ -84,7 +84,7 @@ public class CourseController {
         }
 
         model.addAttribute("courses", allUserCourses);
-        model.addAttribute("user", principal);
+        model.addAttribute("currentUser", user);
         model.addAttribute("coursesInfo", coursesInfo);
 
 
@@ -99,12 +99,8 @@ public class CourseController {
     ) {
         Course course = courseService.findCourseById(idCourse);
         materialService.createMaterial(course, user, material);
-
         for (MultipartFile file : files) {
-            if (file.getSize() != 0) {
-                publicationFileService.saveFile(file, material.getId(), user);
-            }
-
+            publicationFileService.saveFile(file, material.getId(), user);
         }
 
 
