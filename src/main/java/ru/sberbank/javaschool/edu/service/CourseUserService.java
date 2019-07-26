@@ -1,5 +1,7 @@
 package ru.sberbank.javaschool.edu.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,13 +14,13 @@ import ru.sberbank.javaschool.edu.repository.CourseUserRepository;
 import ru.sberbank.javaschool.edu.repository.UserRepository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CourseUserService {
     private final CourseUserRepository courseUserRepository;
     private final CourseRepository courseRepository;
     private final UserRepository userRepository;
+    private static final Logger logger = LoggerFactory.getLogger(CourseUserService.class);
 
     @Autowired
     public CourseUserService(
@@ -42,6 +44,9 @@ public class CourseUserService {
         if (courseUserFromDb == null) {
             CourseUser courseUser = new CourseUser(course, user, userRole);
             courseUserRepository.save(courseUser);
+
+            logger.info("Пользователь " + userLogin + " добавлен на курс " + course.getCaption()
+                    + " с ролью " + role);
         }
     }
 
@@ -53,11 +58,7 @@ public class CourseUserService {
 
     public List<CourseUser> getCourseUsersWithoutTeachers(Course course) {
 
-        List<CourseUser> courseUsers = courseUserRepository.findCourseUserByCourse(course);
         return courseUserRepository.findCourseUserByCourse(course);
-//                .stream()
-//                .filter(u -> u.getRole() != Role.TEACHER)
-//                .collect(Collectors.toList());
     }
 
     public boolean isTeacher(User user, Course course) {
@@ -66,9 +67,12 @@ public class CourseUserService {
         return courseUser.getRole() == Role.TEACHER;
     }
 
+    @Transactional
     public void deleteCourseUser(long id) {
 
         courseUserRepository.deleteById(id);
+
+        logger.info("Удален CourseUser с id = " + id);
     }
 
     //Для автоматического назначения админа на все курсы как учителя для возможности редактирования

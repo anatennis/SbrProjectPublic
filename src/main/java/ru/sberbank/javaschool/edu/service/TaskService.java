@@ -1,5 +1,7 @@
 package ru.sberbank.javaschool.edu.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +22,8 @@ public class TaskService {
     private final UserRepository userRepository;
     private final PublicationFileRepository publicationFileRepository;
     private final TaskInfoService taskInfoService;
+
+    private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
 
     @Autowired
     public TaskService(
@@ -53,6 +57,8 @@ public class TaskService {
             taskRepository.save(task);
             taskInfoService.setTask(task, newTaskInfo);
 
+            logger.info("Пользователем " + user.getLogin() + " добавленно задание " + task.getTitle());
+
             return true;
         }
 
@@ -67,6 +73,8 @@ public class TaskService {
             taskRepository.updateTask(idTask, task.getTitle(), task.getText(), LocalDateTime.now());
 
             taskInfoService.updateTaskInfo(idTask, taskInfo);
+
+            logger.info("Пользователем " + user.getLogin() + " изменено задание с id= " + idTask);
         }
     }
 
@@ -75,6 +83,8 @@ public class TaskService {
 
         if (canCreateTask(idCourse, user)) {
             taskRepository.deleteById(idTask);
+
+            logger.info("Пользователем " + user.getLogin() + " удалено задание с id= " + idTask);
         }
     }
 

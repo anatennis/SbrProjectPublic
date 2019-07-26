@@ -1,5 +1,7 @@
 package ru.sberbank.javaschool.edu.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class MaterialService {
     private final MaterialRepository materialRepository;
+    private static final Logger logger = LoggerFactory.getLogger(MaterialService.class);
 
     @Autowired
     public MaterialService(MaterialRepository materialRepository) {
@@ -32,8 +35,12 @@ public class MaterialService {
 
             materialRepository.save(material);
 
+            logger.info("Пользователь " + user.getLogin() + " добавил на курс " + course.getCaption()
+                    + " новый материал: " + material.getTitle());
+
             return true;
         }
+
         return false;
     }
 
@@ -41,6 +48,8 @@ public class MaterialService {
     public void editMaterial(Long id, Material material) {
 
         materialRepository.updateMaterial(id, material.getTitle(), material.getText(), LocalDateTime.now());
+
+        logger.info("Материал с id = " + id + " был изменен");
     }
 
     @Transactional
@@ -49,6 +58,8 @@ public class MaterialService {
 
         if (material != null && canCreateMaterial(material.getCourse(), user)) {
             materialRepository.deleteById(idMaterial);
+
+            logger.info("Материал с id = " + idMaterial + " был уделен пользоватем " + user.getLogin());
         }
     }
 
