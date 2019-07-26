@@ -115,8 +115,15 @@ public class UserService implements UserDetailsService {
         if (uFromDB == null) {
             return false;
         }
-        uFromDB.setName(user.getName());
-        uFromDB.setSurname(user.getSurname());
+        if (!user.getName().isEmpty()) {
+            uFromDB.setName(user.getName());
+        }
+        if (user.getSurname().isEmpty()) {
+            uFromDB.setSurname(user.getSurname());
+        }
+        if (!user.getEmail().isEmpty()) {
+            uFromDB.setEmail(user.getEmail());
+        }
 
         userRepo.save(uFromDB);
 
