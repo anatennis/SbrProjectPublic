@@ -42,7 +42,15 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <p th:text="${material.getText()}"></p>
+                    <div class="row"><p th:text="${material.getText()}"></p></div>
+                    <div class="row" th:if="${not #lists.isEmpty(material.getPublicationFiles())}">
+                        <div th:each="pfile : ${material.getPublicationFiles()}">
+                            <a th:href="@{'/files/{filename}' (filename=${pfile.getFilename()})}"
+                               th:download="${pfile.getFilename()}">
+                                <span th:text="${pfile.getFilename().split('_')[1]}"></span>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-footer bg-transparent border-success">
                     <h6>Комментарии</h6>

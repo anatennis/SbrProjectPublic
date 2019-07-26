@@ -99,8 +99,12 @@ public class CourseController {
     ) {
         Course course = courseService.findCourseById(idCourse);
         materialService.createMaterial(course, user, material);
+
         for (MultipartFile file : files) {
-            publicationFileService.saveFile(file, material.getId(), user);
+            if (file.getSize() != 0) {
+                publicationFileService.saveFile(file, material.getId(), user);
+            }
+
         }
 
 
