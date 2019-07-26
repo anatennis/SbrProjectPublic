@@ -128,4 +128,9 @@ public class UserTaskService {
             createUserTask(user, task);
         }
     }
+
+    public List<UserTask> getUserTasksFromAllCourseByUser(User user) {
+
+        return userTaskRepository.getUserTasksByUserId(user.getId());
+    }
 }
