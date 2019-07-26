@@ -104,7 +104,7 @@ public class UserService implements UserDetailsService {
 
         userRepo.save(user);
 
-        logger.info("Зарегестрирован пользователь " + user.getLogin());
+        logger.info("Зарегистрирован пользователь " + user.getLogin());
 
         return "ok";
     }
@@ -203,6 +203,7 @@ public class UserService implements UserDetailsService {
             courseUserService.deleteCourseUser(courseUser.getId());
         }
 
-        logger.info("Удален пользователь пользователь " + login);
+        logger.info("Удален пользователь " + login);
     }
+
 }
