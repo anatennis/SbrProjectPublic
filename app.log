@@ -480,3 +480,11 @@ User login nick
 2019-07-26 15:09:09,987 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
 2019-07-26 15:09:09,987 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
 2019-07-26 15:09:16,742 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 7.474 seconds (JVM running for 8.065)
+2019-07-26 15:09:38,002 INFO ru.sberbank.javaschool.edu.Application [main] Starting Application on w8-PC with PID 9984 (D:\PROJECTS\Development\GIT\SbrProject\out\production\classes started by w8 in D:\PROJECTS\Development\GIT\SbrProject)
+2019-07-26 15:09:38,003 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
+2019-07-26 15:09:38,003 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
+2019-07-26 15:10:12,787 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 35.499 seconds (JVM running for 36.183)
+2019-07-26 15:11:08,962 INFO ru.sberbank.javaschool.edu.Application [main] Starting Application on w8-PC with PID 2448 (D:\PROJECTS\Development\GIT\SbrProject\out\production\classes started by w8 in D:\PROJECTS\Development\GIT\SbrProject)
+2019-07-26 15:11:08,962 DEBUG ru.sberbank.javaschool.edu.Application [main] Running with Spring Boot v2.1.6.RELEASE, Spring v5.1.8.RELEASE
+2019-07-26 15:11:08,962 INFO ru.sberbank.javaschool.edu.Application [main] The following profiles are active: dev
+2019-07-26 15:11:34,168 INFO ru.sberbank.javaschool.edu.Application [main] Started Application in 25.984 seconds (JVM running for 26.676)
