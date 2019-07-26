@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.sberbank.javaschool.edu.domain.*;
 import ru.sberbank.javaschool.edu.service.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -19,15 +20,18 @@ public class TaskController {
     private final UserTaskService userTaskService;
     private final CourseUserService courseUserService;
     private final PublicationFileService publicationFileService;
+    private final UserService userService;
 
     @Autowired
     public TaskController(TaskService taskService, MaterialService materialService, UserTaskService userTaskService,
-                          CourseUserService courseUserService, PublicationFileService publicationFileService) {
+                          CourseUserService courseUserService, PublicationFileService publicationFileService,
+                          UserService userService) {
         this.taskService = taskService;
         this.materialService = materialService;
         this.userTaskService = userTaskService;
         this.courseUserService = courseUserService;
         this.publicationFileService = publicationFileService;
+        this.userService = userService;
     }
 
 
@@ -199,6 +203,19 @@ public class TaskController {
         taskService.editTask(idTask, task, taskInfo, user);
 
         return "redirect:/course/{idCourse}/tasks";
+    }
+
+
+    @GetMapping("/alltasks")
+    public String showAllTasks(Principal principal, Model model) {
+        User user = (User)userService.loadUserByUsername(principal.getName());
+        List<CourseUser> courseUsers = courseUserService.getUserCourses(principal.getName());
+        List<Course> courses = taskService.getAllTasksFromUser(courseUsers);
+
+        model.addAttribute("courses", courses);
+        model.addAttribute("user", user);
+
+        return "alltasks";
     }
 
 

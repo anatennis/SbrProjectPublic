@@ -9,6 +9,7 @@ import ru.sberbank.javaschool.edu.domain.*;
 import ru.sberbank.javaschool.edu.repository.*;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -124,5 +125,16 @@ public class TaskService {
                 .collect(Collectors.toMap(CourseUser::getUser, CourseUser::getRole));
 
         return userRoles.containsKey(user) && userRoles.get(user) == Role.TEACHER;
+    }
+
+    public List<Course> getAllTasksFromUser(List<CourseUser> courseUsers) {
+        List<Course> courses = new LinkedList<>();
+        for (CourseUser courseUser : courseUsers) {
+            if (!courseUser.getRole().equals(Role.TEACHER)) {
+                courses.add(courseUser.getCourse());
+            }
+        }
+
+        return courses;
     }
 }

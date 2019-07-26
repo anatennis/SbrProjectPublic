@@ -31,4 +31,8 @@ public class Course implements Serializable {
     @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
     @Where(clause = "dtype='Material'")
     private List<Material> materials = new ArrayList<>();
+
+    @OneToMany(mappedBy = "course", fetch = FetchType.LAZY)
+    @Where(clause = "dtype='Task'")
+    private List<Task> tasks = new ArrayList<>();
 }
