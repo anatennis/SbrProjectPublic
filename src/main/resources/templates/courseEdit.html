@@ -27,7 +27,7 @@
                     <div class="form-group">
                         <label class="label control-label lead"> Новое название курса:
                             <input type="text" name="caption" placeholder="Название"
-                                   class="form-control"/>
+                                   class="form-control" th:value="${course.getCaption()}" required/>
                         </label>
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                         <div><i class="fas fa-book"></i><input type="submit" value="Поменять название"

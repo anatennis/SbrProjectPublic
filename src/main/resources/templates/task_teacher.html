@@ -29,7 +29,8 @@
                     <p th:text="'Курс: '+${course.getCaption()}"></p>
                     <p th:text="'Максимальная оценка: '+${task.getTaskInfo().getMaxMark()}"></p>
                     <p th:text="'Выполнить до: '+${#temporals.format(task.getTaskInfo().getCompleteTime(), 'dd-MM-yyyy HH:mm')}"></p>
-                    <p th:if="${usertask.getTaskState().name().equals('SUBMITTED') || usertask.getTaskState().name().equals('RATED')}" th:text="'Сдано: '+${#temporals.format(usertask.getSubmittedDate(), 'dd-MM-yyyy HH:mm')}"></p>
+                    <p th:if="${usertask.getTaskState().name().equals('SUBMITTED') || usertask.getTaskState().name().equals('RATED')}"
+                       th:text="'Сдано: '+${#temporals.format(usertask.getSubmittedDate(), 'dd-MM-yyyy HH:mm')}"></p>
                     <p th:text="'Студент: '+${usertask.getUser().getName() + ' ' + usertask.getUser().getSurname() + ' [' + usertask.getUser().getLogin() + ']'}"></p>
                     <p th:text="${task.getText()}"></p>
                 </div>
@@ -50,12 +51,16 @@
                         <div>Файлы, прикрепленные к заданию</div>
                         <div th:if="${pubFiles}">
                             <div th:each="pfile : ${pubFiles}">
-                                <a th:href="@{'/files/{filename}' (filename=${pfile.getFilename()})}">
-                                    <span th:text="${pfile.getFilename().split('_')[1]}"></span>
-                                </a>
+                                <div class="badge badge-primary text-wrap m-1" style="width: 6rem; color: white">
+                                    <a target="_blank" th:href="@{'/files/{filename}' (filename=${pfile.getFilename()})}">
+                                        <span style="color: white" th:text="${pfile.getFilename().split('_')[1]}"></span>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#setMark"><i class="fas fa-check"></i> Принять работу</button>
+                        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#setMark"><i
+                                class="fas fa-check"></i> Принять работу
+                        </button>
                     </div>
                     <div th:if="${usertask.getTaskState().name().equals('RATED')}">
                         <div class="alert alert-success" role="alert">
@@ -129,7 +134,7 @@
                   method="post">
                 <div class="modal-body">
                     <input type="number" class="form-control" name="curMark" placeholder="Оценка" required>
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>

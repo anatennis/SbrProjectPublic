@@ -212,7 +212,7 @@ public class TaskController {
     public String showAllTasks(Principal principal, Model model) {
         User user = (User)userService.loadUserByUsername(principal.getName());
         List<CourseUser> courseUsers = courseUserService.getUserCourses(principal.getName());
-        List<Course> courses = taskService.getAllTasksFromUser(courseUsers);
+        List<Course> courses = taskService.getAllCoursesFromUser(courseUsers);
 
         model.addAttribute("courses", courses);
         model.addAttribute("user", user);

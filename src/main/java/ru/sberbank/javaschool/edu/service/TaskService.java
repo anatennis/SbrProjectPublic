@@ -127,7 +127,7 @@ public class TaskService {
         return userRoles.containsKey(user) && userRoles.get(user) == Role.TEACHER;
     }
 
-    public List<Course> getAllTasksFromUser(List<CourseUser> courseUsers) {
+    public List<Course> getAllCoursesFromUser(List<CourseUser> courseUsers) {
         List<Course> courses = new LinkedList<>();
         for (CourseUser courseUser : courseUsers) {
             if (!courseUser.getRole().equals(Role.TEACHER)) {

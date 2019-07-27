@@ -78,11 +78,12 @@ public class AdminController {
         }
 
         Course course = courseService.findCourseById(id);
+        Role[] roles = {Role.STUDENT, Role.TEACHER};
 
         model.addAttribute("user", user);
         model.addAttribute("course", course);
         model.addAttribute("courseusers", course.getCourseUsers());
-        model.addAttribute("roles", Role.values());
+        model.addAttribute("roles", roles);
         model.addAttribute("allUsers", userService.getUsersNotPresentOnCourse(id));
 
         return "courseEdit";

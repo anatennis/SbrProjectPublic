@@ -92,12 +92,10 @@ public class UserService implements UserDetailsService {
                     "Привет, %s!\n Добро пожаловать в наш класс, мы почти как Гугл :D\n"
                             + "Ссылка для активации твоего аккаунта уже здесь: "
                             + "http://localhost:8080/activate/%s "
-                            + "Логин: %s\n "
-                            + "Пароль: %s",
+                            + "Логин: %s\n ",
                     user.getName(),
                     code,
-                    user.getLogin(),
-                    newPassword
+                    user.getLogin()
             );
             try {
                 mailSender.send(user.getEmail(), "Activation code EDUClassroom", message);
