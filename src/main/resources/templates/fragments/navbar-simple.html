@@ -23,9 +23,9 @@
                 <span th:text="${user.getName()}"></span>
             </button>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                    <a href="/user" class="dropdown-item">Мой профиль</a>
+                    <a href="/user" class="dropdown-item"><i class="fas fa-user-circle"></i> Мой профиль</a>
                     <form action="/logout" method="post">
-                        <button type="submit" class="dropdown-item">Выход</button>
+                        <button type="submit" class="dropdown-item"><i class="fas fa-sign-out-alt"></i> Выход</button>
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                     </form>
             </div>

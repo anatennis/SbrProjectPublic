@@ -19,17 +19,12 @@
 <div th:with="user = ${user}" th:include="fragments/navbar-simple"></div>
 
 <div class="container mt-5">
-    <h5>Мои задания</h5>
-    <div class="row">
-
+    <h1>Мои задания</h1>
+    <div th:if="${!courses.isEmpty()}">
         <div th:each="course : ${courses}" class="card m-2 col-md-12">
             <div class="card-header bg-info text-white text-center lead">
                 Курс <span th:text="${course.getCaption()}"> </span>
             </div>
-            <!--<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">-->
-                <!--Развернуть список курсов-->
-            <!--</button>-->
-            <!--<div class="card-body one-collapse" id="collapseExample">-->
             <div class="card-body">
                 <table class="table table-striped">
                     <thead>
@@ -54,10 +49,12 @@
                 </table>
             </div>
         </div>
-
+        <div class="card text-center" th:unless="${!courses.isEmpty()}">
+            <div class="card-body">
+                <p>Твой список курсов пока пуст</p>
+            </div>
+        </div>
     </div>
-
-
 </div>
 
 </body>

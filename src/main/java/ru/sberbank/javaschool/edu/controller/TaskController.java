@@ -143,6 +143,8 @@ public class TaskController {
         model.addAttribute("course", course);
         model.addAttribute("tasks", tasks);
         model.addAttribute("canEdit", materialService.canCreateMaterial(course, user));
+        model.addAttribute("user", user);
+
 
         return "tasks";
     }

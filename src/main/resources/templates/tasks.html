@@ -1,92 +1,59 @@
-<!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html lang="en">
 <head>
-    <title>Getting Started</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/ecd6486686.js"></script>
+
+    <title>JavaSchool</title>
 </head>
 <body>
-<div>
-    <form action="/logout" method="post">
-        <input type="submit" value="Sign Out"/>
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    </form>
-</div>
-<p><a th:href="@{/}">Start page</a></p>
-<p><a th:href="@{/courses}">Back</a></p>
-<h2>Course</h2>
-<div>
-    <span th:text="${course.caption}"></span>
-</div>
+<div th:with="user = ${user}" th:include="fragments/navbar-simple"></div>
 
-<h3>Tasks</h3>
-
-<div th:if="${canEdit}">
-    <form th:action="@{'/course/{id}/tasks'(id=${course.id})}" method="post">
-        <div><label> Title: <input type="text" name="title" placeholder="Название материала"/> </label></div>
-        <div><label> Text: <textarea type="text" name="text" placeholder="Содержание"></textarea></label></div>
-        <div><label> Maximum mark: <input type="number" name="maxMark" placeholder="Max mark"/></label></div>
-        <div><label>Complete date:
-            <input type="datetime-local" name="completeTime" placeholder="Дата сдачи">
-        </label></div>
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-        <div><input type="submit" value="Добавить задание"/></div>
-    </form>
-</div>
-<div th:if="${!tasks.isEmpty()}">
-    <table>
-        <tbody>
-        <tr th:each="task : ${tasks}">
-            <td>
-                <table>
-
-                    <tr>
-                        <td th:align="center"><b>
-                            <a th:href="@{'/course/{idCourse}/tasks/{idTask}'
-                            (idCourse=${course.getId()}, idTask=${task.getId()})}" th:text="${task.getTitle()}"> Title
-                            </a></b></td>
-                    </tr>
-                    <tr>
-                        <td><span th:text="${task.getText()}"> Text </span></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span th:if="${task.isEdited()}" th:text="'Изменено ' + ${#temporals.format(task.getCreateDate(), 'dd-MM-yyyy HH:mm:ss')}">
-                                Publication date
-                            </span>
-                            <span th:unless="${task.isEdited()}" th:text="${#temporals.format(task.getCreateDate(), 'dd-MM-yyyy HH:mm:ss')}">
-                                Publication date
-                            </span>
-                            <span th:text="${#temporals.format(task.getTaskInfo().getCompleteTime(), 'dd-MM-yyyy HH:mm:ss')}">
-                                Complete date
-                            </span>
-                        </td>
-                        <td>Max mark: <span th:text="${task.getTaskInfo().getMaxMark()}"> Max Mark </span></td>
-                        <!--<td>My mark: <span th:text="${task.getMaxMark()}"> My Mark </span></td>-->
-                    </tr>
-                    <tr th:if="${canEdit}">
-                        <td>
-                            <form action="#"
-                                  th:action= "@{'/course/{idCourse}/tasks/edit/{idTask}'(idCourse=${course.getId()}, idTask=${task.getId()})}"
-                                  th:method="get" >
-                                <input type="hidden" name="_method" value="get" />
-                                <button type="submit" id="editTaskButton">Edit</button>
-                            </form>
-                        </td>
-                        <td>
-                            <form action="#"
-                                  th:action= "@{'/course/{idCourse}/tasks/delete/{idTask}'(idCourse=${course.getId()}, idTask=${task.getId()})}"
-                                  th:method="delete" >
-                                <input type="hidden" name="_method" value="delete" />
-                                <button type="submit" id="deleteTaskButton">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+<div class="container mt-5">
+    <h1>Задания курса</h1>
+    <div th:if="${!tasks.isEmpty()}">
+        <div class="card" th:each="task : ${tasks}" style="margin-top: 5px">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-11">
+                        <h5 th:text="${{task.getTitle()}}"></h5>
+                    </div>
+                    <div class="col-md-1">
+                        <i th:text="'#' +${{task.getId()}}"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-11">
+                        <p th:text="'Максимальная оценка: ' +${{task.getTaskInfo().getMaxMark()}}"></p>
+                        <p th:text="'Срок сдачи: ' +${{task.getTaskInfo().getCompleteTime()}}"></p>
+                    </div>
+                    <div class="col-md-1">
+                        <a class="btn btn-light" th:href="@{'/course/{idCourse}/tasks/{idTask}'
+                            (idCourse=${course.getId()}, idTask=${task.getId()})}"><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card text-center" th:unless="${!tasks.isEmpty()}">
+        <div class="card-body">
+            <p>Нет заданий</p>
+        </div>
+    </div>
 </div>
 
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
 </html>
