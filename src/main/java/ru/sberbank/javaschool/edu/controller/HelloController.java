@@ -12,24 +12,27 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.sberbank.javaschool.edu.domain.User;
+import ru.sberbank.javaschool.edu.repository.UserRepository;
 import ru.sberbank.javaschool.edu.service.UserService;
 
 @Controller
 public class HelloController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(HelloController.class);
 
     @Autowired
-    public HelloController(UserService userService) {
+    public HelloController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @GetMapping("/")
     public String greeting(Model model) {
         logger.info("Main page");
-        return "main";
+        return "redirect:/user";
     }
 
     @GetMapping("/login")  //чтобы не было двойной авторизации одного юзера
@@ -49,18 +52,30 @@ public class HelloController {
     public String greeting(@AuthenticationPrincipal User user, Model model) {
         model.addAttribute("user", user);
 
-        //activateUsers();
+        activateUsers();
 
         return "test";
     }
 
+    @PostMapping("/sendcode")
+    public String sendCodeOneMoreTime(@RequestParam String login) {
+        User user = userService.findUserbyLogin(login);
+        if (user == null) {
+           return "redirect:/login";
+        }
+        if (user.getActcode().equals("ok")) {
+            return "redirect:/login";
+        }
+        return "redirect:/activate/"+user.getActcode();
+    }
+
 
     //для активации всех аккаунтов чтобы не активировать черех почту
-    //    private void activateUsers() {
-    //        for (User u : userRepository.findAll()) {
-    //            u.setActcode("ok");
-    //        }
-    //    }
+    private void activateUsers() {
+        for (User u : userRepository.findAll()) {
+            u.setActcode("ok");
+        }
+    }
 
 
 }

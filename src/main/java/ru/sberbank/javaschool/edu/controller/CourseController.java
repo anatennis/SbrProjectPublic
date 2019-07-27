@@ -54,7 +54,9 @@ public class CourseController {
 
         for (CourseUser courseUser : courseUsers) {
             if (courseUser.getRole().equals(Role.TEACHER)) {
-                teachers.add(courseUser);
+                if (!courseUser.getUser().getLogin().equals("admin")) {
+                    teachers.add(courseUser);
+                }
             } else {
                 students.add(courseUser);
             }
