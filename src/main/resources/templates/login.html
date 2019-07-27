@@ -16,7 +16,15 @@
         <div class="modal-content">
             <div th:if="${param.error}" class="alert alert-danger" role="alert">
                 <p>Неверный логин или пароль, или же вы забыли активировать аккаунт :(</p>
+                <form action="/sendcode" method="post" class="form-control alert-danger">
+                    <input type="text" name="login" class="form-control" style="margin-bottom: 5px"
+                           placeholder="Логин"/>
+                    <input type="submit"
+                           value="Активировать аккаунт" class="btn btn-primary btn-info"/>
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                </form>
             </div>
+
             <div th:if="${param.logout}" class="alert alert-primary" role="alert">
                 <p>Вы вышли из аккаунта</p>
             </div>

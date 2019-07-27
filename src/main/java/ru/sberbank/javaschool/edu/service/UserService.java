@@ -59,6 +59,10 @@ public class UserService implements UserDetailsService {
         throw new UsernameNotFoundException("Invalid name and password or user is not activated: " + login);
     }
 
+    public User findUserbyLogin(String login) {
+        return userRepo.findUserByLogin(login);
+    }
+
     @Transactional
     public String addUser(User user) {
         if (user.getLogin().isEmpty() || user.getEmail().isEmpty()) {
@@ -118,7 +122,7 @@ public class UserService implements UserDetailsService {
         if (!user.getName().isEmpty()) {
             uFromDB.setName(user.getName());
         }
-        if (user.getSurname().isEmpty()) {
+        if (!user.getSurname().isEmpty()) {
             uFromDB.setSurname(user.getSurname());
         }
         if (!user.getEmail().isEmpty()) {
